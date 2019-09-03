@@ -35,10 +35,11 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="0" name="Knowledge Base" color="#8cb6ce" meeting="false" start="2019-09-03" duration="7" complete="0" thirdDate="2019-09-03" thirdDate-constraint="0" expand="true">
+        <task id="0" name="Knowledge Base" color="#8cb6ce" meeting="false" start="2019-09-03" duration="9" complete="0" thirdDate="2019-09-03" thirdDate-constraint="0" expand="true">
             <task id="3" name="Inizio progetto" color="#8cb6ce" meeting="false" start="2019-09-03" duration="1" complete="0" thirdDate="2019-09-03" thirdDate-constraint="0" expand="true"/>
             <task id="5" name="Documentazione" color="#8cb6ce" meeting="false" start="2019-09-03" duration="1" complete="0" thirdDate="2019-09-03" thirdDate-constraint="0" expand="true"/>
             <task id="8" name="Progettazione" color="#000000" meeting="false" start="2019-09-03" duration="7" complete="0" thirdDate="2019-08-29" thirdDate-constraint="0" expand="true">
+                <depend id="48" type="2" difference="0" hardness="Strong"/>
                 <task id="9" name="Intervista" color="#8cb6ce" meeting="false" start="2019-09-03" duration="1" complete="0" thirdDate="2019-08-29" thirdDate-constraint="0" expand="true">
                     <depend id="10" type="2" difference="0" hardness="Strong"/>
                 </task>
@@ -58,6 +59,14 @@
                     <depend id="30" type="2" difference="0" hardness="Strong"/>
                 </task>
                 <task id="30" name="Design delle interfacce" color="#8cb6ce" meeting="false" start="2019-09-11" duration="1" complete="0" thirdDate="2019-08-29" thirdDate-constraint="0" expand="true"/>
+            </task>
+            <task id="48" name="Sviluppo" color="#8cb6ce" meeting="false" start="2019-09-12" duration="2" complete="0" thirdDate="2019-08-28" thirdDate-constraint="0" expand="true">
+                <task id="52" name="Pagina di login" color="#8cb6ce" meeting="false" start="2019-09-12" duration="1" complete="0" thirdDate="2019-09-12" thirdDate-constraint="0" expand="true"/>
+                <task id="55" name="Pagina di ricerca casi" meeting="false" start="2019-09-12" duration="1" complete="0" expand="true"/>
+                <task id="58" name="Pagina aggiunta caso" meeting="false" start="2019-09-12" duration="1" complete="0" expand="true">
+                    <depend id="57" type="2" difference="0" hardness="Strong"/>
+                </task>
+                <task id="57" name="Maschera modale aggiunta categoria (admin)" color="#8cb6ce" meeting="false" start="2019-09-13" duration="1" complete="0" thirdDate="2019-09-12" thirdDate-constraint="0" expand="true"/>
             </task>
         </task>
     </tasks>
