@@ -1,0 +1,41 @@
+- Come avviene la ricerca? titolo, categoria, ...? 
+  Ritorna un unico risultato?
+
+- Compiti amministratore? Gli utenti restanti devono effettuare un login per visualizzare i casi?
+
+- Cosa si intende per categoria di un caso?
+
+- Visualizzazione dei casi più recenti, più ricorrenti fa sempre parte dei filtri della ricerca?
+
+- I casi possono essere eliminati o modificati oppure possono solo essere registrati?
+
+- Quali ruoli ci sono?
+
+- Da cosa è composto un caso?
+
+- Webserver e ambiente di sviluppo a scelta?
+
+-----------------------------------------------------
+Funzioni:
+
+- Inserimento caso
+- Ricerca (eventuali filtri)
+- Gestioni categorie e casi 
+
+-----------------------------------------------------
+Attori:
+
+- Amministratore casi -> Inserire casi? 
+- Utenti ->
+
+Solo l'amministratore deve effettuare i login?
+
+-----------------------------------------------------
+Caso:
+
+- categoria
+- prima data di apparizione
+- varianti?
+- numero di ripresentazioni
+
+-----------------------------------------------------
