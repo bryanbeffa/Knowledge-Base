@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="KnowledgeBase" company="" webLink="http://" view-date="2019-09-02" view-index="0" gantt-divider-location="336" resource-divider-location="300" version="2.8.9" locale="it">
+<?xml version="1.0" encoding="UTF-8"?><project name="KnowledgeBase" company="" webLink="http://" view-date="2019-10-14" view-index="0" gantt-divider-location="336" resource-divider-location="300" version="2.8.9" locale="it">
     <description/>
-    <view zooming-state="default:6" id="gantt-chart">
+    <view zooming-state="default:5" id="gantt-chart">
         <field id="tpd3" name="Nome" width="170" order="0"/>
         <field id="tpd4" name="Data d'inizio" width="74" order="1"/>
         <field id="tpd5" name="Data di fine" width="73" order="2"/>
@@ -35,25 +35,21 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="0" name="Knowledge Base" color="#8cb6ce" meeting="false" start="2019-09-03" duration="76" complete="0" thirdDate="2019-09-03" thirdDate-constraint="0" expand="true">
+        <task id="0" name="Knowledge Base" color="#8cb6ce" meeting="false" start="2019-09-03" duration="79" complete="6" thirdDate="2019-09-03" thirdDate-constraint="0" expand="true">
             <task id="3" name="Inizio progetto" color="#8cb6ce" meeting="false" start="2019-09-03" duration="1" complete="0" thirdDate="2019-09-03" thirdDate-constraint="0" expand="true"/>
-            <task id="8" name="Progettazione" color="#000000" meeting="false" start="2019-09-03" duration="20" complete="0" thirdDate="2019-08-29" thirdDate-constraint="0" expand="true">
+            <task id="8" name="Progettazione" color="#000000" meeting="false" start="2019-09-03" duration="20" complete="49" thirdDate="2019-08-29" thirdDate-constraint="0" expand="true">
                 <depend id="48" type="2" difference="0" hardness="Strong"/>
                 <task id="9" name="Intervista" color="#8cb6ce" meeting="false" start="2019-09-03" duration="1" complete="0" thirdDate="2019-08-29" thirdDate-constraint="0" expand="true">
                     <depend id="10" type="2" difference="0" hardness="Strong"/>
                 </task>
-                <task id="10" name="Gannt" color="#8cb6ce" meeting="false" start="2019-09-04" duration="3" complete="0" thirdDate="2019-08-29" thirdDate-constraint="0" expand="true">
+                <task id="10" name="Gannt" color="#8cb6ce" meeting="false" start="2019-09-04" duration="3" complete="100" thirdDate="2019-08-29" thirdDate-constraint="0" expand="true">
                     <depend id="24" type="2" difference="0" hardness="Strong"/>
                 </task>
-                <task id="24" name="Analisi del dominio" color="#8cb6ce" meeting="false" start="2019-09-09" duration="3" complete="0" thirdDate="2019-08-29" thirdDate-constraint="0" expand="true">
-                    <depend id="27" type="2" difference="0" hardness="Strong"/>
-                </task>
-                <task id="27" name="Analisi e specifica dei requisiti" color="#8cb6ce" meeting="false" start="2019-09-12" duration="3" complete="0" thirdDate="2019-09-12" thirdDate-constraint="0" expand="true">
+                <task id="24" name="Analisi del dominio" color="#8cb6ce" meeting="false" start="2019-09-09" duration="3" complete="100" thirdDate="2019-08-29" thirdDate-constraint="0" expand="true"/>
+                <task id="27" name="Analisi e specifica dei requisiti" color="#8cb6ce" meeting="false" start="2019-09-12" duration="3" complete="100" thirdDate="2019-09-12" thirdDate-constraint="0" expand="true">
                     <depend id="28" type="2" difference="0" hardness="Strong"/>
                 </task>
-                <task id="28" name="Design architettura del sistema" color="#8cb6ce" meeting="false" start="2019-09-17" duration="3" complete="0" thirdDate="2019-09-09" thirdDate-constraint="0" expand="true">
-                    <depend id="29" type="2" difference="0" hardness="Strong"/>
-                </task>
+                <task id="28" name="Design architettura del sistema" color="#8cb6ce" meeting="false" start="2019-09-17" duration="3" complete="31" thirdDate="2019-09-09" thirdDate-constraint="0" expand="true"/>
                 <task id="29" name="Design dei dati e del database" color="#8cb6ce" meeting="false" start="2019-09-20" duration="3" complete="0" thirdDate="2019-09-12" thirdDate-constraint="0" expand="true">
                     <depend id="30" type="2" difference="0" hardness="Strong"/>
                 </task>
@@ -69,7 +65,9 @@
                 </task>
                 <task id="312" name="Classe utente" color="#8cb6ce" meeting="false" start="2019-10-04" duration="3" complete="0" thirdDate="2019-10-01" thirdDate-constraint="0" expand="true">
                     <depend id="59" type="2" difference="0" hardness="Strong"/>
+                    <depend id="352" type="2" difference="0" hardness="Strong"/>
                 </task>
+                <task id="352" name="Fine sviluppo classi php" color="#8cb6ce" meeting="true" start="2019-10-09" duration="0" complete="0" thirdDate="2019-10-01" thirdDate-constraint="0" expand="true"/>
                 <task id="59" name="Pagina di registrazione" color="#8cb6ce" meeting="false" start="2019-10-09" duration="2" complete="0" thirdDate="2019-09-12" thirdDate-constraint="0" expand="true">
                     <depend id="72" type="2" difference="0" hardness="Strong"/>
                 </task>
@@ -93,14 +91,14 @@
                 <task id="58" name="Pagina aggiunta caso" color="#8cb6ce" meeting="false" start="2019-10-30" duration="3" complete="0" thirdDate="2019-09-18" thirdDate-constraint="0" expand="true">
                     <depend id="57" type="2" difference="0" hardness="Strong"/>
                 </task>
-                <task id="57" name="Maschera modale aggiunta categoria (admin)" color="#8cb6ce" meeting="false" start="2019-11-04" duration="3" complete="0" thirdDate="2019-09-12" thirdDate-constraint="0" expand="true">
-                    <depend id="337" type="2" difference="0" hardness="Strong"/>
-                </task>
+                <task id="57" name="Maschera modale aggiunta categoria (admin)" color="#8cb6ce" meeting="false" start="2019-11-04" duration="3" complete="0" thirdDate="2019-09-12" thirdDate-constraint="0" expand="true"/>
                 <task id="337" name="Sistema di ricerca" color="#8cb6ce" meeting="false" start="2019-11-07" duration="6" complete="0" thirdDate="2019-10-01" thirdDate-constraint="0" expand="true">
                     <depend id="168" type="2" difference="0" hardness="Strong"/>
+                    <depend id="346" type="2" difference="0" hardness="Strong"/>
                 </task>
+                <task id="346" name="Fine sviluppo" color="#8cb6ce" meeting="true" start="2019-11-15" duration="0" complete="0" thirdDate="2019-10-01" thirdDate-constraint="0" expand="true"/>
             </task>
-            <task id="163" name="Test" meeting="false" start="2019-11-15" duration="16" complete="0" expand="true">
+            <task id="163" name="Test" color="#000000" meeting="false" start="2019-11-15" duration="16" complete="0" thirdDate="2019-11-15" thirdDate-constraint="0" expand="true">
                 <task id="168" name="Test registrazione" color="#8cb6ce" meeting="false" start="2019-11-15" duration="3" complete="0" thirdDate="2019-10-02" thirdDate-constraint="0" expand="true">
                     <depend id="165" type="2" difference="0" hardness="Strong"/>
                 </task>
@@ -112,7 +110,7 @@
                 </task>
                 <task id="260" name="Test Ricerca" color="#8cb6ce" meeting="false" start="2019-12-02" duration="5" complete="0" thirdDate="2019-10-31" thirdDate-constraint="0" expand="true"/>
             </task>
-            <task id="5" name="Documentazione" color="#8cb6ce" meeting="false" start="2019-09-03" duration="76" complete="0" thirdDate="2019-09-03" thirdDate-constraint="0" expand="true"/>
+            <task id="5" name="Documentazione" color="#8cb6ce" meeting="false" start="2019-09-03" duration="79" complete="0" thirdDate="2019-09-03" thirdDate-constraint="0" expand="true"/>
         </task>
     </tasks>
     <resources>
