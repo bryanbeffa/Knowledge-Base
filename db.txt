@@ -1,0 +1,26 @@
+//// -- LEVEL 1
+//// -- Tables and References
+
+// Creating tables
+Table users as U {
+  id int 
+	name varchar
+  surname varchar
+  email varchar
+  password varchar
+  cambio_password tinyint
+  admin tinyint
+}
+
+Table Category as C {
+  id int
+  name varchar
+}
+
+Table case {
+  id int
+  user_id int [ref: > U.id]
+  title varchar
+  description varchar
+  category int [ref: > C.id]
+}
