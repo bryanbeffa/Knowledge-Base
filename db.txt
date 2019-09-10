@@ -3,24 +3,42 @@
 
 // Creating tables
 Table users as U {
-  id int 
+  id int
+	surname varchar
 	name varchar
-  surname varchar
   email varchar
   password varchar
-  cambio_password tinyint
   admin tinyint
+  change_pass tinyint
 }
 
-Table Category as C {
+Table cases {
+  id int
+	created_by id
+	title varchar
+  desc varchar
+  category_id int
+  created_at timestamp
+  deleted tinyint
+  modified_at timestamp
+  variant id
+}
+
+Table rappresentations{
+  id_case int
+  date datetime
+}
+
+Table categories{
   id int
   name varchar
 }
 
-Table case {
-  id int
-  user_id int [ref: > U.id]
-  title varchar
-  description varchar
-  category int [ref: > C.id]
-}
+Ref: "cases"."created_by" < "users"."id"
+
+Ref: "cases"."id" < "rappresentations"."id_case"
+
+Ref: "categories"."id" < "cases"."category_id"
+
+
+Ref: "cases"."variant" < "cases"."id"
