@@ -70,18 +70,26 @@ create Table rappresentations(
 
 create table cases (
 	id int primary key auto_increment,
-    created_by int not null,
+    created_by int,
     title varchar(255),
     description text,
-    category_id int not null,
+    category_id int,
     created_at timestamp,
     deleted tinyint,
     modified_at timestamp,
     variant int,
     
-    FOREIGN KEY (variant) REFERENCES cases(id),
-    FOREIGN KEY (category_id) REFERENCES categories(id),
+    FOREIGN KEY (variant) REFERENCES cases(id)
+    on update cascade
+    on delete set null,
+    
+    FOREIGN KEY (category_id) REFERENCES categories(id)
+    on update cascade
+    on delete set null,
+    
     FOREIGN KEY (created_by) REFERENCES users(id)
+    on update cascade
+    on delete set null
 );
 
 create table rappresentations(
@@ -90,4 +98,6 @@ create table rappresentations(
     
     primary key(id_case, date),
     FOREIGN KEY (id_case) REFERENCES cases(id)
+    on delete cascade
+    on update cascade
 );
