@@ -46,8 +46,17 @@ Ref: "cases"."variant" < "cases"."id"
 
 
 ------------------------------------------------
+Create admin user:
+
+CREATE USER 'knowledge_project_admin'@'%' IDENTIFIED BY '******';
+GRANT ALL PRIVILEGES ON knowledge_base_db.* TO 'knowledge_project_admin'@'%';
+
+________________________________________________-
 Sql script:
 
+create database knowledge_base_db;
+
+use knowledge_base_db;
 
 create table users (
 	id int primary key auto_increment,
@@ -61,11 +70,6 @@ create table users (
 create table categories (
 	id int primary key auto_increment,
     name varchar(50)
-);
-
-create Table rappresentations(
-	id_case int primary key auto_increment,
-    date timestamp
 );
 
 create table cases (
