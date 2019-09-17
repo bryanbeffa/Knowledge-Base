@@ -3,27 +3,43 @@
 
 class Home
 {
+    private static $conn;
+    private $user_manager;
 
     public function __construct()
     {
-        require_once 'application/models/DbManager';
+        require_once 'application/models/DbManager.php';
+        require_once 'application/models/UserManager.php';
+        require_once 'application/models/User.php';
+
+        $this->user_manager = new UserManager();
     }
 
     public function index()
     {
-
-        require_once 'application/views/templates/header.php';
+        require_once 'application/views/templates/head.php';
         require_once 'application/views/login/index.php';
 
-        //try to connect to database
+        //testing connection to db
         try {
-            $conn = DbManager::connect();
-            echo 'Connessione riuscita';
+            self::$conn = DbManager::connect();
+            //echo "Connessione riuscita";
         } catch (PDOException $e) {
-            echo 'Errore di connessione al database';
+            //echo "Connessione fallita";
         }
 
-        require_once 'application/views/templates/footer.php';
+        $this->login();
+    }
+
+    /**
+     * Method
+     */
+    public function login(){
+        if ($this->user_manager->checkCredentials("ciao@ciao.ciao", 'cane')){
+            echo "Login effettutato correttamente";
+        } else {
+            echo "Username o password sbagliate";
+        }
     }
 
     function test_input($data)

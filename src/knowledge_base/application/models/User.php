@@ -34,21 +34,21 @@ class User
     private $admin;
 
     /**
-     * attribute that identifies if there is a change password request
+     * attribute that identifies if there is a change password request (feature)
      */
     private $change_pass;
 
     public function __construct(string $name, string $surname, string $email, string $password, bool $admin, bool $change_pass )
     {
         $this->name = $this->testInput($name);
-        $this->$surname = $this->testInput($surname);
-        $this->$email = $this->testInput($email);
-        $this->$password = $this->testInput($password);
-        $this->$admin = $this->testInput($admin);
-        $this->$change_pass = $this->testInput($change_pass);
+        $this->surname = $this->testInput($surname);
+        $this->email = $this->testInput($email);
+        $this->password = $this->testInput($password);
+        $this->admin = $this->testInput($admin);
+        $this->change_pass = $this->testInput($change_pass);
     }
 
-    function testInput($data)
+    public function testInput($data)
     {
         $data = trim($data);
         $data = stripslashes($data);
@@ -56,7 +56,45 @@ class User
         return $data;
     }
 
-    private function registerUser(){
+    /**
+     * Method that returns the password
+     */
+    public function getPassword(){
+        return $this->password;
+    }
 
+    /**
+     * Method that returns the name
+     */
+    public function getName(){
+        return $this->name;
+    }
+
+    /**
+     * Method that returns the surname
+     */
+    public function getSurname(){
+        return $this->surname;
+    }
+
+    /**
+     * Method that returns the email
+     */
+    public function getEmail(){
+        return $this->email;
+    }
+
+    /**
+     * Method that returns the admin
+     */
+    public function getAdmin(){
+        return $this->admin;
+    }
+
+    /**
+     * Method that returns the email
+     */
+    public function getChangePass(){
+        return $this->change_pass;
     }
 }

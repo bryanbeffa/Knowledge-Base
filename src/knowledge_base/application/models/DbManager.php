@@ -6,7 +6,7 @@ class DbManager
     private static $username = 'knowledge_project_admin';
     private static $password = 'KnowledgeBase2019';
     private static $db_name = 'knowledge_base_db';
-    private static $host = 'localhost:8080';
+    private static $host = 'localhost:3306';
     private static $conn;
 
     private function __construct()
@@ -16,20 +16,14 @@ class DbManager
     /**
      * Method that returns if the connection is correctly established
      */
-    public function connect()
+    public static function connect()
     {
         if (!self::$conn) {
-            try {
-                self::$conn = new PDO("mysql:host=$this->host;dbname=$this->db_name", $this->username, $this->password);
+            self::$conn = new PDO("mysql:host=" . self::$host . ";dbname=" . self::$db_name,  self::$username, self::$password);
 
-                // set the PDO error mode to exception
-                self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                return self::$conn;
-
-            } catch (PDOException $e) {
-                PDOException($e->getMessage(), (int)$e->getCode());
-            }
+            // set the PDO error mode to exception
+            self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return self::$conn;
         }
         return self::$conn;
     }
