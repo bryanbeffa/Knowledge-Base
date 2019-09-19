@@ -2,15 +2,15 @@
 <html>
     <head>
         <meta charset="utf-8">
-
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <!-- Bootstrap core CSS -->
-        <link href="application/libs/css/bootstrap.min.css" rel="stylesheet">
-        <link href="application/libs/css/mdb.min.css" rel="stylesheet">
+        <link href="/knowledge_base/application/libs/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/knowledge_base/application/libs/css/mdb.min.css" rel="stylesheet">
     </head>
 
     <!-- MDB scripts-->
-    <script type="text/javascript" src="application/libs/js/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="application/libs/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="application/libs/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="application/libs/js/mdb.min.js"></script>
+    <script type="text/javascript" src="/knowledge_base/application/libs/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/knowledge_base/application/libs/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/knowledge_base/application/libs/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/knowledge_base/application/libs/js/mdb.min.js"></script>

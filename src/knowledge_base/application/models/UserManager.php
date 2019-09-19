@@ -76,4 +76,36 @@ class UserManager
             return false;
         }
     }
+
+    /**
+     * Method that returns the list of users
+     */
+    public function getUsersList(){
+        //get the password from database
+        $prepared_query = $this->conn->prepare("SELECT * FROM users");
+        $prepared_query->execute();
+
+        $users = $prepared_query->fetchAll();
+
+        return $users;
+    }
+
+    /**
+     * Method that returns if the logged user has admin privileges
+     */
+    public function isAdminUser($email){
+        //get is_admin value
+        $prepared_query = $this->conn->prepare("SELECT is_admin FROM users WHERE email = :email");
+        $prepared_query->execute(['email' => $email]);
+
+        //get result
+        $res = $prepared_query->fetch();
+        $is_admin = $res[0];
+
+        if(intval($is_admin)){
+            return true;
+        }
+
+        return false;
+    }
 }

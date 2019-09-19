@@ -60,26 +60,27 @@ use knowledge_base_db;
 
 create table users (
 	id int primary key auto_increment,
-    surname varchar(50),
-    name varchar(50),
+    surname varchar(50) not null,
+    name varchar(50) not null,
     email  varchar(255) unique,
-    is_admin tinyint(1),
-    change_pass tinyint(1)
+    is_admin tinyint(1) not null,
+    change_pass tinyint(1) not null,
+    password varchar(255) not null
 );
 
 create table categories (
 	id int primary key auto_increment,
-    name varchar(50)
+    name varchar(50) not null
 );
 
 create table cases (
 	id int primary key auto_increment,
     created_by int,
-    title varchar(255),
-    description text,
+    title varchar(255) not null,
+    description text not null,
     category_id int,
-    created_at timestamp,
-    deleted tinyint,
+    created_at timestamp not null,
+    deleted tinyint not null,
     modified_at timestamp,
     variant int,
     
@@ -105,3 +106,6 @@ create table rappresentations(
     on delete cascade
     on update cascade
 );
+
+-------------------------------------------------------
+insert into users (name, surname, email, password, is_admin, change_pass) values ('bryan', 'beffa', 'aa@a.a', '$2y$10$4H8Og1W3LFV3JnahrgCe1e39JaBup328sRr8N6/JBz/2eE1YSjeXa', 0, 0);
