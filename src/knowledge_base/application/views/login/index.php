@@ -8,8 +8,8 @@
 require_once 'application/config/config.php';
 ?>
 
-<body>
-    <div class="container border col-6 p-4 align-middle" style="position:absolute; left:0;right:0; top:50%; -webkit-transform:translateY(-50%) !important; -ms-transform:translateY(-50%) !important; transform:translateY(-50%) !important;">
+<body style="background: url('/knowledge_base/application/libs/img/login_bg.jpg')">
+    <div class="container border col-6 p-4 align-middle white" style="opacity: 0.95; position:absolute; left:0;right:0; top:50%; -webkit-transform:translateY(-50%) !important; -ms-transform:translateY(-50%) !important; transform:translateY(-50%) !important;">
 
         <!---->
         <div class="px-lg-5">
@@ -28,14 +28,14 @@ require_once 'application/config/config.php';
 
                 <!-- Email -->
                 <div class="md-form mt-3">
-                    <input type="email" id="materialSubscriptionFormPasswords" class="form-control" name="email">
-                    <label for="materialSubscriptionFormPasswords">Email</label>
+                    <input type="email" id="email" class="form-control" name="email">
+                    <label for="email">Email</label>
                 </div>
 
                 <!-- Password -->
                 <div class="md-form">
-                    <input type="password" id="materialSubscriptionFormEmail" class="form-control" name="password">
-                    <label for="materialSubscriptionFormEmail">Password</label>
+                    <input type="password" id="password" class="form-control" name="password">
+                    <label for="password">Password</label>
                 </div>
 
                 <!-- Sign in button -->

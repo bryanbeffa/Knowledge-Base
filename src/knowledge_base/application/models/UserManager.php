@@ -12,10 +12,15 @@ class UserManager
 
     public function __construct()
     {
-        $this->conn = DbManager::connect();
+        try {
+            $this->conn = DbManager::connect();
+        } catch (PDOException $ex) {
+            throw $ex;
+        }
     }
 
-    public function registerUser(User $user){
+    public function registerUser(User $user)
+    {
         //register new user
 
     }
@@ -23,13 +28,13 @@ class UserManager
     /**
      * Method that returns if the user credentials are correct
      */
-    public function checkCredentials(string $email, string $password){
-
+    public function checkCredentials(string $email, string $password)
+    {
         //check if the email exists
-        if($this->isExistingEmail($email)) {
+        if ($this->isExistingEmail($email)) {
 
             //check if the password is correct
-            if($this->isPasswordCorrect($email, $password)) {
+            if ($this->isPasswordCorrect($email, $password)) {
                 return true;
             }
 
@@ -37,19 +42,21 @@ class UserManager
         }
 
         return false;
+
     }
 
     /**
      * Method that return if the email is in the system.
      */
-    private function isExistingEmail(string $email) {
+    private function isExistingEmail(string $email)
+    {
         //get the number of rows that contain the user email (MAX 1)
         $prepared_query = $this->conn->prepare("SELECT count(*) FROM users WHERE email = :email");
         $prepared_query->execute(['email' => $email]);
         $res = $prepared_query->fetch();
 
         //check if the row count is 1
-        if(intval($res[0]) == 1) {
+        if (intval($res[0]) == 1) {
             //email already exists
             return true;
         }
@@ -61,7 +68,8 @@ class UserManager
     /**
      * Method that return if the password is correct.
      */
-    private function isPasswordCorrect(string $email, string $password){
+    private function isPasswordCorrect(string $email, string $password)
+    {
         //get the password from database
         $prepared_query = $this->conn->prepare("SELECT password FROM users WHERE email = :email");
         $prepared_query->execute(['email' => $email]);
@@ -70,7 +78,7 @@ class UserManager
         $hashed_password = $res[0];
 
         //check if the inserted password is correct
-        if (password_verify($password, $hashed_password)){
+        if (password_verify($password, $hashed_password)) {
             return true;
         } else {
             return false;
@@ -80,7 +88,8 @@ class UserManager
     /**
      * Method that returns the list of users
      */
-    public function getUsersList(){
+    public function getUsersList()
+    {
         //get the password from database
         $prepared_query = $this->conn->prepare("SELECT * FROM users");
         $prepared_query->execute();
@@ -93,7 +102,8 @@ class UserManager
     /**
      * Method that returns if the logged user has admin privileges
      */
-    public function isAdminUser($email){
+    public function isAdminUser($email)
+    {
         //get is_admin value
         $prepared_query = $this->conn->prepare("SELECT is_admin FROM users WHERE email = :email");
         $prepared_query->execute(['email' => $email]);
@@ -102,10 +112,34 @@ class UserManager
         $res = $prepared_query->fetch();
         $is_admin = $res[0];
 
-        if(intval($is_admin)){
+        if (intval($is_admin)) {
             return true;
         }
 
         return false;
+    }
+
+    public function createUser(User $user)
+    {
+        //check if the email already exists
+        if (!$this->isExistingEmail($user->getEmail())) {
+
+            try {
+                //prepare query
+                $prepared_query = $this->conn->prepare("INSERT INTO USERS (name, surname, email, password, is_admin, change_pass) VALUES(:name, :surname, :email, :password, :is_admin, :change_pass)");
+                $prepared_query->execute(['name' => $user->getName(), 'surname' => $user->getSurname(),
+                                            'email' => $user->getEmail(), 'password' => $user->getPassword(),
+                                            'is_admin' => $user->getAdmin(), 'change_pass' => $user->getChangePass()]);
+
+                echo "utente creato";
+                return true;
+
+            } catch (PDOException $ex) {
+                echo $ex;
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

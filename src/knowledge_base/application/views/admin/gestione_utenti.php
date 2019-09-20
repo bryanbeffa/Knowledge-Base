@@ -21,21 +21,24 @@
                 <?php echo '<td>' . $user['surname'] . '</td>' ?>
                 <?php echo '<td>' . $user['email'] . '</td>' ?>
 
-                <!-- Check if the user is admin or not-->
-                <?php if(intval($user['change_pass'] == 0)): ?>
-                    <td>No</td>
-                        <?php else: ?>
-                    <td>Si</td>
-                <?php endif; ?>
+                <td>
+                    <a href="#" class="btn btn-sm" style="background-color: #20d6a9">
+                        X
+                    </a>
+                </td>
 
                 <!-- Check if the user is admin or not-->
-                <?php if(intval($user['is_admin'] == 0)): ?>
+                <?php if (intval($user['is_admin'] == 0)): ?>
                     <td>No</td>
                 <?php else: ?>
                     <td>Si</td>
                 <?php endif; ?>
 
-                <td><a href="#">X </a></td>
+                <td>
+                    <a href="#" class="btn btn-danger btn-sm">
+                        <i class="far fa-trash-alt"></i>
+                    </a>
+                </td>
             </tr>
         <?php endforeach; ?>
     </table>
@@ -47,12 +50,14 @@
 <div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="registrationModal"
      aria-hidden="true">
 
+    <script type="text/javascript" src="/knowledge_base/application/libs/js/UserRegistration.js"></script>
+
     <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
     <div class="modal-dialog modal-dialog-centered" role="document">
 
         <!-- modal content -->
         <div class="modal-content">
-            <form action="" method="post">
+            <form action="<?php echo URL?>home/createUser" method="post">
 
                 <!-- modal header -->
                 <div class="modal-header">
@@ -65,39 +70,51 @@
                 <!-- body of the modal -->
                 <div class="modal-body">
 
-
                     <!-- Name -->
                     <div class="md-form">
-                        <input type="text" id="materialSubscriptionFormEmail" class="form-control" name="name" required>
-                        <label for="materialSubscriptionFormEmail">Nome</label>
+                        <input type="text" id="name" class="form-control" name="name" required>
+                        <label for="name">Nome</label>
                     </div>
 
                     <!-- Surname -->
                     <div class="md-form">
-                        <input type="text" id="materialSubscriptionFormEmail" class="form-control" name="surname"
+                        <input type="text" id="surname" class="form-control" name="surname"
                                required>
-                        <label for="materialSubscriptionFormEmail">Cognome</label>
+                        <label for="surname">Cognome</label>
                     </div>
 
                     <!-- Email -->
                     <div class="md-form mt-3">
-                        <input type="email" id="materialSubscriptionFormPasswords" class="form-control" name="email"
+                        <input type="email" id="email" class="form-control" name="email"
                                required>
-                        <label for="materialSubscriptionFormPasswords">Email</label>
+                        <label for="email">Email</label>
+                    </div>
+
+                    <!-- User Privileges -->
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="baseUser"
+                               name="is_admin" value="0" checked="checked">
+                        <label class="custom-control-label" for="baseUser">Utente base</label>
+                    </div>
+
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="adminUser"
+                               name="is_admin" value="1">
+                        <label class="custom-control-label" for="adminUser">Utente admin</label>
                     </div>
 
                     <!-- Password -->
                     <div class="md-form">
-                        <input type="password" id="materialSubscriptionFormEmail" class="form-control" name="password"
+                        <input type="password" id="password" class="form-control" name="password"
                                required>
-                        <label for="materialSubscriptionFormEmail">Password</label>
+                        <label for="password">Password</label>
                     </div>
 
-                    <!-- Password -->
+                    <!-- Confirm Password -->
                     <div class="md-form">
-                        <input type="password" id="materialSubscriptionFormEmail" class="form-control"
-                               name="confirm_pass" required>
-                        <label for="materialSubscriptionFormEmail">Conferma password</label>
+                        <input type="password" id="confirmPassword" class="form-control"
+                               name="confirm_pass" required onfocusout="confirmPassCorrect()">
+                        <label for="confirmPassword">Conferma password</label>
                     </div>
 
                 </div>
@@ -114,4 +131,5 @@
 </div>
 
 </div>
+
 </body

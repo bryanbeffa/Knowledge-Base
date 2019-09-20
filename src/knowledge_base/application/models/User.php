@@ -38,7 +38,7 @@ class User
      */
     private $change_pass;
 
-    public function __construct(string $name, string $surname, string $email, string $password, bool $admin, bool $change_pass )
+    public function __construct(string $name, string $surname, string $email, string $password, $admin, $change_pass )
     {
         $this->name = $this->testInput($name);
         $this->surname = $this->testInput($surname);
