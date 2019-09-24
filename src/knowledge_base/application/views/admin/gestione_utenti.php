@@ -1,15 +1,15 @@
 <?php ?>
 
-<div class="container pt-5">
+<div class="p-5">
     <h1>Gestione utenti </h1>
 
-    <table class="table text-center mt-5 mb-5">
+    <table class="table table-bordered text-center mt-5 mb-5">
         <tr>
             <th>Id</th>
             <th>Nome</th>
             <th>Cognome</th>
             <th>E-mail</th>
-            <th>Richiesta cambio password</th>
+            <th>Richiesta cambio <br>password</th>
             <th>Admin</th>
             <th>Elimina</th>
         </tr>
@@ -22,8 +22,8 @@
                 <?php echo '<td>' . $user['email'] . '</td>' ?>
 
                 <td>
-                    <a href="#" class="btn btn-sm" style="background-color: #20d6a9">
-                        X
+                    <a class="text-info" href="<?php echo URL . "home/requestChangePass/" . $user['id']?>" >
+                        Effettua richiesta
                     </a>
                 </td>
 
@@ -35,7 +35,7 @@
                 <?php endif; ?>
 
                 <td>
-                    <a href="#" class="btn btn-danger btn-sm">
+                    <a href="<?php echo URL . "home/deleteUser/" . $user['id']?>" onclick="return confirm('Sei sicuro di voler eliminare questo utente?');">
                         <i class="far fa-trash-alt"></i>
                     </a>
                 </td>
@@ -113,10 +113,12 @@
                     <!-- Confirm Password -->
                     <div class="md-form">
                         <input type="password" id="confirmPassword" class="form-control"
-                               name="confirm_pass" required onfocusout="confirmPassCorrect()">
+                               name="confirm_pass" required onkeyup="confirmPassCorrect()">
                         <label for="confirmPassword">Conferma password</label>
                     </div>
 
+                    <!-- Error msg -->
+                    <p id="errorMsg"></p>
                 </div>
 
                 <!-- buttons of the modal -->
@@ -129,7 +131,7 @@
         </div>
     </div>
 </div>
-
 </div>
 
 </body
+

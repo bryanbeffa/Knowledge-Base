@@ -3,6 +3,7 @@
 class Home
 {
     private $user_manager;
+    private static $error_msg = "";
 
     public function __construct()
     {
@@ -11,13 +12,26 @@ class Home
         require_once 'application/models/User.php';
         require_once 'application/models/PasswordManager.php';
 
-        $this->user_manager = new UserManager();
+        try {
+            $this->user_manager = new UserManager();
+        } catch (PDOException $exception) {
+        }
     }
 
     public function index()
     {
-        require_once 'application/views/templates/head.php';
-        require_once 'application/views/login/index.php';
+        if (isset($this->user_manager)) {
+            require_once 'application/views/templates/head.php';
+            require_once 'application/views/login/index.php';
+        } else {
+            //redirect to no connection page
+            $this->noDatabaseConnection();
+        }
+    }
+
+    public static function setErrorMsg($msg)
+    {
+        self::$error_msg = $msg;
     }
 
     /**
@@ -26,28 +40,40 @@ class Home
     public function login()
     {
 
-        //get user's inputs
-        $email = $this->testInput($_POST['email']);
-        $password = $this->testInput($_POST['password']);
+        if (isset($this->user_manager)) {
+            //get user's inputs
+            $email = $this->testInput($_POST['email']);
+            $password = $this->testInput($_POST['password']);
 
-        //check if the user credentials are correct
-        if ($this->user_manager->checkCredentials($email, $password)) {
+            //check if the user credentials are correct
+            if ($this->user_manager->checkCredentials($email, $password)) {
 
-            //save user's inputs in session variables
-            $_SESSION['email'] = $email;
-            $_SESSION['password'] = $password;
+                //save user's inputs in session variables
+                $_SESSION['email'] = $email;
+                $_SESSION['password'] = $password;
 
-            $this->researchCases();
+                //redirect to research cases - prevent re-login if the database crashed
+                $url = URL . "home/researchCases";
+                header("Location: $url");
 
-        } else {
-            echo "<div class='text-center alert alert-danger alert-dismissible fade show' role='alert'>
+            } else {
+                echo "<div class='text-center alert alert-danger alert-dismissible fade show' role='alert'>
                   <strong>Errore!</strong> Le credenziali fornite non sono corrette
                   <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                   <span aria-hidden='true'>&times;</span></button></div>";
-            $this->index();
+                $this->index();
+            }
+        } else {
+            $this->noDatabaseConnection();
         }
-
     }
+
+    private function noDatabaseConnection()
+    {
+        require_once 'application/views/templates/head.php';
+        require_once 'application/views/errors/database_error.php';
+    }
+
 
     function testInput($data)
     {
@@ -133,12 +159,15 @@ class Home
      */
     private function isUserLogged()
     {
-        if (isset($_SESSION['email']) && isset($_SESSION['email'])) {
-            if ($this->user_manager->checkCredentials($_SESSION['email'], $_SESSION['password'])) {
-                return true;
+        if (isset($this->user_manager)) {
+            if (isset($_SESSION['email']) && isset($_SESSION['email'])) {
+                if ($this->user_manager->checkCredentials($_SESSION['email'], $_SESSION['password'])) {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
+        $this->logout();
     }
 
     public function createUser()
@@ -167,23 +196,22 @@ class Home
                     $user = new User($name, $surname, $email, $password, $is_admin, 0);
 
                     if ($this->user_manager->createUser($user)) {
-                        echo "<div class='text-center alert alert-success alert-dismissible fade show' role='alert'>
-                                  <strong>Ottimo!</strong> L'utente è stato creato con successo 
-                                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                                  <span aria-hidden='true'>&times;</span></button></div>";
+                        //user created message
+                        $this->userCreatedMsg();
                     } else {
-                        $this->printError("Impossibile creare l'utente");
+
+                        $this->printError();
                     }
 
                     $this->manageUsers();
 
                 } else {
-                    require_once 'application/views/templates/user_header.php';
-                    require_once 'application/views/users/ricerca_casi.php';
+                    $this->researchCases();
                 }
-            } else{
+            } else {
                 //redirect to manager page
-                $this->printError("Le due password non corrispondono");
+                self::setErrorMsg("Le password non corrispondono");
+                $this->printError();
                 $this->manageUsers();
             }
         } else {
@@ -192,15 +220,80 @@ class Home
         }
     }
 
+    private function userCreatedMsg()
+    {
+        echo "<div class='text-center alert alert-success alert-dismissible fade show' role='alert' style='position:absolute; left:0;right:0; top:10%; -webkit-transform:translateY(-50%) !important; -ms-transform:translateY(-50%) !important; transform:translateY(-50%) !important;'>
+                                  <strong>Ottimo!</strong> L'utente è stato creato con successo 
+                                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                  <span aria-hidden='true'>&times;</span></button></div>";
+    }
+
     /**
      * Method that print the error message.
      * @param $msg message to print
      */
-    private function printError($msg){
+    private function printError()
+    {
         echo "<div class='text-center alert alert-danger alert-dismissible fade show' role='alert' style='position:absolute; left:0;right:0; top:10%; -webkit-transform:translateY(-50%) !important; -ms-transform:translateY(-50%) !important; transform:translateY(-50%) !important;'>
-                                  <strong>Errore!</strong> $msg 
+                                  <strong>Errore!</strong> " . self::$error_msg . "
                                   <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                   <span aria-hidden='true'>&times;</span></button></div>";
+    }
+
+    /**
+     * Method that set the user field 'change_pass' to 1. User has requested a password change.
+     * @param $id user id
+     */
+    public function requestChangePass($id)
+    {
+        //check if the uses is logged
+        if ($this->isUserLogged()) {
+
+            //check if the user is an admin
+            if ($this->isAdmin()) {
+
+                //set change_pass
+                $this->user_manager->requestChangePass($id);
+
+                //redirect manage users page
+                header('Location: ' . URL . "home/manageUsers");
+
+            } else {
+                $this->researchCases();
+            }
+
+        } else {
+            //redirect to login page
+            $this->index();
+        }
+    }
+
+    /**
+     * Method that tries to delete the user.
+     * @param $id id of the user who will be deleted
+     */
+    public function deleteUser($id)
+    {
+        //check if the uses is logged
+        if ($this->isUserLogged()) {
+
+            //check if the user is an admin
+            if ($this->isAdmin()) {
+
+                //try to delete user
+                $this->user_manager->deleteUSer($id);
+
+                //redirect manage users page
+                header('Location: ' . URL . "home/manageUsers");
+
+            } else {
+                $this->researchCases();
+            }
+
+        } else {
+            //redirect to login page
+            $this->index();
+        }
     }
 }
 

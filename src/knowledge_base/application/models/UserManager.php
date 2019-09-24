@@ -12,6 +12,7 @@ class UserManager
 
     public function __construct()
     {
+        require_once 'application/controller/home.php';
         try {
             $this->conn = DbManager::connect();
         } catch (PDOException $ex) {
@@ -119,6 +120,11 @@ class UserManager
         return false;
     }
 
+    /**
+     * Method that try to create a new user.
+     * @param User $user user will be created
+     * @return bool if the user has been created.
+     */
     public function createUser(User $user)
     {
         //check if the email already exists
@@ -131,15 +137,43 @@ class UserManager
                                             'email' => $user->getEmail(), 'password' => $user->getPassword(),
                                             'is_admin' => $user->getAdmin(), 'change_pass' => $user->getChangePass()]);
 
-                echo "utente creato";
                 return true;
 
             } catch (PDOException $ex) {
-                echo $ex;
+                Home::setErrorMsg("Impossibile creare l'utente");
                 return false;
             }
         } else {
+            Home::setErrorMsg("Email già utilizzata");
             return false;
+        }
+    }
+
+    /**
+     * Method that sets the db field 'change_pass' of the table users to the specified user to 1.
+     * @param $id id of the user who requested the change password.
+     */
+    public function requestChangePass($id){
+        try {
+            //prepare query
+            $prepared_query = $this->conn->prepare("UPDATE USERS SET change_pass = 1 WHERE id = :id");
+            $prepared_query->execute(['id' => $id]);
+
+        } catch (PDOException $ex) {
+        }
+    }
+
+    /**
+     * Method that tries to delete the user.
+     * @param $id id of the user who will be deleted
+     */
+    public function deleteUser($id){
+        try {
+            //prepare query
+            $prepared_query = $this->conn->prepare("DELETE FROM USERS WHERE ID = :id");
+            $prepared_query->execute(['id' => $id]);
+
+        } catch (PDOException $ex) {
         }
     }
 }
