@@ -20,12 +20,6 @@ class UserManager
         }
     }
 
-    public function registerUser(User $user)
-    {
-        //register new user
-
-    }
-
     /**
      * Method that returns if the user credentials are correct
      */
@@ -53,7 +47,8 @@ class UserManager
     {
         //get the number of rows that contain the user email (MAX 1)
         $prepared_query = $this->conn->prepare("SELECT count(*) FROM users WHERE email = :email");
-        $prepared_query->execute(['email' => $email]);
+        $prepared_query->bindParam(':email', $email, PDO::PARAM_STR);
+        $prepared_query->execute();
         $res = $prepared_query->fetch();
 
         //check if the row count is 1
@@ -73,7 +68,8 @@ class UserManager
     {
         //get the password from database
         $prepared_query = $this->conn->prepare("SELECT password FROM users WHERE email = :email");
-        $prepared_query->execute(['email' => $email]);
+        $prepared_query->bindParam(':email', $email, PDO::PARAM_STR);
+        $prepared_query->execute();
         $res = $prepared_query->fetch();
 
         $hashed_password = $res[0];
@@ -107,7 +103,8 @@ class UserManager
     {
         //get is_admin value
         $prepared_query = $this->conn->prepare("SELECT is_admin FROM users WHERE email = :email");
-        $prepared_query->execute(['email' => $email]);
+        $prepared_query->bindParam(':email', $email, PDO::PARAM_STR);
+        $prepared_query->execute();
 
         //get result
         $res = $prepared_query->fetch();
@@ -133,9 +130,24 @@ class UserManager
             try {
                 //prepare query
                 $prepared_query = $this->conn->prepare("INSERT INTO USERS (name, surname, email, password, is_admin, change_pass) VALUES(:name, :surname, :email, :password, :is_admin, :change_pass)");
-                $prepared_query->execute(['name' => $user->getName(), 'surname' => $user->getSurname(),
-                                            'email' => $user->getEmail(), 'password' => $user->getPassword(),
-                                            'is_admin' => $user->getAdmin(), 'change_pass' => $user->getChangePass()]);
+
+                //get params
+                $name = $user->getName();
+                $surname = $user->getSurname();
+                $email = $user->getEmail();
+                $password = $user->getPassword();
+                $is_admin = $user->getAdmin();
+                $change_pass = $user->getChangePass();
+
+                //bind params
+                $prepared_query->bindParam(':name', $name, PDO::PARAM_STR);
+                $prepared_query->bindParam(':surname', $surname, PDO::PARAM_STR);
+                $prepared_query->bindParam(':email', $email, PDO::PARAM_STR);
+                $prepared_query->bindParam(':password', $password, PDO::PARAM_STR);
+                $prepared_query->bindParam(':is_admin', $is_admin, PDO::PARAM_INT);
+                $prepared_query->bindParam(':change_pass', $change_pass, PDO::PARAM_INT);
+
+                $prepared_query->execute();
 
                 return true;
 
@@ -157,7 +169,8 @@ class UserManager
         try {
             //prepare query
             $prepared_query = $this->conn->prepare("UPDATE USERS SET change_pass = 1 WHERE id = :id");
-            $prepared_query->execute(['id' => $id]);
+            $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
+            $prepared_query->execute();
 
         } catch (PDOException $ex) {
         }
@@ -171,7 +184,8 @@ class UserManager
         try {
             //prepare query
             $prepared_query = $this->conn->prepare("DELETE FROM USERS WHERE ID = :id");
-            $prepared_query->execute(['id' => $id]);
+            $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
+            $prepared_query->execute();
 
         } catch (PDOException $ex) {
         }

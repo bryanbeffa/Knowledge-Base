@@ -11,6 +11,7 @@ class Home
         require_once 'application/models/UserManager.php';
         require_once 'application/models/User.php';
         require_once 'application/models/PasswordManager.php';
+        require_once 'application/models/CategoryManager.php';
 
         try {
             $this->user_manager = new UserManager();
@@ -53,8 +54,7 @@ class Home
                 $_SESSION['password'] = $password;
 
                 //redirect to research cases - prevent re-login if the database crashed
-                $url = URL . "home/researchCases";
-                header("Location: $url");
+                header("Location: " . URL . "home/researchCases");
 
             } else {
                 echo "<div class='text-center alert alert-danger alert-dismissible fade show' role='alert'>
@@ -121,6 +121,10 @@ class Home
             } else {
                 require_once 'application/views/templates/user_header.php';
             }
+
+            //get categories
+            $categories = (new CategoryManager())->getCategories();
+
             require_once 'application/views/users/ricerca_casi.php';
 
         } else {
@@ -190,18 +194,24 @@ class Home
                     $email = $this->testInput($_POST['email']);
                     $is_admin = $this->testInput($_POST['is_admin']);
 
-                    //hash password
-                    $password = password_hash($password, PASSWORD_DEFAULT);
+                    //check if the text fields are not empty
+                    if($this->checkTextInput($name) && $this->checkTextInput($password) && $this->checkTextInput($surname)){
+                        //hash password
+                        $password = password_hash($password, PASSWORD_DEFAULT);
 
-                    $user = new User($name, $surname, $email, $password, $is_admin, 0);
+                        $user = new User($name, $surname, $email, $password, $is_admin, 0);
 
-                    if ($this->user_manager->createUser($user)) {
-                        //user created message
-                        $this->userCreatedMsg();
+                        if ($this->user_manager->createUser($user)) {
+                            //user created message
+                            $this->userCreatedMsg();
+                        } else {
+                            $this->printError();
+                        }
                     } else {
-
+                        self::$error_msg = "I campi di testo non possono essere vuoti";
                         $this->printError();
                     }
+
 
                     $this->manageUsers();
 
@@ -294,6 +304,13 @@ class Home
             //redirect to login page
             $this->index();
         }
+    }
+
+    private function checkTextInput($data){
+        if(empty($data)){
+            return false;
+        }
+        return true;
     }
 }
 
