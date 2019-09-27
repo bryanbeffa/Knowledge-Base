@@ -4,6 +4,8 @@ class Home
 {
     private $user_manager;
     private static $error_msg = "";
+    private $category_manager;
+    private $case_manager;
 
     public function __construct()
     {
@@ -12,9 +14,12 @@ class Home
         require_once 'application/models/User.php';
         require_once 'application/models/PasswordManager.php';
         require_once 'application/models/CategoryManager.php';
+        require_once 'application/models/CaseManager.php';
 
         try {
             $this->user_manager = new UserManager();
+            $this->category_manager = new CategoryManager();
+            $this->case_manager = new CaseManager();
         } catch (PDOException $exception) {
         }
     }
@@ -115,15 +120,22 @@ class Home
 
             require_once 'application/views/templates/head.php';
 
+            $is_admin = "";
+
             //check if the user is an admin
             if ($this->isAdmin()) {
                 require_once 'application/views/templates/admin_header.php';
+                $is_admin = 1;
             } else {
                 require_once 'application/views/templates/user_header.php';
+                $is_admin = 0;
             }
 
             //get categories
-            $categories = (new CategoryManager())->getCategories();
+            $categories = $this->category_manager->getCategories();
+
+            //get cases
+            $cases = $this->case_manager->getCases();
 
             require_once 'application/views/users/ricerca_casi.php';
 
@@ -194,6 +206,12 @@ class Home
                     $email = $this->testInput($_POST['email']);
                     $is_admin = $this->testInput($_POST['is_admin']);
 
+                    //save data into session variables
+                    $_SESSION['new_user_name'] = $name;
+                    $_SESSION['new_user_surname'] = $surname;
+                    $_SESSION['new_user_email'] = $email;
+                    $_SESSION['new_user_is_admin'] = $is_admin;
+
                     //check if the text fields are not empty
                     if($this->checkTextInput($name) && $this->checkTextInput($password) && $this->checkTextInput($surname)){
                         //hash password
@@ -204,6 +222,11 @@ class Home
                         if ($this->user_manager->createUser($user)) {
                             //user created message
                             $this->userCreatedMsg();
+
+                            unset($_SESSION['new_user_name']);
+                            unset($_SESSION['new_user_surname']);
+                            unset($_SESSION['new_user_email']);
+                            unset($_SESSION['new_user_is_admin']);
                         } else {
                             $this->printError();
                         }
@@ -312,5 +335,46 @@ class Home
         }
         return true;
     }
+
+    /**
+     * Add new category.
+     */
+    public function addCategory(){
+        //check if the uses is logged
+        if ($this->isUserLogged()) {
+
+            //check if the user is an admin
+            if ($this->isAdmin()) {
+
+                if(isset($_POST['new_category']) && !empty($_POST['new_category'])) {
+
+                    $new_category = $this->testInput($_POST['new_category']);
+
+                    if(strlen($new_category) <= 50 && !empty($new_category)){
+                        //add new category
+                        if($this->category_manager->addCategory($new_category)){
+                            //redirect manage users page
+                            header('Location: ' . URL . "home/researchCases");
+                        } else {
+                            $this->researchCases();
+                            $this->printError();
+                        }
+                    } else {
+                        self::$error_msg = "Inserire da 1 a 50 caratteri";
+                        $this->researchCases();
+                        $this->printError();
+                    }
+                }
+
+            } else {
+                $this->researchCases();
+            }
+
+        } else {
+            //redirect to login page
+            $this->index();
+        }
+    }
+
 }
 

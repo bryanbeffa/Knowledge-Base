@@ -7,6 +7,7 @@ class CategoryManager
 
     public function __construct()
     {
+        require_once 'application/controller/home.php';
         try {
             $this->conn = DbManager::connect();
         } catch (PDOException $ex) {
@@ -29,4 +30,17 @@ class CategoryManager
         }
     }
 
+    public function addCategory($category_name){
+        try {
+            //prepare query
+            $prepared_query = $this->conn->prepare("INSERT INTO categories(name) VALUES (:category_name)");
+            $prepared_query->bindParam(':category_name', $category_name, PDO::PARAM_STR);
+            $prepared_query->execute();
+
+            return true;
+        } catch (PDOException $ex) {
+            Home::setErrorMsg("La categoria esiste già");
+            return false;
+        }
+    }
 }
