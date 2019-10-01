@@ -62,38 +62,40 @@
 
     <h2>Risultati:</h2>
 
-    <!-- Esempio di caso -->
-    <div class="card mt-4 mb-4">
+    <!-- Show cases -->
+    <?php foreach ($cases as $case): ?>
+        <?php if (!$case['deleted']): ?>
+            <div class="card mt-4 mb-5">
 
-        <!-- Title -->
-        <div class="card-header" style="background-color: #20d6a9">
-            <h2 class="text-center"><b>Nome: </b>Prova</h2>
-        </div>
+                <!-- Title -->
+                <div class="card-header" style="background-color: #20d6a9">
+                    <h2 class="text-center"><b>Nome: </b><?php echo $case['title'] ?></h2>
+                </div>
 
-        <!-- Body -->
-        <div class="card-body">
-            <h5><b>Categoria:</b> Reti aziendali</h5>
-            <h5><b>Variante di:</b> Caso numero 2</h5>
-            <h5><b>Data creazione:</b> 26.09.2019 14:36:02</h5>
-            <h5 class="font-weight-bold">Descrizione:</h5>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-                scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
-                into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
-                release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
-                software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                <!-- Body -->
+                <div class="card-body">
+                    <h5><b>Categoria:</b> <?php echo $case['category_id'] ?></h5>
+                    <h5><b>Variante di:</b> <?php echo ($case['variant'] == null) ? "-" : $case['variant'] ?> </h5>
+                    <h5><b>Data creazione:</b> <?php echo $case['created_at'] ?></h5>
+                    <h5 class="font-weight-bold">Descrizione:</h5>
+                    <p><?php echo $case['description'] ?></p>
 
-            <!-- Times -->
-            <h5 class="font-weight-bold">Times: 6</h5>
-        </div>
+                    <!-- Times -->
+                    <h5 class="font-weight-bold">Times: 6</h5>
+                </div>
 
-        <!-- Footer-->
-        <div class="card-footer bg-transparent">
-            <button class="btn" style="background-color: #20d6a9"> Elimina</button>
-            <button class="btn" style="background-color: #20d6a9"> Modifica</button>
-        </div>
+                <!-- Footer-->
+                <?php if ($is_admin): ?>
+                    <div class="card-footer bg-transparent text-right">
+                        <button class="btn" style="background-color: #20d6a9"> Modifica</button>
+                        <a href="<?php echo URL."/home/deleteCase/".$case['id']?>"><button class="btn" style="background-color: #20d6a9"> Elimina</button>
+                    </div>
+                <?php endif; ?>
 
-    </div>
+            </div>
+
+        <?php endif; ?>
+    <?php endforeach; ?>
 
     <hr>
 
@@ -166,7 +168,7 @@
                 </button>
             </div>
 
-            <form action="<?php echo URL ?>" method="post">
+            <form action="<?php echo URL ?>home/addCase" method="post">
                 <!-- Body -->
                 <div class="modal-body">
 
@@ -174,13 +176,14 @@
                     <div class="mt-3">
                         <label>Nome della caso (massimo 50 caratteri) <b class="text-danger">*</b></label>
                         <input type="text" id="title" class="form-control" placeholder="Inserisci nome"
-                               name="new_case_title" required>
+                               name="new_case_title" required
+                               value="<?php echo (isset($_SESSION['new_case_title'])) ? $_SESSION['new_case_title'] : "" ?>">
                     </div>
 
                     <!-- Case category -->
                     <div class="mt-3">
                         <label>Seleziona una categoria <b class="text-danger">*</b></label>
-                        <select class="browser-default custom-select" required name="category">
+                        <select class="browser-default custom-select" required name="new_case_category">
                             <?php foreach ($categories as $category): ?>
                                 <?php echo "<option value=" . $category['id'] . "selected>" . $category['name'] . "</option>" ?>
                             <?php endforeach; ?>
@@ -190,10 +193,10 @@
                     <!-- Case variant -->
                     <div class="mt-3">
                         <label>Variante del caso:</label>
-                        <select class="browser-default custom-select" required name="variant">
+                        <select class="browser-default custom-select" required name="new_case_variant">
                             <option value="0" selected>Nessun caso</option>
                             <?php foreach ($cases as $case): ?>
-                                <?php echo "<option value=" . $case['id'] . "selected>" . $case['title'] . "</option>" ?>
+                                <?php echo "<option value=" . $case['id'] . "selected>" . " (id: " . $case['id'] . ") " . $case['title'] . "</option>" ?>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -202,7 +205,8 @@
                     <div class="mt-3">
                         <label>Descrizione <b class="text-danger">*</b></label>
                         <textarea type="text" name="new_case_description" rows="10" placeholder="Inserire descrizione"
-                                  class="form-control md-textarea"></textarea>
+                                  class="form-control md-textarea"
+                                  required><?php echo (isset($_SESSION['new_case_description'])) ? $_SESSION['new_case_description'] : "" ?></textarea>
                     </div>
 
                     <p class="mt-3"><b class="text-danger">*</b> indica un campo obbligatorio</p>

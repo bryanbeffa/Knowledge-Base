@@ -190,4 +190,22 @@ class UserManager
         } catch (PDOException $ex) {
         }
     }
+
+    /**
+     * Get user id by email.
+     * @param $email user email
+     */
+    public function getIdByEmail($email){
+        try {
+            //prepare query
+            $prepared_query = $this->conn->prepare("SELECT id FROM USERS WHERE EMAIL = :email");
+            $prepared_query->bindParam(':email', $email, PDO::PARAM_STR);
+            $prepared_query->execute();
+
+            $res = $prepared_query->fetch();
+            return $res[0];
+
+        } catch (PDOException $ex) {
+        }
+    }
 }
