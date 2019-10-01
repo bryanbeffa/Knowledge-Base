@@ -149,6 +149,14 @@ class Home
             //get cases
             $cases = $this->case_manager->getCases();
 
+            $cases_times = array();
+            foreach ($cases as $case){
+                //create associative array, id case as key
+                $key = $case['id'];
+                $cases_times["$key"] = $this->case_manager->getTimes($case['id']);
+                $cases_categories["$key"] = $this->category_manager->getCategoryById($case['category_id']);
+            }
+
             require_once 'application/views/users/ricerca_casi.php';
 
         } else {
@@ -494,6 +502,9 @@ class Home
             if ($this->isAdmin()) {
 
                 $this->case_manager->setDeletedCase($id);
+
+                //redirect research cases page
+                header('Location: ' . URL . "home/researchCases");
 
             } else {
                 $this->researchCases();

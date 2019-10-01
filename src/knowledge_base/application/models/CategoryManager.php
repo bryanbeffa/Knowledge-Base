@@ -43,4 +43,18 @@ class CategoryManager
             return false;
         }
     }
+
+    public function getCategoryById($id){
+        try {
+            //prepare query
+            $prepared_query = $this->conn->prepare("SELECT name FROM categories WHERE id = :id");
+            $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
+            $prepared_query->execute();
+
+            $res = $prepared_query->fetch();
+            return $res[0];
+
+        } catch (PDOException $ex) {
+        }
+    }
 }

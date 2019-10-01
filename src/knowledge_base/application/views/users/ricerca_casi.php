@@ -65,30 +65,34 @@
     <!-- Show cases -->
     <?php foreach ($cases as $case): ?>
         <?php if (!$case['deleted']): ?>
+
+            <!-- Uses to print times variable -->
+            <?php $key = $case['id']; ?>
             <div class="card mt-4 mb-5">
 
                 <!-- Title -->
                 <div class="card-header" style="background-color: #20d6a9">
-                    <h2 class="text-center"><b>Nome: </b><?php echo $case['title'] ?></h2>
+                    <h2 class="text-center"><b>Nome: </b><?php echo  $case['title'] ?></h2>
                 </div>
 
                 <!-- Body -->
                 <div class="card-body">
-                    <h5><b>Categoria:</b> <?php echo $case['category_id'] ?></h5>
+                    <h5><b>ID:</b>  <?php echo $case['id'] ?></h5>
+                    <h5><b>Categoria:</b> <?php echo $cases_categories["$key"]?></h5>
                     <h5><b>Variante di:</b> <?php echo ($case['variant'] == null) ? "-" : $case['variant'] ?> </h5>
                     <h5><b>Data creazione:</b> <?php echo $case['created_at'] ?></h5>
                     <h5 class="font-weight-bold">Descrizione:</h5>
                     <p><?php echo $case['description'] ?></p>
 
                     <!-- Times -->
-                    <h5 class="font-weight-bold">Times: 6</h5>
+                    <h5><b>Numero di ripresentazioni: </b><?php echo $cases_times["$key"]?> </h5>
                 </div>
 
                 <!-- Footer-->
                 <?php if ($is_admin): ?>
                     <div class="card-footer bg-transparent text-right">
                         <button class="btn" style="background-color: #20d6a9"> Modifica</button>
-                        <a href="<?php echo URL."/home/deleteCase/".$case['id']?>"><button class="btn" style="background-color: #20d6a9"> Elimina</button>
+                        <a class="btn" style="background-color: #20d6a9" href="<?php echo URL."/home/deleteCase/".$case['id']?>" onclick="return confirm('Sei sicuro di voler eliminare questo caso?');"> Elimina</a>
                     </div>
                 <?php endif; ?>
 
