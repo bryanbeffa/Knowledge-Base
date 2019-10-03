@@ -35,19 +35,19 @@
     <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\login\application\libs\img" />
-      <recent name="C:\xampp\htdocs\login\application\models" />
-      <recent name="C:\xampp\htdocs\login\application\libs\css" />
-      <recent name="C:\xampp\htdocs\login\application\views\tasks" />
-      <recent name="C:\xampp\htdocs\login\application\views\login" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\knowledge_base\application\libs\img" />
       <recent name="C:\xampp\htdocs\knowledge_base\application\libs" />
       <recent name="C:\xampp\htdocs\login\application\views\templates" />
       <recent name="C:\xampp\htdocs\login\application\views\subjects" />
       <recent name="C:\xampp\htdocs\login\application\libs" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\login\application\libs\img" />
+      <recent name="C:\xampp\htdocs\login\application\models" />
+      <recent name="C:\xampp\htdocs\login\application\libs\css" />
+      <recent name="C:\xampp\htdocs\login\application\views\tasks" />
+      <recent name="C:\xampp\htdocs\login\application\views\login" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -134,6 +134,9 @@
       <workItem from="1569579501885" duration="8274000" />
       <workItem from="1569592568670" duration="9000" />
       <workItem from="1569932105408" duration="10523000" />
+      <workItem from="1569948247906" duration="11000" />
+      <workItem from="1569967049934" duration="331000" />
+      <workItem from="1570103181707" duration="10540000" />
     </task>
     <servers />
   </component>

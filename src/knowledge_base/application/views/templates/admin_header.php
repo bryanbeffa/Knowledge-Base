@@ -17,14 +17,14 @@
 
                 <!-- Manage users -->
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo URL.'home/manageUsers'?>"> Gestione utenti
+                    <a class="nav-link" href="<?php echo URL.'users/manageUsers'?>"> Gestione utenti
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
 
                 <!-- Cases -->
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo URL.'home/researchCases'?>">Ricerca Casi
+                    <a class="nav-link" href="<?php echo URL.'researchCases/showCases'?>">Ricerca Casi
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
@@ -33,7 +33,7 @@
             <!-- logout button -->
             <ul class="navbar-nav ml-auto nav-flex-icons">
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo URL.'home/logout'?>">Logout
+                    <a class="nav-link" href="<?php echo URL.'users/logout'?>">Logout
                     </a>
                 </li>
             </ul>

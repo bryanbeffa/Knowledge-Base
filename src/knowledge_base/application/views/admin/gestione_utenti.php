@@ -9,7 +9,7 @@
             <th>Nome</th>
             <th>Cognome</th>
             <th>E-mail</th>
-            <th>Richiesta cambio <br>password</th>
+            <!--<th>Richiesta cambio <br>password</th>-->
             <th>Admin</th>
             <th>Elimina utente</th>
         </tr>
@@ -21,11 +21,11 @@
                 <?php echo '<td>' . $user['surname'] . '</td>' ?>
                 <?php echo '<td>' . $user['email'] . '</td>' ?>
 
-                <td>
-                    <a class="text-info" href="<?php echo URL . "home/requestChangePass/" . $user['id'] ?>">
+                <!--<td>
+                    <a class="text-info" href="<?php echo URL . "users/requestChangePass/" . $user['id'] ?>">
                         Effettua richiesta
                     </a>
-                </td>
+                </td>-->
 
                 <!-- Check if the user is admin or not-->
                 <?php if (intval($user['is_admin'] == 0)): ?>
@@ -35,7 +35,7 @@
                 <?php endif; ?>
 
                 <td>
-                    <a class="text-info" href="<?php echo URL . "home/deleteUser/" . $user['id'] ?>"
+                    <a class="text-info" href="<?php echo URL . "users/deleteUser/" . $user['id'] ?>"
                        onclick="return confirm('Sei sicuro di voler eliminare questo utente?');">
                         Elimina
                     </a>
@@ -59,7 +59,7 @@
 
                 <!-- modal content -->
                 <div class="modal-content">
-                    <form action="<?php echo URL ?>home/createUser" method="post">
+                    <form action="<?php echo URL ?>users/createUser" method="post">
 
                         <!-- modal header -->
                         <div class="modal-header">
@@ -85,6 +85,7 @@
                                 <label class="">Cognome:</label>
                                 <input type="text" id="surname" class="form-control" name="surname"
                                        placeholder="Inserire cognome"
+                                       value="<?php echo (isset($_SESSION['new_user_surname'])) ? $_SESSION['new_user_surname'] : null ?>"
                                        required>
                             </div>
 
@@ -92,6 +93,7 @@
                             <div class="mt-3">
                                 <label class="">Email:</label>
                                 <input type="email" id="email" class="form-control" name="email"
+                                       value="<?php echo (isset($_SESSION['new_user_email'])) ? $_SESSION['new_user_email'] : null ?>"
                                        required placeholder="email">
                             </div>
 

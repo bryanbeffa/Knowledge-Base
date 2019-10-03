@@ -22,12 +22,28 @@ class CaseManager
     public function getCases()
     {
         try {
+            $sql = "SELECT * FROM cases WHERE DELETED = 0 LIMIT 1";
+
             //prepare query
-            $prepared_query = $this->conn->prepare("SELECT * FROM cases");
+            if(isset($_SESSION['order_results'])){
+
+                if(intval($_SESSION['order_results']) == 0){
+
+                    //order by date
+                    $sql = "SELECT * FROM cases WHERE DELETED = 0 order by created_at desc";
+                } else if(intval($_SESSION['order_results'])== 1){
+
+                    //order by times
+                    $sql = "SELECT * FROM cases WHERE DELETED = 0";
+                }
+            }
+
+            $prepared_query = $this->conn->prepare($sql);
             $prepared_query->execute();
             return $prepared_query->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (PDOException $ex) {
+            echo $ex;
         }
     }
 
@@ -87,6 +103,21 @@ class CaseManager
     public function setDeletedCase($id)
     {
         try {
+
+            //get cases that have the variant id of the deleted case
+            $variant_query = $this->conn->prepare("SELECT * FROM CASES WHERE variant = :id");
+            $variant_query->bindParam(':id', $id, PDO::PARAM_INT);
+            $variant_query->execute();
+
+            $results = $variant_query->fetchAll(PDO::FETCH_ASSOC);
+
+            //set null variant field
+            foreach ($results as $result){
+                $prepared_query = $this->conn->prepare("UPDATE CASES set variant = null where id = :id");
+                $prepared_query->bindParam(':id', $result['id'], PDO::PARAM_INT);
+                $prepared_query->execute();
+            }
+
             //prepare query
             $prepared_query = $this->conn->prepare("UPDATE CASES SET deleted = 1 WHERE ID = :id");
             $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
@@ -103,13 +134,28 @@ class CaseManager
     public function getTimes($id)
     {
         try {
-            //prepare query
-            $prepared_query = $this->conn->prepare("SELECT count(*) FROM rappresentations WHERE id_case = :id");
+            //get which cases have this variant case
+            $prepared_query = $this->conn->prepare("SELECT * FROM cases WHERE variant = :id");
             $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
             $prepared_query->execute();
 
-            $res = $prepared_query->fetch();
-            return intval($res[0]);
+            $variant_case_results = $prepared_query->fetchAll(PDO::FETCH_ASSOC);
+
+            //get not deleted case
+            $times = 0;
+            foreach ($variant_case_results as $variant_case_result){
+
+                $prepared_query = $this->conn->prepare("SELECT  count(*) FROM cases WHERE id = :id AND deleted = 0");
+                $prepared_query->bindParam(':id', $variant_case_results['id'], PDO::PARAM_INT);
+                $prepared_query->execute();
+                $res = $prepared_query->fetch();
+
+                if(intval($res[0]) == 1){
+                    $times++;
+                }
+            }
+
+            return $times;
 
         } catch (PDOException $ex) {
         }

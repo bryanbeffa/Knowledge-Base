@@ -3,27 +3,21 @@
 class Home
 {
     private $user_manager;
-    private $validator;
-    private static $error_msg = "";
     private $category_manager;
     private $case_manager;
+
+    static $error_msg = "";
+    static $success_msg = "";
 
     public function __construct()
     {
         require_once 'application/models/DbManager.php';
         require_once 'application/models/UserManager.php';
-        require_once 'application/models/User.php';
         require_once 'application/models/PasswordManager.php';
-        require_once 'application/models/CategoryManager.php';
-        require_once 'application/models/CaseManager.php';
-        require_once 'application/models/Validator.php';
-        require_once 'application/models/DocCase.php';
+        require_once 'application/controller/dbErrorPage.php';
 
         try {
             $this->user_manager = new UserManager();
-            $this->category_manager = new CategoryManager();
-            $this->case_manager = new CaseManager();
-            $this->validator = new Validator();
         } catch (PDOException $exception) {
         }
     }
@@ -35,7 +29,7 @@ class Home
             require_once 'application/views/login/index.php';
         } else {
             //redirect to no connection page
-            $this->noDatabaseConnection();
+            DbErrorPage::noDatabaseConnection();
         }
     }
 
@@ -44,12 +38,16 @@ class Home
         self::$error_msg = $msg;
     }
 
+    public static function setSuccessMsg($msg)
+    {
+        self::$success_msg = $msg;
+    }
+
     /**
      * Method
      */
     public function login()
     {
-
         if (isset($this->user_manager)) {
 
             //check if the post variable are not null
@@ -68,7 +66,7 @@ class Home
                     $_SESSION['id'] = $this->user_manager->getIdByEmail($email);
 
                     //redirect to research cases - prevent re-login if the database crashed
-                    header("Location: " . URL . "home/researchCases");
+                    header("Location: " . URL . "researchCases/showCases");
 
                 } else {
                     echo "<div class='text-center alert alert-danger alert-dismissible fade show' role='alert'>
@@ -81,16 +79,9 @@ class Home
                 $this->index();
             }
         } else {
-            $this->noDatabaseConnection();
+            DbErrorPage::noDatabaseConnection();
         }
     }
-
-    private function noDatabaseConnection()
-    {
-        require_once 'application/views/templates/head.php';
-        require_once 'application/views/errors/database_error.php';
-    }
-
 
     function testInput($data)
     {
@@ -100,197 +91,11 @@ class Home
         return $data;
     }
 
-    public function manageUsers()
-    {
-        //check if the user is logged
-        if ($this->isUserLogged()) {
-
-            //check if the user is an admin
-            if ($this->isAdmin()) {
-
-                //get users list
-                $users = $this->user_manager->getUsersList();
-
-                require_once 'application/views/templates/head.php';
-                require_once 'application/views/templates/admin_header.php';
-                require_once 'application/views/admin/gestione_utenti.php';
-            } else {
-
-                //redirect to cases page
-                $this->researchCases();
-            }
-        } else {
-            //redirect to login page
-            $this->index();
-        }
-    }
-
-    public function researchCases()
-    {
-        //check if the uses is logged
-        if ($this->isUserLogged()) {
-
-            require_once 'application/views/templates/head.php';
-
-            $is_admin = "";
-
-            //check if the user is an admin
-            if ($this->isAdmin()) {
-                require_once 'application/views/templates/admin_header.php';
-                $is_admin = 1;
-            } else {
-                require_once 'application/views/templates/user_header.php';
-                $is_admin = 0;
-            }
-
-            //get categories
-            $categories = $this->category_manager->getCategories();
-
-            //get cases
-            $cases = $this->case_manager->getCases();
-
-            $cases_times = array();
-            foreach ($cases as $case){
-                //create associative array, id case as key
-                $key = $case['id'];
-                $cases_times["$key"] = $this->case_manager->getTimes($case['id']);
-                $cases_categories["$key"] = $this->category_manager->getCategoryById($case['category_id']);
-            }
-
-            require_once 'application/views/users/ricerca_casi.php';
-
-        } else {
-            //redirect to login page
-            $this->index();
-        }
-    }
-
-    /**
-     * Method that returns if the logged user has admin privileges
-     */
-    private function isAdmin()
-    {
-
-        if (isset($_SESSION['email'])) {
-            if ($this->user_manager->isAdminUser($_SESSION['email'])) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Method that unsets session variables
-     */
-    public function logout()
-    {
-        $_SESSION['email'] = '';
-        $_SESSION['password'] = '';
-
-        //redirect to login page
-        $this->index();
-    }
-
-    /**
-     * Method that returns if the user is logged
-     */
-    private function isUserLogged()
-    {
-        if (isset($this->user_manager)) {
-
-            //check if the variables are initialized
-            if (isset($_SESSION['email']) && isset($_SESSION['email'])) {
-                if ($this->user_manager->checkCredentials($_SESSION['email'], $_SESSION['password'])) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        $this->logout();
-    }
-
-    public function createUser()
-    {
-        //check if the uses is logged
-        if ($this->isUserLogged()) {
-            require_once 'application/views/templates/head.php';
-
-            //check if the post variable are not null
-            if (isset($_POST['password']) && isset($_POST['confirm_pass'])
-                && isset($_POST['name']) && isset($_POST['surname']) && isset($_POST['email']) && isset($_POST['is_admin'])) {
-
-
-                $password = $this->testInput($_POST['password']);
-                $confirm_pass = $this->testInput($_POST['confirm_pass']);
-
-                //check if the password are the same
-                if (PasswordManager::matchPassword($password, $confirm_pass)) {
-
-                    //check if the user is an admin
-                    if ($this->isAdmin()) {
-                        //create user
-                        $name = $this->testInput($_POST['name']);
-                        $surname = $this->testInput($_POST['surname']);
-                        $email = $this->testInput($_POST['email']);
-                        $is_admin = $this->testInput($_POST['is_admin']);
-
-                        //save data into session variables
-                        $_SESSION['new_user_name'] = $name;
-                        $_SESSION['new_user_surname'] = $surname;
-                        $_SESSION['new_user_email'] = $email;
-                        $_SESSION['new_user_is_admin'] = $is_admin;
-
-                        //check if the text fields are not empty
-                        if ($this->checkTextInput($name) && $this->checkTextInput($password) && $this->checkTextInput($surname)) {
-                            //hash password
-                            $password = password_hash($password, PASSWORD_DEFAULT);
-
-                            $user = new User($name, $surname, $email, $password, $is_admin, 0);
-
-                            if ($this->user_manager->createUser($user)) {
-                                //user created message
-                                $this->userCreatedMsg();
-
-                                unset($_SESSION['new_user_name']);
-                                unset($_SESSION['new_user_surname']);
-                                unset($_SESSION['new_user_email']);
-                                unset($_SESSION['new_user_is_admin']);
-                            } else {
-                                $this->printError();
-                            }
-                        } else {
-                            self::$error_msg = "I campi di testo non possono essere vuoti";
-                            $this->printError();
-                        }
-
-
-                        $this->manageUsers();
-
-                    } else {
-                        $this->researchCases();
-                    }
-                } else {
-                    //redirect to manager page
-                    self::setErrorMsg("Le password non corrispondono");
-                    $this->printError();
-                    $this->manageUsers();
-                }
-            } else {
-                $this->manageUsers();
-            }
-        } else {
-            //redirect to login page
-            $this->index();
-        }
-    }
-
-    private
-    function userCreatedMsg()
+    public static function successMsg()
     {
         echo "<div class='text-center alert alert-success alert-dismissible fade show' role='alert' style='position:absolute; left:0;right:0; top:10%; -webkit-transform:translateY(-50%) !important; -ms-transform:translateY(-50%) !important; transform:translateY(-50%) !important;'>
-                                  <strong>Ottimo!</strong> L'utente è stato creato con successo 
-                                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                  <strong>Ottimo!</strong>" . self::$success_msg .
+            "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                   <span aria-hidden='true'>&times;</span></button></div>";
     }
 
@@ -298,223 +103,12 @@ class Home
      * Method that print the error message.
      * @param $msg message to print
      */
-    private
-    function printError()
+    public static function printError()
     {
         echo "<div class='text-center alert alert-danger alert-dismissible fade show' role='alert' style='position:absolute; left:0;right:0; top:10%; -webkit-transform:translateY(-50%) !important; -ms-transform:translateY(-50%) !important; transform:translateY(-50%) !important;'>
                                   <strong>Errore!</strong> " . self::$error_msg . "
                                   <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                   <span aria-hidden='true'>&times;</span></button></div>";
     }
-
-    /**
-     * Method that set the user field 'change_pass' to 1. User has requested a password change.
-     * @param $id user id
-     */
-    public
-    function requestChangePass($id)
-    {
-        //check if the uses is logged
-        if ($this->isUserLogged()) {
-
-            //check if the user is an admin
-            if ($this->isAdmin()) {
-
-                //set change_pass
-                $this->user_manager->requestChangePass($id);
-
-                //redirect manage users page
-                header('Location: ' . URL . "home/manageUsers");
-
-            } else {
-                $this->researchCases();
-            }
-
-        } else {
-            //redirect to login page
-            $this->index();
-        }
-    }
-
-    /**
-     * Method that tries to delete the user.
-     * @param $id id of the user who will be deleted
-     */
-    public
-    function deleteUser($id)
-    {
-        //check if the uses is logged
-        if ($this->isUserLogged()) {
-
-            //check if the user is an admin
-            if ($this->isAdmin()) {
-
-                //try to delete user
-                $this->user_manager->deleteUSer($id);
-
-                //redirect manage users page
-                header('Location: ' . URL . "home/manageUsers");
-
-            } else {
-                $this->researchCases();
-            }
-
-        } else {
-            //redirect to login page
-            $this->index();
-        }
-    }
-
-    private
-    function checkTextInput($data)
-    {
-        if (empty($data)) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Add new category.
-     */
-    public
-    function addCategory()
-    {
-        //check if the uses is logged
-        if ($this->isUserLogged()) {
-
-            //check if the user is an admin
-            if ($this->isAdmin()) {
-
-                //check if the variables are not null
-                if (isset($_POST['new_category']) && !empty($_POST['new_category'])) {
-
-                    $new_category = $this->testInput($_POST['new_category']);
-
-                    if ($this->validator->validateTextInput($new_category, 1, 50)) {
-                        //add new category
-                        if ($this->category_manager->addCategory($new_category)) {
-                            //redirect research cases page
-                            header('Location: ' . URL . "home/researchCases");
-                        } else {
-                            $this->researchCases();
-                            $this->printError();
-                        }
-                    } else {
-                        self::$error_msg = "Inserire da 1 a 50 caratteri";
-                        $this->researchCases();
-                        $this->printError();
-                    }
-                }
-
-            } else {
-                $this->researchCases();
-            }
-
-        } else {
-            //redirect to login page
-            $this->index();
-        }
-    }
-
-    /**
-     * Add new case
-     */
-    public function addCase()
-    {
-        //check if the uses is logged
-        if ($this->isUserLogged()) {
-
-            //set sessions variable
-            (isset($_POST['new_case_title'])) ? $_SESSION['new_case_title'] = $_POST['new_case_title'] : "";
-            (isset($_POST['new_case_description'])) ? $_SESSION['new_case_description'] = $_POST['new_case_description'] : "";
-
-            //check if the variables are initialized
-            if (isset($_POST['new_case_title']) && isset($_POST['new_case_category']) && isset($_POST['new_case_description'])) {
-
-                //test input
-                $title = $this->testInput($_POST['new_case_title']);
-                $category = $this->testInput($_POST['new_case_category']);
-                $description = $this->testInput($_POST['new_case_description']);
-
-                //check if data are valid
-                if ($this->validator->validateTextInput($title, 1, 50)) {
-                    if ($this->validator->validateTextInput($description, 1, 65535)) {
-
-                        $variant = null;
-                        if (isset($_POST['new_case_variant'])) {
-
-                            //null -> 0
-                            if (intval($_POST['new_case_variant']) != 0) {
-                                $variant = $this->testInput($_POST['new_case_variant']);
-                            }
-                        }
-
-                        //creare DocCase object
-                        $case = new DocCase($title, $category, $variant, $description);
-
-                        if (!$this->case_manager->addCase($case)) {
-                            $this->printError();
-                            $this->researchCases();
-                        } else {
-                            //unset session variable
-                            unset($_SESSION['new_case_title']);
-                            unset($_SESSION['new_case_description']);
-
-                            //redirect research cases page
-                            header('Location: ' . URL . "home/researchCases");
-                        }
-
-                        exit();
-
-                    } else {
-                        self::$error_msg = "La descrizione deve contenere del testo";
-                    }
-
-                } else {
-                    self::$error_msg = "Il titolo non deve contenere da 1 a 50 caratteri";
-                }
-
-                $this->printError();
-                $this->researchCases();
-
-            } else {
-                $this->researchCases();
-            }
-
-        } else {
-            //redirect to login page
-            $this->index();
-        }
-    }
-
-    /**
-     * Method that deletes the specified case.
-     * @param $id
-     */
-    public function deleteCase($id)
-    {
-
-        //check if the uses is logged
-        if ($this->isUserLogged()) {
-
-            //check if the user is an admin
-            if ($this->isAdmin()) {
-
-                $this->case_manager->setDeletedCase($id);
-
-                //redirect research cases page
-                header('Location: ' . URL . "home/researchCases");
-
-            } else {
-                $this->researchCases();
-            }
-
-        } else {
-            //redirect to login page
-            $this->index();
-        }
-    }
-
 }
 

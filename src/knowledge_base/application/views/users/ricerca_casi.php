@@ -6,7 +6,7 @@
 
     <!-- Filter mask -->
     <div class="container">
-        <form action="" method="post">
+        <form action="<?php echo URL?>researchCases/showCases" method="post">
 
             <h3 class="text-center">Filtri Base:</h3>
 
@@ -14,9 +14,9 @@
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Scegli ordinamento</label>
                 <div class="col-sm-9">
-                    <select class="browser-default custom-select" name="orderResults">
-                        <option value="0" selected>Casi più recenti</option>
-                        <option value="1">Casi più ricorrenti</option>
+                    <select class="browser-default custom-select" name="order_results">
+                        <option value="0" <?php echo (isset($_SESSION['order_results']) && intval($_SESSION['order_results']) == 0) ? "selected" : null ?>>Casi più recenti</option>
+                        <option value="1" <?php echo (isset($_SESSION['order_results']) && intval($_SESSION['order_results']) == 1) ? "selected" : null ?>>Casi più ricorrenti</option>
                     </select>
                 </div>
             </div>
@@ -64,7 +64,6 @@
 
     <!-- Show cases -->
     <?php foreach ($cases as $case): ?>
-        <?php if (!$case['deleted']): ?>
 
             <!-- Uses to print times variable -->
             <?php $key = $case['id']; ?>
@@ -92,13 +91,11 @@
                 <?php if ($is_admin): ?>
                     <div class="card-footer bg-transparent text-right">
                         <button class="btn" style="background-color: #20d6a9"> Modifica</button>
-                        <a class="btn" style="background-color: #20d6a9" href="<?php echo URL."/home/deleteCase/".$case['id']?>" onclick="return confirm('Sei sicuro di voler eliminare questo caso?');"> Elimina</a>
+                        <a class="btn" style="background-color: #20d6a9" href="<?php echo URL."researchCases/deleteCase/".$case['id']?>" onclick="return confirm('Sei sicuro di voler eliminare questo caso?');"> Elimina</a>
                     </div>
                 <?php endif; ?>
 
             </div>
-
-        <?php endif; ?>
     <?php endforeach; ?>
 
     <hr>
@@ -131,7 +128,7 @@
                 </button>
             </div>
 
-            <form action="<?php echo URL ?>home/addCategory" method="post">
+            <form action="<?php echo URL ?>researchCases/addCategory" method="post">
                 <!-- Body -->
                 <div class="modal-body">
 
@@ -172,7 +169,7 @@
                 </button>
             </div>
 
-            <form action="<?php echo URL ?>home/addCase" method="post">
+            <form action="<?php echo URL ?>researchCases/addCase" method="post">
                 <!-- Body -->
                 <div class="modal-body">
 

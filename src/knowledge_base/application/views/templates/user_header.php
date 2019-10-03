@@ -16,7 +16,7 @@
         <ul class="navbar-nav mr-auto">
             <!-- Cases -->
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL.'home/researchCases'?>">Ricerca Casi
+                <a class="nav-link" href="<?php echo URL.'researchCases/showCases'?>">Ricerca Casi
                 </a>
             </li>
         </ul>
@@ -24,7 +24,7 @@
         <!-- logout button -->
         <ul class="navbar-nav ml-auto nav-flex-icons">
             <li class="nav-item">
-                <a class="nav-link" href="<?php echo URL.'home/logout'?>">Logout
+                <a class="nav-link" href="<?php echo URL.'users/logout'?>">Logout
                 </a>
             </li>
         </ul>
