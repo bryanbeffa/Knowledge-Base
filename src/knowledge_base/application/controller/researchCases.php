@@ -45,6 +45,11 @@ class ResearchCases
                     $_SESSION['order_results'] = 0;
                 }
 
+                //set session variables
+                (isset($_POST['text_filter']))? $_SESSION['text_filter'] = $this->testInput($_POST['text_filter']): $_SESSION['text_filter'] = '';
+                (isset($_POST['date_filter']))? $_SESSION['date_filter'] = $this->testInput($_POST['date_filter']): $_SESSION['date_filter'] = '';
+                (isset($_POST['category_filter']))? $_SESSION['category_filter'] = $this->testInput($_POST['category_filter']): $_SESSION['category_filter'] = '';
+
                 $is_admin = "";
 
                 //check if the user is an admin

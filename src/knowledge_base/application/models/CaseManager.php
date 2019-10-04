@@ -24,13 +24,37 @@ class CaseManager
         try {
             $sql = "SELECT * FROM cases WHERE DELETED = 0 LIMIT 1";
 
+            //filter variables
+            $text_filter = "";
+            $date_filter = "";
+            $category_filter = "";
+
             //prepare query
             if(isset($_SESSION['order_results'])){
+
+                //set session variables value
+                (isset($_SESSION['text_filter']))?$text_filter = $_SESSION['text_filter']: $text_filter = "";
+                (isset($_SESSION['date_filter']))?$date_filter = $_SESSION['date_filter']: $date_filter = "";
+
+                //if value == 0 -> all categories
+                (isset($_SESSION['category_filter']) && intval($_SESSION['category_filter']) != 0)?$category_filter = $_SESSION['category_filter']: $category_filter = "";
+
+                $text_filter = "%". $text_filter ."%";
+                $date_filter = "%". $date_filter ."%";
+                $category_filter = "%".$category_filter ."%";
 
                 if(intval($_SESSION['order_results']) == 0){
 
                     //order by date
-                    $sql = "SELECT * FROM cases WHERE DELETED = 0 order by created_at desc";
+                    $sql = "SELECT * FROM cases WHERE DELETED = 0 AND 
+                            (description LIKE :text_filter 
+                                OR id LIKE :text_filter 
+                                OR title LIKE :text_filter 
+                                OR variant LIKE :text_filter) 
+                                AND (created_at LIKE :date_filter) 
+                                AND (category_id LIKE :category_id)
+                             order by created_at desc";
+
                 } else if(intval($_SESSION['order_results'])== 1){
 
                     //order by times
@@ -39,6 +63,12 @@ class CaseManager
             }
 
             $prepared_query = $this->conn->prepare($sql);
+
+            //bind params
+            $prepared_query->bindParam(':text_filter', $text_filter, PDO::PARAM_STR);
+            $prepared_query->bindParam(':date_filter', $date_filter, PDO::PARAM_STR);
+            $prepared_query->bindParam(':category_id', $category_filter, PDO::PARAM_STR);
+
             $prepared_query->execute();
             return $prepared_query->fetchAll(PDO::FETCH_ASSOC);
 
@@ -134,28 +164,14 @@ class CaseManager
     public function getTimes($id)
     {
         try {
-            //get which cases have this variant case
-            $prepared_query = $this->conn->prepare("SELECT * FROM cases WHERE variant = :id");
+            //get times
+            $prepared_query = $this->conn->prepare("SELECT count(*) FROM cases WHERE variant = :id and deleted = 0");
             $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
             $prepared_query->execute();
 
-            $variant_case_results = $prepared_query->fetchAll(PDO::FETCH_ASSOC);
+            $res = $prepared_query->fetch();
 
-            //get not deleted case
-            $times = 0;
-            foreach ($variant_case_results as $variant_case_result){
-
-                $prepared_query = $this->conn->prepare("SELECT  count(*) FROM cases WHERE id = :id AND deleted = 0");
-                $prepared_query->bindParam(':id', $variant_case_results['id'], PDO::PARAM_INT);
-                $prepared_query->execute();
-                $res = $prepared_query->fetch();
-
-                if(intval($res[0]) == 1){
-                    $times++;
-                }
-            }
-
-            return $times;
+            return intval($res[0]);
 
         } catch (PDOException $ex) {
         }

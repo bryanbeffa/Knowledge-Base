@@ -27,7 +27,7 @@
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Inserisci parola chiave</label>
                 <div class="col-sm-9">
-                    <input class="form-control" type="text" placeholder="Ricerca" aria-label="Search">
+                    <input class="form-control" type="text" placeholder="Ricerca" aria-label="Search" name="text_filter" value="<?php echo (isset($_SESSION['text_filter']))?  $_SESSION['text_filter']: null ?>">
                 </div>
             </div>
 
@@ -48,7 +48,7 @@
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Scegli una data</label>
                 <div class="col-sm-9">
-                    <input placeholder="Seleziona una data" type="date" class="form-control datepicker">
+                    <input placeholder="Seleziona una data" type="date" class="form-control datepicker" name="date_filter" value="<?php echo (isset($_SESSION['date_filter']))?  $_SESSION['date_filter']: null ?>">
                 </div>
             </div>
 
