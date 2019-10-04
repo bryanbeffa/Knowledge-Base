@@ -39,21 +39,25 @@ class CaseManager
                 //if value == 0 -> all categories
                 (isset($_SESSION['category_filter']) && intval($_SESSION['category_filter']) != 0)?$category_filter = $_SESSION['category_filter']: $category_filter = "";
 
+                $id = $text_filter;
                 $text_filter = "%". $text_filter ."%";
                 $date_filter = "%". $date_filter ."%";
                 $category_filter = "%".$category_filter ."%";
+
+                //variable that sets if include or not null category id
+                $include_null_category_id = (($_SESSION['category_filter']) == 0)? " OR category_id IS NULL) " : ") ";
 
                 if(intval($_SESSION['order_results']) == 0){
 
                     //order by date
                     $sql = "SELECT * FROM cases WHERE DELETED = 0 AND 
                             (description LIKE :text_filter 
-                                OR id LIKE :text_filter 
+                                OR id LIKE :id 
                                 OR title LIKE :text_filter 
-                                OR variant LIKE :text_filter) 
+                                OR variant LIKE :id) 
                                 AND (created_at LIKE :date_filter) 
-                                AND (category_id LIKE :category_id)
-                             order by created_at desc";
+                                AND (category_id LIKE :category_id" . $include_null_category_id . "
+                                order by created_at desc";
 
                 } else if(intval($_SESSION['order_results'])== 1){
 
@@ -66,6 +70,7 @@ class CaseManager
 
             //bind params
             $prepared_query->bindParam(':text_filter', $text_filter, PDO::PARAM_STR);
+            $prepared_query->bindParam(':id', $id, PDO::PARAM_STR);
             $prepared_query->bindParam(':date_filter', $date_filter, PDO::PARAM_STR);
             $prepared_query->bindParam(':category_id', $category_filter, PDO::PARAM_STR);
 

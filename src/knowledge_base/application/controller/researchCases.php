@@ -46,9 +46,9 @@ class ResearchCases
                 }
 
                 //set session variables
-                (isset($_POST['text_filter']))? $_SESSION['text_filter'] = $this->testInput($_POST['text_filter']): $_SESSION['text_filter'] = '';
-                (isset($_POST['date_filter']))? $_SESSION['date_filter'] = $this->testInput($_POST['date_filter']): $_SESSION['date_filter'] = '';
-                (isset($_POST['category_filter']))? $_SESSION['category_filter'] = $this->testInput($_POST['category_filter']): $_SESSION['category_filter'] = '';
+                (isset($_POST['text_filter'])) ? $_SESSION['text_filter'] = $this->testInput($_POST['text_filter']) : $_SESSION['text_filter'] = '';
+                (isset($_POST['date_filter'])) ? $_SESSION['date_filter'] = $this->testInput($_POST['date_filter']) : $_SESSION['date_filter'] = '';
+                (isset($_POST['category_filter'])) ? $_SESSION['category_filter'] = $this->testInput($_POST['category_filter']) : $_SESSION['category_filter'] = '';
 
                 $is_admin = "";
 
@@ -242,6 +242,49 @@ class ResearchCases
                             header("Location: " . URL . "researchCases/showCases");
                             Home::printError();
                         }
+                    }
+
+                } else {
+                    header("Location: " . URL . "researchCases/showCases");
+                }
+
+            } else {
+                //redirect to login page
+                header("Location: " . URL . "home/index");
+            }
+        } else {
+            DbErrorPage::noDatabaseConnection();
+        }
+    }
+
+    /**
+     * Delete category.
+     */
+    public function deleteCategory()
+    {
+        //check if the db is connected
+        if (isset($this->user_manager)) {
+
+            //check if the uses is logged
+            if ($this->user_manager->isUserLogged()) {
+
+                //check if the user is an admin
+                if (UserManager::isAdminUser($_SESSION['email'])) {
+
+                    //check post variable
+                    if (isset($_POST['delete_category_id']) && !empty($this->testInput($_POST['delete_category_id']))) {
+
+                        $category_id = $this->testInput($_POST['delete_category_id']);
+
+                        //delete category
+                        $this->category_manager->deleteCategory($category_id);
+
+                        header("Location: " . URL . "researchCases/showCases");
+
+                    } else {
+                        Home::setErrorMsg("Inserire da 1 a 50 caratteri");
+                        header("Location: " . URL . "researchCases/showCases");
+                        Home::printError();
                     }
 
                 } else {

@@ -77,7 +77,7 @@
                 <!-- Body -->
                 <div class="card-body">
                     <h5><b>ID:</b>  <?php echo $case['id'] ?></h5>
-                    <h5><b>Categoria:</b> <?php echo $cases_categories["$key"]?></h5>
+                    <h5><b>Categoria:</b> <?php echo ($case['category_id'] != null)?$cases_categories["$key"]: "-"?></h5>
                     <h5><b>Variante di:</b> <?php echo ($case['variant'] == null) ? "-" : $case['variant'] ?> </h5>
                     <h5><b>Data creazione:</b> <?php echo $case['created_at'] ?></h5>
                     <h5 class="font-weight-bold">Descrizione:</h5>
@@ -107,6 +107,9 @@
     <?php /** @var $is_admin contains if the user is an admin */
     if ($is_admin): ?>
         <p>Aggiungi una <a href data-toggle="modal" data-target="#addCategory"> categoria </a></p>
+    <?php endif; ?>
+    <?php if ($is_admin): ?>
+        <p><a href data-toggle="modal" data-target="#deleteCategory">Elimina </a>una categoria </p>
     <?php endif; ?>
 </div>
 
@@ -219,6 +222,49 @@
                     <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi
                     </button>
                     <input type="submit" class="btn" style="background-color: #20d6a9" value="Aggiungi">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal delete category -->
+<div class="modal fade" id="deleteCategory" tabindex="-1" role="dialog" aria-labelledby="deleteCategory"
+     aria-hidden="true">
+
+    <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+    <div class="modal-dialog modal-dialog-centered" role="document">
+
+        <!-- Content -->
+        <div class="modal-content">
+
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Seleziona la categoria che vuoi eliminare</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="<?php echo URL ?>researchCases/deleteCategory" method="post">
+                <!-- Body -->
+                <div class="modal-body">
+
+                    <!-- Title -->
+                    <div class="mt-3">
+                        <label>Elimina categoria</label>
+                        <select class="browser-default custom-select" name="delete_category_id" required>
+                            <?php foreach ($categories as $category): ?>
+                                <?php echo "<option value=" . $category['id'] . ">" . $category['name'] . "</option>" ?>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi</button>
+                    <input type="submit" class="btn" style="background-color: #20d6a9" value="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questa categoria?');">
                 </div>
             </form>
         </div>

@@ -57,4 +57,19 @@ class CategoryManager
         } catch (PDOException $ex) {
         }
     }
+
+    public function deleteCategory($id){
+        try {
+            //prepare query
+            $prepared_query = $this->conn->prepare("DELETE FROM categories WHERE id = :id");
+            $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
+            $prepared_query->execute();
+
+            return true;
+        } catch (PDOException $ex) {
+            echo $ex;
+            Home::setErrorMsg("Impossibile eliminare questa categoria");
+            return false;
+        }
+    }
 }
