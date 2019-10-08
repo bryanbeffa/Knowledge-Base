@@ -79,7 +79,7 @@
                     <h5><b>ID:</b>  <?php echo $case['id'] ?></h5>
                     <h5><b>Categoria:</b> <?php echo ($case['category_id'] != null)?$cases_categories["$key"]: "-"?></h5>
                     <h5><b>Variante di:</b> <?php echo ($case['variant'] == null) ? "-" : $case['variant'] ?> </h5>
-                    <h5><b>Data creazione:</b> <?php echo $case['created_at'] ?></h5>
+                    <h5><b>Data creazione:</b> <?php echo date_format(date_create($case['created_at']), "d.m.Y H:i:s") ?></h5>
                     <h5 class="font-weight-bold">Descrizione:</h5>
                     <p><?php echo $case['description'] ?></p>
 

@@ -8,6 +8,9 @@ class DbErrorPage
         require_once 'application/models/UserManager.php';
     }
 
+    /**
+     * Method that shows the error page if cannot connect to db.
+     */
     public static function noDatabaseConnection()
     {
         UserManager::logout();

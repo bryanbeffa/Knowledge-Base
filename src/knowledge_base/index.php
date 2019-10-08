@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 // carico il file di configurazione
 require 'application/config/config.php';
@@ -7,5 +8,4 @@ require 'application/config/config.php';
 require 'application/libs/application.php';
 
 // faccio partire l'applicazione
-session_start();
 $app = new Application();

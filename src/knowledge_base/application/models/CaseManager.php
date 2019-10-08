@@ -123,8 +123,6 @@ class CaseManager
 
             return true;
         } catch (PDOException $ex) {
-            echo $ex;
-            Home::setErrorMsg("Impossibile creare il caso");
             return false;
         }
 
@@ -158,7 +156,10 @@ class CaseManager
             $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
             $prepared_query->execute();
 
+            return true;
+
         } catch (PDOException $ex) {
+            return false;
         }
     }
 

@@ -61,6 +61,7 @@ class ResearchCases
                     $is_admin = 0;
                 }
 
+
                 //get categories
                 $categories = $this->category_manager->getCategories();
 
@@ -73,6 +74,13 @@ class ResearchCases
                     $key = $case['id'];
                     $cases_times["$key"] = $this->case_manager->getTimes($case['id']);
                     $cases_categories["$key"] = $this->category_manager->getCategoryById($case['category_id']);
+                }
+
+                //if success variable is set print the message
+                if (isset($_SESSION['success'])) {
+                    Home::setSuccessMsg($_SESSION['success']);
+                    Home::successMsg();
+                    unset($_SESSION['success']);
                 }
 
                 require_once 'application/views/users/ricerca_casi.php';
@@ -104,13 +112,21 @@ class ResearchCases
                 //check if the user is an admin
                 if (UserManager::isAdminUser($_SESSION['email'])) {
 
-                    $this->case_manager->setDeletedCase($id);
+                    //try to delete the case
+                    if($this->case_manager->setDeletedCase($id)){
 
-                    //redirect research cases page
-                    header("Location: " . URL . "researchCases/showCases");
+                        //show success alert
+                        $_SESSION['success'] = "Il caso è stato eliminato con successo";
 
+                        //redirect to showCases function
+                        header("Location: " . URL . "researchCases/showCases");
+                    } else {
+                        Home::setErrorMsg("Impossibile eliminare il caso");
+                        Home::printError();
+                        $this->showCases();
+                    }
                 } else {
-                    $this->researchCases();
+                    $this->showCases();
                 }
 
             } else {
@@ -159,33 +175,44 @@ class ResearchCases
                                 }
                             }
 
-                            //creare DocCase object
+                            //create DocCase object
                             $case = new DocCase($title, $category, $variant, $description);
 
-                            if (!$this->case_manager->addCase($case)) {
-                                $this->printError();
-                                header("Location: " . URL . "researchCases/showCases");
-                            } else {
-                                //unset session variable
+                            if ($this->case_manager->addCase($case)) {
+
+                                //unset post variables
+                                unset($_POST['new_case_title']);
+                                unset($_POST['new_case_description']);
+                                unset($_POST['new_case_category']);
+
+                                //unset session variables
                                 unset($_SESSION['new_case_title']);
                                 unset($_SESSION['new_case_description']);
+                                unset($_SESSION['new_case_category']);
 
-                                //redirect research cases page
+                                //show success alert
+                                $_SESSION['success'] = "Il caso è stato creato con successo";
+
+                                //redirect to showCases function
                                 header("Location: " . URL . "researchCases/showCases");
+
+                            } else {
+                                Home::setErrorMsg("Impossibile creare caso. Riprova più tardi");
+                                Home::printError();
+                                $this->showCases();
                             }
 
                             exit();
-
                         } else {
-                            self::$error_msg = "La descrizione deve contenere del testo";
+                            Home::setErrorMsg("La descrizione deve contenere del testo");
                         }
 
                     } else {
-                        self::$error_msg = "Il titolo non deve contenere da 1 a 50 caratteri";
+                        Home::setErrorMsg("Il titolo non deve contenere da 1 a 50 caratteri");
                     }
 
-                    $this->printError();
-                    header("Location: " . URL . "researchCases/showCases");
+                    Home::printError();
+                    $this->showCases();
 
                 } else {
                     header("Location: " . URL . "researchCases/showCases");
@@ -229,23 +256,29 @@ class ResearchCases
                         $new_category = $this->testInput($_POST['new_category']);
 
                         if ($this->validator->validateTextInput($new_category, 1, 50)) {
+
                             //add new category
                             if ($this->category_manager->addCategory($new_category)) {
-                                //redirect research cases page
+
+                                //show success alert
+                                $_SESSION['success'] = "La categoria è stata aggiunta";
+
+                                //redirect to showCases function
                                 header("Location: " . URL . "researchCases/showCases");
+
                             } else {
-                                header("Location: " . URL . "researchCases/showCases");
+                                $this->showCases();
                                 Home::printError();
                             }
                         } else {
                             Home::setErrorMsg("Inserire da 1 a 50 caratteri");
-                            header("Location: " . URL . "researchCases/showCases");
                             Home::printError();
+                            $this->showCases();
                         }
                     }
 
                 } else {
-                    header("Location: " . URL . "researchCases/showCases");
+                    $this->showCases();
                 }
 
             } else {
@@ -279,16 +312,19 @@ class ResearchCases
                         //delete category
                         $this->category_manager->deleteCategory($category_id);
 
+                        //show success alert
+                        $_SESSION['success'] = "La categoria è stata eliminata con successo";
+
                         header("Location: " . URL . "researchCases/showCases");
 
                     } else {
                         Home::setErrorMsg("Inserire da 1 a 50 caratteri");
-                        header("Location: " . URL . "researchCases/showCases");
                         Home::printError();
+                        $this->showCases();
                     }
 
                 } else {
-                    header("Location: " . URL . "researchCases/showCases");
+                    $this->showCases();
                 }
 
             } else {

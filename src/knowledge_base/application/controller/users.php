@@ -40,6 +40,13 @@ class Users
                     //get users list
                     $users = $this->user_manager->getUsersList();
 
+                    //if the success variable is set print the message
+                    if(isset($_SESSION['success'])) {
+                        Home::setSuccessMsg($_SESSION['success']);
+                        Home::successMsg();
+                        unset($_SESSION['success']);
+                    }
+
                     require_once 'application/views/templates/head.php';
                     require_once 'application/views/templates/admin_header.php';
                     require_once 'application/views/admin/gestione_utenti.php';
@@ -72,10 +79,19 @@ class Users
                 if (UserManager::isAdminUser($_SESSION['email'])) {
 
                     //try to delete user
-                    $this->user_manager->deleteUSer($id);
+                    if($this->user_manager->deleteUSer($id)){
 
-                    //redirect manage users page
-                    header('Location: ' . URL . "users/manageUsers");
+                        //set success msg
+                        $_SESSION['success'] = "Utente eliminato";
+
+                        //redirect to manage function
+                        header("Location: " . URL . "users/manageUsers");
+
+                    } else {
+                        Home::setErrorMsg("Impossibile eliminare l'utente");
+                        Home::printError();
+                        $this->manageUsers();
+                    }
 
                 } else {
                     header("Location: " . URL . "researchCases/showCases");
@@ -112,6 +128,7 @@ class Users
 
                         //check if the user is an admin
                         if (UserManager::isAdminUser($_SESSION['email'])) {
+
                             //create user
                             $name = $this->testInput($_POST['name']);
                             $surname = $this->testInput($_POST['surname']);
@@ -125,29 +142,39 @@ class Users
 
                             //check if the text fields are not empty
                             if (!empty($name) && !empty($password) && !empty($surname)) {
-                                //hash password
-                                $password = password_hash($password, PASSWORD_DEFAULT);
 
-                                $user = new User($name, $surname, $email, $password, $is_admin, 0);
+                                //check the password strength
+                                if (PasswordManager::checkStrength($password)) {
 
-                                if ($this->user_manager->createUser($user)) {
-                                    //user created message
-                                    Home::setSuccessMsg("L'utente è stato creato con successo ");
-                                    Home::successMsg();
+                                    //hash password
+                                    $password = password_hash($password, PASSWORD_DEFAULT);
+                                    $user = new User($name, $surname, $email, $password, $is_admin, 0);
 
-                                    unset($_SESSION['new_user_name']);
-                                    unset($_SESSION['new_user_surname']);
-                                    unset($_SESSION['new_user_email']);
+
+                                    if ($this->user_manager->createUser($user)) {
+
+                                        //unset sessions variables
+                                        unset($_SESSION['new_user_name']);
+                                        unset($_SESSION['new_user_surname']);
+                                        unset($_SESSION['new_user_email']);
+
+                                        //user created message
+                                        $_SESSION['success'] = "L'utente è stato creato con successo";
+
+                                        //redirect to manage function
+                                        header("Location: " . URL . "users/manageUsers");
+
+                                    } else {
+                                        Home::printError();
+                                    }
                                 } else {
+                                    Home::setErrorMsg("La password non rispetta le condizioni di sicurezza");
                                     Home::printError();
                                 }
                             } else {
-                                Home::$error_msg = "I campi di testo non possono essere vuoti";
+                                Home::setErrorMsg("I campi di testo non possono essere vuoti");
                                 Home::printError();
                             }
-
-
-                            $this->manageUsers();
 
                         } else {
                             $this->researchCases();

@@ -2,12 +2,20 @@
 
 class Home
 {
+    /**
+     * @var UserManager attributes that defines the user manager object.
+     */
     private $user_manager;
-    private $category_manager;
-    private $case_manager;
 
-    static $error_msg = "";
-    static $success_msg = "";
+    /**
+     * @var string attribute that defines the error message.
+     */
+    private static $error_msg = "";
+
+    /**
+     * @var string attribute that defines the error message.
+     */
+    private static $success_msg = "";
 
     public function __construct()
     {
@@ -22,6 +30,9 @@ class Home
         }
     }
 
+    /**
+     * Method that shows the login page.
+     */
     public function index()
     {
         if (isset($this->user_manager)) {
@@ -33,18 +44,24 @@ class Home
         }
     }
 
+    /**
+     * @param $msg danger message to set.
+     */
     public static function setErrorMsg($msg)
     {
         self::$error_msg = $msg;
     }
 
+    /**
+     * @param $msg success message to set.
+     */
     public static function setSuccessMsg($msg)
     {
         self::$success_msg = $msg;
     }
 
     /**
-     * Method
+     * Method that checks if the credentials are correct.
      */
     public function login()
     {
@@ -83,6 +100,11 @@ class Home
         }
     }
 
+    /**
+     * Method that validates the param
+     * @param $data data to validate
+     * @return string validated data
+     */
     function testInput($data)
     {
         $data = trim($data);
@@ -91,22 +113,24 @@ class Home
         return $data;
     }
 
+    /**
+     * Method that show a success alert.
+     */
     public static function successMsg()
     {
-        echo "<div class='text-center alert alert-success alert-dismissible fade show' role='alert' style='position:absolute; left:0;right:0; top:10%; -webkit-transform:translateY(-50%) !important; -ms-transform:translateY(-50%) !important; transform:translateY(-50%) !important;'>
-                                  <strong>Ottimo!</strong>" . self::$success_msg .
+        echo "<div class='text-center alert alert-success alert-dismissible fade show fixed-bottom' role='alert'>
+                                  <strong>Ottimo! </strong>" . self::$success_msg .
             "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                   <span aria-hidden='true'>&times;</span></button></div>";
     }
 
     /**
      * Method that print the error message.
-     * @param $msg message to print
      */
     public static function printError()
     {
-        echo "<div class='text-center alert alert-danger alert-dismissible fade show' role='alert' style='position:absolute; left:0;right:0; top:10%; -webkit-transform:translateY(-50%) !important; -ms-transform:translateY(-50%) !important; transform:translateY(-50%) !important;'>
-                                  <strong>Errore!</strong> " . self::$error_msg . "
+        echo "<div class='text-center alert alert-danger alert-dismissible fade show fixed-bottom' role='alert'>
+                                  <strong>Errore! </strong>" . self::$error_msg . "
                                   <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                   <span aria-hidden='true'>&times;</span></button></div>";
     }
