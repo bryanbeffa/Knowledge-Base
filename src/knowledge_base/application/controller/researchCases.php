@@ -113,7 +113,7 @@ class ResearchCases
                 if (UserManager::isAdminUser($_SESSION['email'])) {
 
                     //try to delete the case
-                    if($this->case_manager->setDeletedCase($id)){
+                    if ($this->case_manager->setDeletedCase($id)) {
 
                         //show success alert
                         $_SESSION['success'] = "Il caso è stato eliminato con successo";
@@ -126,7 +126,8 @@ class ResearchCases
                         $this->showCases();
                     }
                 } else {
-                    $this->showCases();
+                    //redirect to login page
+                    header("Location: " . URL . "researchCases/showCases");
                 }
 
             } else {
@@ -197,7 +198,7 @@ class ResearchCases
                                 header("Location: " . URL . "researchCases/showCases");
 
                             } else {
-                                Home::setErrorMsg("Impossibile creare caso. Riprova più tardi");
+                                Home::setErrorMsg("Impossibile creare il caso. Riprova più tardi");
                                 Home::printError();
                                 $this->showCases();
                             }
@@ -278,7 +279,8 @@ class ResearchCases
                     }
 
                 } else {
-                    $this->showCases();
+                    //redirect to login page
+                    header("Location: " . URL . "researchCases/showCases");
                 }
 
             } else {
@@ -324,7 +326,101 @@ class ResearchCases
                     }
 
                 } else {
-                    $this->showCases();
+                    //redirect to login page
+                    header("Location: " . URL . "researchCases/showCases");
+                }
+
+            } else {
+                //redirect to login page
+                header("Location: " . URL . "home/index");
+            }
+        } else {
+            DbErrorPage::noDatabaseConnection();
+        }
+    }
+
+    public function modifyDetails($id)
+    {
+        //check if the db is connected
+        if (isset($this->user_manager)) {
+
+            //check if the uses is logged
+            if ($this->user_manager->isUserLogged()) {
+
+                //check if the user is an admin
+                if (UserManager::isAdminUser($_SESSION['email'])) {
+
+                    //set sessions variable
+                    (isset($_POST['modify_case_title'])) ? $_SESSION['modify_case_title'] = $_POST['new_case_title'] : "";
+                    (isset($_POST['modify_case_description'])) ? $_SESSION['modify_case_description'] = $_POST['new_case_description'] : "";
+
+                    //check if the variables are initialized
+                    if (isset($_POST['modify_case_title']) && isset($_POST['modify_case_category']) && isset($_POST['modify_case_description'])) {
+
+                        //test input
+                        $title = $this->testInput($_POST['modify_case_title']);
+                        $category = $this->testInput($_POST['modify_case_category']);
+                        $description = $this->testInput($_POST['modify_case_description']);
+
+                        //check if data are valid
+                        if ($this->validator->validateTextInput($title, 1, 50)) {
+                            if ($this->validator->validateTextInput($description, 1, 65535)) {
+
+                                $variant = null;
+                                if (isset($_POST['modify_case_variant'])) {
+
+                                    //null -> 0
+                                    if (intval($_POST['modify_case_variant']) != 0) {
+                                        $variant = $this->testInput($_POST['modify_case_variant']);
+                                    }
+                                }
+
+                                //create DocCase object
+                                $case = new DocCase($title, $category, $variant, $description);
+
+                                if ($this->case_manager->modifyCase($case)) {
+
+                                    //unset post variables
+                                    unset($_POST['modify_case_title']);
+                                    unset($_POST['modify_case_description']);
+                                    unset($_POST['modify_case_category']);
+
+                                    //unset session variables
+                                    unset($_SESSION['modify_case_title']);
+                                    unset($_SESSION['modify_case_description']);
+                                    unset($_SESSION['modify_case_category']);
+
+                                    //show success alert
+                                    $_SESSION['success'] = "Il caso è stato creato con successo";
+
+                                    //redirect to showCases function
+                                    header("Location: " . URL . "researchCases/showCases");
+
+                                } else {
+                                    Home::setErrorMsg("Impossibile modificare il caso. Riprova più tardi");
+                                    Home::printError();
+                                    $this->showCases();
+                                }
+
+                                exit();
+                            } else {
+                                Home::setErrorMsg("La descrizione deve contenere del testo");
+                            }
+
+                        } else {
+                            Home::setErrorMsg("Il titolo non deve contenere da 1 a 50 caratteri");
+                        }
+
+                        Home::printError();
+                        $this->showCases();
+
+                    } else {
+                        header("Location: " . URL . "researchCases/showCases");
+                    }
+
+                } else {
+                    //redirect to login page
+                    header("Location: " . URL . "researchCases/showCases");
                 }
 
             } else {

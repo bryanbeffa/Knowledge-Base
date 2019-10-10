@@ -1,12 +1,15 @@
 <?php ?>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
 <div class="p-5">
     <h1>Ricerca casi</h1>
     <hr>
 
     <!-- Filter mask -->
     <div class="container">
-        <form action="<?php echo URL?>researchCases/showCases" method="post">
+        <form action="<?php echo URL ?>researchCases/showCases" method="post">
 
             <h3 class="text-center">Filtri Base:</h3>
 
@@ -15,8 +18,12 @@
                 <label class="col-sm-2 col-form-label">Scegli ordinamento</label>
                 <div class="col-sm-9">
                     <select class="browser-default custom-select" name="order_results">
-                        <option value="0" <?php echo (isset($_SESSION['order_results']) && intval($_SESSION['order_results']) == 0) ? "selected" : null ?>>Casi più recenti</option>
-                        <option value="1" <?php echo (isset($_SESSION['order_results']) && intval($_SESSION['order_results']) == 1) ? "selected" : null ?>>Casi più ricorrenti</option>
+                        <option value="0" <?php echo (isset($_SESSION['order_results']) && intval($_SESSION['order_results']) == 0) ? "selected" : null ?>>
+                            Casi più recenti
+                        </option>
+                        <option value="1" <?php echo (isset($_SESSION['order_results']) && intval($_SESSION['order_results']) == 1) ? "selected" : null ?>>
+                            Casi più ricorrenti
+                        </option>
                     </select>
                 </div>
             </div>
@@ -27,7 +34,8 @@
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Inserisci parola chiave</label>
                 <div class="col-sm-9">
-                    <input class="form-control" type="text" placeholder="Ricerca" aria-label="Search" name="text_filter" value="<?php echo (isset($_SESSION['text_filter']))?  $_SESSION['text_filter']: null ?>">
+                    <input class="form-control" type="text" placeholder="Ricerca" aria-label="Search" name="text_filter"
+                           value="<?php echo (isset($_SESSION['text_filter'])) ? $_SESSION['text_filter'] : null ?>">
                 </div>
             </div>
 
@@ -48,7 +56,9 @@
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Scegli una data</label>
                 <div class="col-sm-9">
-                    <input placeholder="Seleziona una data" type="date" class="form-control datepicker" name="date_filter" value="<?php echo (isset($_SESSION['date_filter']))?  $_SESSION['date_filter']: null ?>">
+                    <input placeholder="Seleziona una data" type="date" class="form-control datepicker"
+                           name="date_filter"
+                           value="<?php echo (isset($_SESSION['date_filter'])) ? $_SESSION['date_filter'] : null ?>">
                 </div>
             </div>
 
@@ -65,37 +75,41 @@
     <!-- Show cases -->
     <?php foreach ($cases as $case): ?>
 
-            <!-- Uses to print times variable -->
-            <?php $key = $case['id']; ?>
-            <div class="card mt-4 mb-5">
+        <!-- Uses to print times variable -->
+        <?php $key = $case['id']; ?>
+        <div class="card mt-4 mb-5">
 
-                <!-- Title -->
-                <div class="card-header" style="background-color: #20d6a9">
-                    <h2 class="text-center"><b>Nome: </b><?php echo  $case['title'] ?></h2>
-                </div>
-
-                <!-- Body -->
-                <div class="card-body">
-                    <h5><b>ID:</b>  <?php echo $case['id'] ?></h5>
-                    <h5><b>Categoria:</b> <?php echo ($case['category_id'] != null)?$cases_categories["$key"]: "-"?></h5>
-                    <h5><b>Variante di:</b> <?php echo ($case['variant'] == null) ? "-" : $case['variant'] ?> </h5>
-                    <h5><b>Data creazione:</b> <?php echo date_format(date_create($case['created_at']), "d.m.Y H:i:s") ?></h5>
-                    <h5 class="font-weight-bold">Descrizione:</h5>
-                    <p><?php echo $case['description'] ?></p>
-
-                    <!-- Times -->
-                    <h5><b>Numero di ripresentazioni: </b><?php echo $cases_times["$key"]?> </h5>
-                </div>
-
-                <!-- Footer-->
-                <?php if ($is_admin): ?>
-                    <div class="card-footer bg-transparent text-right">
-                        <button class="btn" style="background-color: #20d6a9"> Modifica</button>
-                        <a class="btn" style="background-color: #20d6a9" href="<?php echo URL."researchCases/deleteCase/".$case['id']?>" onclick="return confirm('Sei sicuro di voler eliminare questo caso?');"> Elimina</a>
-                    </div>
-                <?php endif; ?>
-
+            <!-- Title -->
+            <div class="card-header" style="background-color: #20d6a9">
+                <h2 class="text-center"><b>Nome: </b><?php echo $case['title'] ?></h2>
             </div>
+
+            <!-- Body -->
+            <div class="card-body">
+                <h5><b>ID:</b> <?php echo $case['id'] ?></h5>
+                <h5><b>Categoria:</b> <?php echo ($case['category_id'] != null) ? $cases_categories["$key"] : "-" ?>
+                </h5>
+                <h5><b>Variante di:</b> <?php echo ($case['variant'] == null) ? "-" : $case['variant'] ?> </h5>
+                <h5><b>Data creazione:</b> <?php echo date_format(date_create($case['created_at']), "d.m.Y H:i:s") ?>
+                </h5>
+                <h5 class="font-weight-bold">Descrizione:</h5>
+                <p><?php echo $case['description'] ?></p>
+
+                <!-- Times -->
+                <h5><b>Numero di ripresentazioni: </b><?php echo $cases_times["$key"] ?> </h5>
+            </div>
+
+            <!-- Footer-->
+            <?php if ($is_admin): ?>
+                <div class="card-footer bg-transparent text-right">
+                    <a class="btn text-dark" style="background-color: #20d6a9" onclick="showModifyModal('<?php echo $case['title'] ?>' , '<?php echo $case['description'] ?>')">Modifica</a>
+                    <a class="btn" style="background-color: #20d6a9"
+                       href="<?php echo URL . "researchCases/deleteCase/" . $case['id'] ?>"
+                       onclick="return confirm('Sei sicuro di voler eliminare questo caso?');"> Elimina</a>
+                </div>
+            <?php endif; ?>
+
+        </div>
     <?php endforeach; ?>
 
     <hr>
@@ -263,8 +277,91 @@
 
                 <!-- Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi</button>
-                    <input type="submit" class="btn" style="background-color: #20d6a9" value="Elimina" onclick="return confirm('Sei sicuro di voler eliminare questa categoria?');">
+                    <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi
+                    </button>
+                    <input type="submit" class="btn" style="background-color: #20d6a9" value="Elimina"
+                           onclick="return confirm('Sei sicuro di voler eliminare questa categoria?');">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal modify case-->
+<div class="modal" id="modifyCase" tabindex="-1" role="dialog"
+     aria-labelledby="modifyCase"
+     aria-hidden="true">
+
+    <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+        <!-- Content -->
+        <div class="modal-content">
+
+            <!-- Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="caseTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="<?php echo URL ?>researchCases/modifyCase" method="post">
+                <!-- Body -->
+                <div class="modal-body">
+
+                    <!-- Case name -->
+                    <div class="mt-3">
+                        <label>Nome della caso (massimo 50 caratteri) <b class="text-danger">*</b></label>
+                        <input type="text" id="title" class="form-control" placeholder="Inserisci nome"
+                               name="modify_case_title" required value="<?php echo $case['title'] ?>">
+                    </div>
+
+                    <!-- Case category -->
+                    <div class="mt-3">
+                        <label>Seleziona una categoria <b class="text-danger">*</b></label>
+                        <select class="browser-default custom-select" required name="modify_case_category">
+                            <?php foreach ($categories as $category): ?>
+                                <?php echo '<option value="'. $category['id'] . '"' . (intval($category['id']) == intval($case['category_id'])? "selected>": ">")?>
+                                <?php echo $category['name'] . '</option>' ?>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <!-- Case variant -->
+                    <div class="mt-3">
+                        <label>Variante del caso:</label>
+                        <select class="browser-default custom-select" required name="modify_case_variant">
+                            <option value="0" selected>Nessun caso</option>
+
+                            <!-- check if there is already a selected option -->
+                            <?php foreach ($cases as $variant): ?>
+                                <?php echo '<option value="'. $variant['id'] . '"' . (intval($variant['id']) == intval($case['variant'])? "selected>": ">")?>
+                                <?php echo '(id: ' . $variant['id'] . ') ' . $variant['title'] . '</option>' ?>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <!-- Case description -->
+                    <div class="mt-3">
+                        <label>Descrizione <b class="text-danger">*</b></label>
+                        <textarea type="text" name="modify_case_description" rows="10"
+                                  placeholder="Inserire descrizione"
+                                  id="caseDescription"
+                                  class="form-control md-textarea"
+                                  required></textarea>
+                    </div>
+
+                    <p class="mt-3"><b class="text-danger">*</b> indica un campo obbligatorio</p>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal"
+                            style="background-color: #20d6a9">Chiudi
+                    </button>
+                    <input type="submit" class="btn" style="background-color: #20d6a9" value="Salva">
                 </div>
             </form>
         </div>
@@ -272,3 +369,4 @@
 </div>
 
 
+<script type="text/javascript" src="/knowledge_base/application/libs/js/ModifyCases.js"></script>

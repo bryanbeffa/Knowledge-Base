@@ -182,5 +182,47 @@ class CaseManager
         } catch (PDOException $ex) {
         }
     }
+
+
+    public function modifyCase(DocCase $case, $id){
+        try {
+
+            $sql = "UPDATE cases SET title = :title, description = :description, category_id = :category_id, variant = :variant WHERE ID = :id";
+
+            //get values
+            $title = $case->getTitle();
+            $description = $case->getDescription();
+            $category_id = $case->getCategory();
+            $variant = $case->getVariant();
+
+            //if the variant is not null, insert row in rappresentations table
+            if ($variant != null) {
+                $sql .= "INSERT INTO rappresentations (id_case) VALUES (:id_case);";
+            }
+
+            //prepare query
+            $prepared_query = $this->conn->prepare($sql);
+
+            //bind params first statement
+            $prepared_query->bindParam(':title', $title, PDO::PARAM_STR);
+            $prepared_query->bindParam(':created_by', $_SESSION['id'], PDO::PARAM_INT);
+            $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
+            $prepared_query->bindParam(':description', $description, PDO::PARAM_STR);
+            $prepared_query->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+            $prepared_query->bindParam(':variant', $variant, PDO::PARAM_INT);
+
+
+            //bind params second statement -> if there is a variant
+            if ($variant != null) {
+                $prepared_query->bindParam(':id_case', $variant, PDO::PARAM_INT);
+            }
+
+            $prepared_query->execute();
+
+            return true;
+        } catch (PDOException $ex) {
+            return false;
+        }
+    }
 }
 
