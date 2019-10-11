@@ -50,6 +50,7 @@ class Users
                     require_once 'application/views/templates/head.php';
                     require_once 'application/views/templates/admin_header.php';
                     require_once 'application/views/admin/gestione_utenti.php';
+
                 } else {
 
                     //redirect to cases page

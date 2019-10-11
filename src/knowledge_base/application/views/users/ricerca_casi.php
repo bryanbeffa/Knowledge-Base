@@ -102,7 +102,8 @@
             <!-- Footer-->
             <?php if ($is_admin): ?>
                 <div class="card-footer bg-transparent text-right">
-                    <a class="btn text-dark" style="background-color: #20d6a9" onclick="showModifyModal('<?php echo $case['title'] ?>' , '<?php echo $case['description'] ?>')">Modifica</a>
+                    <a class="btn text-dark" style="background-color: #20d6a9"
+                       onclick="showModifyModal('<?php echo $case['title'] ?>' , '<?php echo $case['id'] ?>', '<?php echo $case['description'] ?>', '<?php echo $case['category_id'] ?>', '<?php echo $case['variant'] ?>')">Modifica</a>
                     <a class="btn" style="background-color: #20d6a9"
                        href="<?php echo URL . "researchCases/deleteCase/" . $case['id'] ?>"
                        onclick="return confirm('Sei sicuro di voler eliminare questo caso?');"> Elimina</a>
@@ -313,16 +314,17 @@
                     <!-- Case name -->
                     <div class="mt-3">
                         <label>Nome della caso (massimo 50 caratteri) <b class="text-danger">*</b></label>
-                        <input type="text" id="title" class="form-control" placeholder="Inserisci nome"
+                        <input type="text" id="modifyCaseTitle" class="form-control" placeholder="Inserisci nome"
                                name="modify_case_title" required value="<?php echo $case['title'] ?>">
                     </div>
 
                     <!-- Case category -->
                     <div class="mt-3">
                         <label>Seleziona una categoria <b class="text-danger">*</b></label>
-                        <select class="browser-default custom-select" required name="modify_case_category">
+                        <select class="browser-default custom-select" required name="modify_case_category"
+                                id="modifyCaseCategorySelect">
                             <?php foreach ($categories as $category): ?>
-                                <?php echo '<option value="'. $category['id'] . '"' . (intval($category['id']) == intval($case['category_id'])? "selected>": ">")?>
+                                <?php echo '<option value="' . $category['id'] . '" id="category' . $category['id'] . '"' . (intval($category['id']) == intval($case['category_id']) ? "selected>" : ">") ?>
                                 <?php echo $category['name'] . '</option>' ?>
                             <?php endforeach; ?>
                         </select>
@@ -331,12 +333,13 @@
                     <!-- Case variant -->
                     <div class="mt-3">
                         <label>Variante del caso:</label>
-                        <select class="browser-default custom-select" required name="modify_case_variant">
+                        <select class="browser-default custom-select" required name="modify_case_variant"
+                                id="modifyCaseVariantSelect">
                             <option value="0" selected>Nessun caso</option>
 
                             <!-- check if there is already a selected option -->
                             <?php foreach ($cases as $variant): ?>
-                                <?php echo '<option value="'. $variant['id'] . '"' . (intval($variant['id']) == intval($case['variant'])? "selected>": ">")?>
+                                <?php echo '<option value="' . $variant['id'] . '" id="variant' . $variant['id'] . '"' . (intval($variant['id']) == intval($case['variant']) ? "selected>" : ">") ?>
                                 <?php echo '(id: ' . $variant['id'] . ') ' . $variant['title'] . '</option>' ?>
                             <?php endforeach; ?>
                         </select>

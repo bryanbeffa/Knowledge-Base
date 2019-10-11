@@ -30,24 +30,24 @@ class CaseManager
             $category_filter = "";
 
             //prepare query
-            if(isset($_SESSION['order_results'])){
+            if (isset($_SESSION['order_results'])) {
 
                 //set session variables value
-                (isset($_SESSION['text_filter']))?$text_filter = $_SESSION['text_filter']: $text_filter = "";
-                (isset($_SESSION['date_filter']))?$date_filter = $_SESSION['date_filter']: $date_filter = "";
+                (isset($_SESSION['text_filter'])) ? $text_filter = $_SESSION['text_filter'] : $text_filter = "";
+                (isset($_SESSION['date_filter'])) ? $date_filter = $_SESSION['date_filter'] : $date_filter = "";
 
                 //if value == 0 -> all categories
-                (isset($_SESSION['category_filter']) && intval($_SESSION['category_filter']) != 0)?$category_filter = $_SESSION['category_filter']: $category_filter = "";
+                (isset($_SESSION['category_filter']) && intval($_SESSION['category_filter']) != 0) ? $category_filter = $_SESSION['category_filter'] : $category_filter = "";
 
                 $id = $text_filter;
-                $text_filter = "%". $text_filter ."%";
-                $date_filter = "%". $date_filter ."%";
-                $category_filter = "%".$category_filter ."%";
+                $text_filter = "%" . $text_filter . "%";
+                $date_filter = "%" . $date_filter . "%";
+                $category_filter = "%" . $category_filter . "%";
 
                 //variable that sets if include or not null category id
-                $include_null_category_id = (($_SESSION['category_filter']) == 0)? " OR category_id IS NULL) " : ") ";
+                $include_null_category_id = (($_SESSION['category_filter']) == 0) ? " OR category_id IS NULL) " : ") ";
 
-                if(intval($_SESSION['order_results']) == 0){
+                if (intval($_SESSION['order_results']) == 0) {
 
                     //order by date
                     $sql = "SELECT * FROM cases WHERE DELETED = 0 AND 
@@ -59,7 +59,7 @@ class CaseManager
                                 AND (category_id LIKE :category_id" . $include_null_category_id . "
                                 order by created_at desc";
 
-                } else if(intval($_SESSION['order_results'])== 1){
+                } else if (intval($_SESSION['order_results']) == 1) {
 
                     //order by times
                     $sql = "SELECT * FROM cases WHERE DELETED = 0";
@@ -145,7 +145,7 @@ class CaseManager
             $results = $variant_query->fetchAll(PDO::FETCH_ASSOC);
 
             //set null variant field
-            foreach ($results as $result){
+            foreach ($results as $result) {
                 $prepared_query = $this->conn->prepare("UPDATE CASES set variant = null where id = :id");
                 $prepared_query->bindParam(':id', $result['id'], PDO::PARAM_INT);
                 $prepared_query->execute();
@@ -184,7 +184,8 @@ class CaseManager
     }
 
 
-    public function modifyCase(DocCase $case, $id){
+    public function modifyCase(DocCase $case, $id)
+    {
         try {
 
             $sql = "UPDATE cases SET title = :title, description = :description, category_id = :category_id, variant = :variant WHERE ID = :id";
@@ -197,7 +198,7 @@ class CaseManager
 
             //if the variant is not null, insert row in rappresentations table
             if ($variant != null) {
-                $sql .= "INSERT INTO rappresentations (id_case) VALUES (:id_case);";
+                $sql .= "INSERT INTO rappresentations (id_case) VALUES (:id);";
             }
 
             //prepare query
@@ -205,12 +206,10 @@ class CaseManager
 
             //bind params first statement
             $prepared_query->bindParam(':title', $title, PDO::PARAM_STR);
-            $prepared_query->bindParam(':created_by', $_SESSION['id'], PDO::PARAM_INT);
             $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
             $prepared_query->bindParam(':description', $description, PDO::PARAM_STR);
             $prepared_query->bindParam(':category_id', $category_id, PDO::PARAM_INT);
             $prepared_query->bindParam(':variant', $variant, PDO::PARAM_INT);
-
 
             //bind params second statement -> if there is a variant
             if ($variant != null) {
@@ -221,6 +220,7 @@ class CaseManager
 
             return true;
         } catch (PDOException $ex) {
+            echo $ex;
             return false;
         }
     }

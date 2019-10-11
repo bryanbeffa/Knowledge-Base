@@ -339,8 +339,22 @@ class ResearchCases
         }
     }
 
-    public function modifyDetails($id)
+    public function setModifyCase($id){
+
+        //test input
+        $id = $this->testInput($id);
+
+        $_SESSION['modify_case'] = $id;
+
+        echo $_SESSION['modify_case'];
+
+        $this->showCases();
+    }
+
+    public function modifyCase()
     {
+        echo $_SESSION['modify_case'];
+
         //check if the db is connected
         if (isset($this->user_manager)) {
 
@@ -351,8 +365,8 @@ class ResearchCases
                 if (UserManager::isAdminUser($_SESSION['email'])) {
 
                     //set sessions variable
-                    (isset($_POST['modify_case_title'])) ? $_SESSION['modify_case_title'] = $_POST['new_case_title'] : "";
-                    (isset($_POST['modify_case_description'])) ? $_SESSION['modify_case_description'] = $_POST['new_case_description'] : "";
+                    (isset($_POST['modify_case_title'])) ? $_SESSION['modify_case_title'] = $_POST['modify_case_title'] : "";
+                    (isset($_POST['modify_case_description'])) ? $_SESSION['modify_case_description'] = $_POST['modify_case_description'] : "";
 
                     //check if the variables are initialized
                     if (isset($_POST['modify_case_title']) && isset($_POST['modify_case_category']) && isset($_POST['modify_case_description'])) {
@@ -378,7 +392,7 @@ class ResearchCases
                                 //create DocCase object
                                 $case = new DocCase($title, $category, $variant, $description);
 
-                                if ($this->case_manager->modifyCase($case)) {
+                                if ($this->case_manager->modifyCase($case, $_SESSION['modify_case'])) {
 
                                     //unset post variables
                                     unset($_POST['modify_case_title']);
@@ -391,7 +405,7 @@ class ResearchCases
                                     unset($_SESSION['modify_case_category']);
 
                                     //show success alert
-                                    $_SESSION['success'] = "Il caso è stato creato con successo";
+                                    $_SESSION['success'] = "Il caso è stato modificato con successo";
 
                                     //redirect to showCases function
                                     header("Location: " . URL . "researchCases/showCases");
