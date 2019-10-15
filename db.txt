@@ -97,12 +97,16 @@ create table cases (
     on delete set null
 );
 
-create table rappresentations(
+create table representation (
 	id_case int,
+	id_variant int,
     date timestamp,
     
     primary key(id_case, date),
     FOREIGN KEY (id_case) REFERENCES cases(id)
+    on delete cascade
+    on update cascade,
+FOREIGN KEY (id_variant) REFERENCES cases(id)
     on delete cascade
     on update cascade
 );
