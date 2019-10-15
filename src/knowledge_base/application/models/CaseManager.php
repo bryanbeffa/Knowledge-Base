@@ -22,7 +22,7 @@ class CaseManager
     public function getCases()
     {
         try {
-            $sql = "SELECT * FROM cases WHERE DELETED = 0 LIMIT 1";
+            $sql = "SELECT * FROM cases WHERE DELETED = 0";
 
             //filter variables
             $text_filter = "";
@@ -78,7 +78,6 @@ class CaseManager
             return $prepared_query->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (PDOException $ex) {
-            echo $ex;
         }
     }
 
@@ -98,9 +97,9 @@ class CaseManager
             $category_id = $case->getCategory();
             $variant = $case->getVariant();
 
-            //if the variant is not null, insert row in rappresentations table
+            //if the variant is not null, insert row in representation table
             if ($variant != null) {
-                $sql .= "INSERT INTO rappresentations (id_case) VALUES (:id_case);";
+                $sql .= "INSERT INTO representation (id_case, id_variant) VALUES (:id_case, :variant);";
             }
 
             //prepare query
@@ -113,25 +112,18 @@ class CaseManager
             $prepared_query->bindParam(':category_id', $category_id, PDO::PARAM_INT);
             $prepared_query->bindParam(':variant', $variant, PDO::PARAM_INT);
 
-
-            //bind params second statement -> if there is a variant
-            if ($variant != null) {
-                $prepared_query->bindParam(':id_case', $variant, PDO::PARAM_INT);
-            }
-
             $prepared_query->execute();
 
             return true;
         } catch (PDOException $ex) {
             return false;
         }
-
-
     }
 
     /**
      * Method that sets to 1 the deleted attribute
      * @param $id case to hide.
+     * @return bool if the case is been deleted
      */
     public function setDeletedCase($id)
     {
@@ -166,6 +158,7 @@ class CaseManager
     /**
      * Method that return the times of the case.
      * @param $id of the case
+     * @return int times of representation
      */
     public function getTimes($id)
     {
@@ -188,7 +181,7 @@ class CaseManager
     {
         try {
 
-            $sql = "UPDATE cases SET title = :title, description = :description, category_id = :category_id, variant = :variant WHERE ID = :id";
+            $sql = "UPDATE cases SET title = :title, description = :description, category_id = :category_id, variant = :variant WHERE ID = :id;";
 
             //get values
             $title = $case->getTitle();
@@ -196,9 +189,10 @@ class CaseManager
             $category_id = $case->getCategory();
             $variant = $case->getVariant();
 
-            //if the variant is not null, insert row in rappresentations table
+            //if the variant is not null, insert row in representation table
             if ($variant != null) {
-                $sql .= "INSERT INTO rappresentations (id_case) VALUES (:id);";
+                $sql .= "INSERT INTO representation (id_case, id_variant) VALUES (:id, :variant);";
+                echo $variant;
             }
 
             //prepare query
@@ -211,16 +205,11 @@ class CaseManager
             $prepared_query->bindParam(':category_id', $category_id, PDO::PARAM_INT);
             $prepared_query->bindParam(':variant', $variant, PDO::PARAM_INT);
 
-            //bind params second statement -> if there is a variant
-            if ($variant != null) {
-                $prepared_query->bindParam(':id_case', $variant, PDO::PARAM_INT);
-            }
-
             $prepared_query->execute();
 
             return true;
         } catch (PDOException $ex) {
-            echo $ex;
+            echo $ex->getMessage();
             return false;
         }
     }

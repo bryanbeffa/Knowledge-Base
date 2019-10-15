@@ -39,14 +39,14 @@
                 </div>
             </div>
 
-            <!-- Category -->
+            <!-- Search Category -->
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Seleziona categoria</label>
                 <div class="col-sm-9">
                     <select class="browser-default custom-select" name="category_filter">
-                        <option value="0" selected>Tutte le categorie</option>
+                        <option value="0">Tutte le categorie</option>
                         <?php foreach ($categories as $category): ?>
-                            <?php echo "<option value=" . $category['id'] . ">" . $category['name'] . "</option>" ?>
+                            <option value="<?php echo  $category['id']?>" <?php echo ((isset($_SESSION['category_filter']) && $_SESSION['category_filter'] == $category['id'])? "selected>" : ">") . $category['name'] . "</option>" ?>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -112,7 +112,6 @@
 
         </div>
     <?php endforeach; ?>
-
     <hr>
 
     <!-- Add case -->
@@ -311,6 +310,9 @@
                 <!-- Body -->
                 <div class="modal-body">
 
+                    <!-- Id case -->
+                    <input type="hidden" id="modifyCaseId" name="modify_case_id">
+
                     <!-- Case name -->
                     <div class="mt-3">
                         <label>Nome della caso (massimo 50 caratteri) <b class="text-danger">*</b></label>
@@ -339,8 +341,9 @@
 
                             <!-- check if there is already a selected option -->
                             <?php foreach ($cases as $variant): ?>
-                                <?php echo '<option value="' . $variant['id'] . '" id="variant' . $variant['id'] . '"' . (intval($variant['id']) == intval($case['variant']) ? "selected>" : ">") ?>
-                                <?php echo '(id: ' . $variant['id'] . ') ' . $variant['title'] . '</option>' ?>
+
+                                <!-- Check if the option is selected -->
+                                <?php echo '<option value="' . $variant['id'] . '" id="variant' . $variant['id'] . '"' . (intval($variant['id']) == intval($case['variant']) ? " selected >" : ">") ?><?php echo '(id: ' . $variant['id'] . ') ' . $variant['title'] . '</option>' ?>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -354,9 +357,7 @@
                                   class="form-control md-textarea"
                                   required></textarea>
                     </div>
-
                     <p class="mt-3"><b class="text-danger">*</b> indica un campo obbligatorio</p>
-
                 </div>
 
                 <!-- Footer -->
@@ -364,12 +365,12 @@
                     <button type="button" class="btn" data-dismiss="modal"
                             style="background-color: #20d6a9">Chiudi
                     </button>
-                    <input type="submit" class="btn" style="background-color: #20d6a9" value="Salva">
+                    <input type="submit" class="btn" style="background-color: #20d6a9" value="Salva"
+                           onclick="return confirm('Sei sicuro di voler modificare questo caso?');">
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 
 <script type="text/javascript" src="/knowledge_base/application/libs/js/ModifyCases.js"></script>

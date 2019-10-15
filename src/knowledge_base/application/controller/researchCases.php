@@ -48,7 +48,7 @@ class ResearchCases
                 //set session variables
                 (isset($_POST['text_filter'])) ? $_SESSION['text_filter'] = $this->testInput($_POST['text_filter']) : $_SESSION['text_filter'] = '';
                 (isset($_POST['date_filter'])) ? $_SESSION['date_filter'] = $this->testInput($_POST['date_filter']) : $_SESSION['date_filter'] = '';
-                (isset($_POST['category_filter'])) ? $_SESSION['category_filter'] = $this->testInput($_POST['category_filter']) : $_SESSION['category_filter'] = '';
+                (isset($_POST['category_filter'])) ? $_SESSION['category_filter'] = intval($this->testInput($_POST['category_filter'])) : $_SESSION['category_filter'] = '';
 
                 $is_admin = "";
 
@@ -180,11 +180,6 @@ class ResearchCases
                             $case = new DocCase($title, $category, $variant, $description);
 
                             if ($this->case_manager->addCase($case)) {
-
-                                //unset post variables
-                                unset($_POST['new_case_title']);
-                                unset($_POST['new_case_description']);
-                                unset($_POST['new_case_category']);
 
                                 //unset session variables
                                 unset($_SESSION['new_case_title']);
@@ -339,34 +334,16 @@ class ResearchCases
         }
     }
 
-    public function setModifyCase($id){
-
-        //test input
-        $id = $this->testInput($id);
-
-        $_SESSION['modify_case'] = $id;
-
-        echo $_SESSION['modify_case'];
-
-        $this->showCases();
-    }
-
     public function modifyCase()
     {
-        echo $_SESSION['modify_case'];
-
         //check if the db is connected
         if (isset($this->user_manager)) {
 
             //check if the uses is logged
             if ($this->user_manager->isUserLogged()) {
 
-                //check if the user is an admin
-                if (UserManager::isAdminUser($_SESSION['email'])) {
-
-                    //set sessions variable
-                    (isset($_POST['modify_case_title'])) ? $_SESSION['modify_case_title'] = $_POST['modify_case_title'] : "";
-                    (isset($_POST['modify_case_description'])) ? $_SESSION['modify_case_description'] = $_POST['modify_case_description'] : "";
+                //check if the user is an admin and the case id to modify is set
+                if (UserManager::isAdminUser($_SESSION['email']) && isset($_POST['modify_case_id'])) {
 
                     //check if the variables are initialized
                     if (isset($_POST['modify_case_title']) && isset($_POST['modify_case_category']) && isset($_POST['modify_case_description'])) {
@@ -375,6 +352,7 @@ class ResearchCases
                         $title = $this->testInput($_POST['modify_case_title']);
                         $category = $this->testInput($_POST['modify_case_category']);
                         $description = $this->testInput($_POST['modify_case_description']);
+                        $id = $this->testInput($_POST['modify_case_id']);
 
                         //check if data are valid
                         if ($this->validator->validateTextInput($title, 1, 50)) {
@@ -392,17 +370,7 @@ class ResearchCases
                                 //create DocCase object
                                 $case = new DocCase($title, $category, $variant, $description);
 
-                                if ($this->case_manager->modifyCase($case, $_SESSION['modify_case'])) {
-
-                                    //unset post variables
-                                    unset($_POST['modify_case_title']);
-                                    unset($_POST['modify_case_description']);
-                                    unset($_POST['modify_case_category']);
-
-                                    //unset session variables
-                                    unset($_SESSION['modify_case_title']);
-                                    unset($_SESSION['modify_case_description']);
-                                    unset($_SESSION['modify_case_category']);
+                                if ($this->case_manager->modifyCase($case, $id)) {
 
                                     //show success alert
                                     $_SESSION['success'] = "Il caso è stato modificato con successo";
