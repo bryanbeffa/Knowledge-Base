@@ -2,55 +2,54 @@
 
 <div class="p-5">
     <h1>Gestione utenti </h1>
-
+    <p>In questa pagina puoi gestire gli gestire gli utenti</p>
     <!-- Add user -->
     <p>Aggiungi un <a href data-toggle="modal" data-target="#registrationModal"> utente </a>
 
-    <div class="table-responsive">
-        <table class="table text-center mb-3 table-striped">
-            <thead>
+    <table id="dtBasicExample" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
             <tr>
-                <th>Id</th>
-                <th>Nome</th>
-                <th>Cognome</th>
-                <th>E-mail</th>
-                <!--<th>Richiesta cambio <br>password</th>-->
-                <th>Admin</th>
-                <th>Elimina utente</th>
+                <th class="th-sm">Id</th>
+                <th class="th-sm">Nome</th>
+                <th class="th-sm">Cognome</th>
+                <th class="th-sm">E-mail</th>
+                <!--<th class="th-sm">Richiesta cambio <br>password</th>-->
+                <th class="th-sm">Admin</th>
+                <th class="th-sm">Elimina utente</th>
             </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($users as $user): ?>
-                <tr>
-                    <?php echo '<td>' . $user['id'] . '</td>' ?>
-                    <?php echo '<td>' . $user['name'] . '</td>' ?>
-                    <?php echo '<td>' . $user['surname'] . '</td>' ?>
-                    <?php echo '<td>' . $user['email'] . '</td>' ?>
+        </thead>
+        <tbody>
+        <?php foreach ($users as $user): ?>
+            <tr>
+                <?php echo '<td>' . $user['id'] . '</td>' ?>
+                <?php echo '<td>' . $user['name'] . '</td>' ?>
+                <?php echo '<td>' . $user['surname'] . '</td>' ?>
+                <?php echo '<td>' . $user['email'] . '</td>' ?>
 
-                    <!--<td>
+                <!--<td>
                     <a class="text-info" href="<?php echo URL . "users/requestChangePass/" . $user['id'] ?>">
                         Effettua richiesta
                     </a>
                 </td>-->
 
-                    <!-- Check if the user is admin or not-->
-                    <?php if (intval($user['is_admin'] == 0)): ?>
-                        <td>No</td>
-                    <?php else: ?>
-                        <td>Si</td>
-                    <?php endif; ?>
+                <!-- Check if the user is admin or not-->
+                <?php if (intval($user['is_admin'] == 0)): ?>
+                    <td>No</td>
+                <?php else: ?>
+                    <td>Si</td>
+                <?php endif; ?>
 
-                    <td>
-                        <a class="text-info" href="<?php echo URL . "users/deleteUser/" . $user['id'] ?>"
-                           onclick="return confirm('Sei sicuro di voler eliminare questo utente?');">
-                            Elimina
-                        </a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
+                <td>
+                    <a class="text-info" href="<?php echo URL . "users/deleteUser/" . $user['id'] ?>"
+                       onclick="return confirm('Sei sicuro di voler eliminare questo utente?');">
+                        Elimina
+                    </a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+
 
     <!-- Modal -->
     <div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="registrationModal"
@@ -141,7 +140,6 @@
         </div>
     </div>
 </div>
-
 
 </body
 

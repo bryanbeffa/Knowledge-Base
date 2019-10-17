@@ -40,8 +40,12 @@ class ResearchCases
                 if (isset($_POST['order_results']) && intval($_POST['order_results']) == 1) {
 
                     $_SESSION['order_results'] = 1;
+                } else if (isset($_POST['order_results']) && intval($_POST['order_results']) == 2) {
+
+                    //order by less recent
+                    $_SESSION['order_results'] = 2;
                 } else {
-                    //set date order
+                    //order by most recent
                     $_SESSION['order_results'] = 0;
                 }
 

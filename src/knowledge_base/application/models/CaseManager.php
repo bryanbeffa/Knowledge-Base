@@ -47,8 +47,11 @@ class CaseManager
                 //variable that sets if include or not null category id
                 $include_null_category_id = (($_SESSION['category_filter']) == 0) ? " OR category_id IS NULL) " : ") ";
 
-                if (intval($_SESSION['order_results']) == 0) {
+                if (intval($_SESSION['order_results']) == 0 || intval($_SESSION['order_results']) == 2) {
 
+                    //if true order by most recent
+                    $order = "";
+                    (intval($_SESSION['order_results']) == 0)? $order = "desc": null;
                     //order by date
                     $sql = "SELECT * FROM cases WHERE DELETED = 0 AND 
                             (description LIKE :text_filter 
@@ -57,7 +60,7 @@ class CaseManager
                                 OR variant LIKE :id) 
                                 AND (created_at LIKE :date_filter) 
                                 AND (category_id LIKE :category_id" . $include_null_category_id . "
-                                order by created_at desc";
+                                order by created_at " . $order;
 
                 } else if (intval($_SESSION['order_results']) == 1) {
 
@@ -97,11 +100,6 @@ class CaseManager
             $category_id = $case->getCategory();
             $variant = $case->getVariant();
 
-            //if the variant is not null, insert row in representation table
-            if ($variant != null) {
-                $sql .= "INSERT INTO representation (id_case, id_variant) VALUES (:id_case, :variant);";
-            }
-
             //prepare query
             $prepared_query = $this->conn->prepare($sql);
 
@@ -114,8 +112,23 @@ class CaseManager
 
             $prepared_query->execute();
 
+            //if the variant is not null, insert row in representation table
+            if ($variant != null) {
+                $sql = "INSERT INTO representation (id_case, id_variant) VALUES (:id_case, :variant);";
+
+                //prepare query
+                $prepared_query = $this->conn->prepare($sql);
+
+                $last_inserted_id = $this->conn->lastInsertId();
+                $prepared_query->bindParam(':variant', $variant, PDO::PARAM_INT);
+                $prepared_query->bindParam(':id_case', $last_inserted_id, PDO::PARAM_INT);
+
+                $prepared_query->execute();
+            }
+
             return true;
         } catch (PDOException $ex) {
+            echo $ex;
             return false;
         }
     }

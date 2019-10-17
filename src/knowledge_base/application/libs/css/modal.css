@@ -1,0 +1,8 @@
+body.modal-open-noscroll {
+    margin-right: 0!important;
+    padding-right: 0!important;
+}
+
+modal-open-block-body{
+    overflow: hidden;
+}

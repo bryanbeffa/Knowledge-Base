@@ -47,3 +47,8 @@ function showModifyModal(caseName, caseId, caseDescription, categoryId, variantI
     $("#modifyCase").modal("toggle");
 
 }
+
+$(document).ready(function () {
+    $('#dtBasicExample').DataTable();
+    $('.dataTables_length').addClass('bs-select');
+});
