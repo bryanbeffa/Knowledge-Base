@@ -4,70 +4,81 @@
     <h1>Ricerca casi</h1>
     <hr>
 
-    <!-- Filter mask -->
-    <div class="container">
-        <form action="<?php echo URL ?>researchCases/showCases" method="post">
-
-            <h3 class="text-center">Filtri Base:</h3>
-
-            <!-- base filters  -->
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Scegli ordinamento</label>
-                <div class="col-sm-9">
-                    <select class="browser-default custom-select" name="order_results">
-                        <option value="0" <?php echo (isset($_SESSION['order_results']) && intval($_SESSION['order_results']) == 0) ? "selected" : null ?>>
-                            Casi più recenti
-                        </option>
-                        <option value="2" <?php echo (isset($_SESSION['order_results']) && intval($_SESSION['order_results']) == 2) ? "selected" : null ?>>
-                            Casi meno recenti
-                        </option>
-                        <option value="1" <?php echo (isset($_SESSION['order_results']) && intval($_SESSION['order_results']) == 1) ? "selected" : null ?>>
-                            Casi più ricorrenti
-                        </option>
-                    </select>
-                </div>
-            </div>
-
-            <h3 class="text-center">Filtri avanzati:</h3>
-            <hr>
-            <!-- Search text -->
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Inserisci parola chiave</label>
-                <div class="col-sm-9">
-                    <input class="form-control" type="text" placeholder="Ricerca" aria-label="Search" name="text_filter"
-                           value="<?php echo (isset($_SESSION['text_filter'])) ? $_SESSION['text_filter'] : null ?>">
-                </div>
-            </div>
-
-            <!-- Search Category -->
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Seleziona categoria</label>
-                <div class="col-sm-9">
-                    <select class="browser-default custom-select" name="category_filter">
-                        <option value="0">Tutte le categorie</option>
-                        <?php foreach ($categories as $category): ?>
-                            <option value="<?php echo $category['id'] ?>" <?php echo ((isset($_SESSION['category_filter']) && $_SESSION['category_filter'] == $category['id']) ? "selected>" : ">") . $category['name'] . "</option>" ?>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Date -->
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Scegli una data</label>
-                <div class="col-sm-9">
-                    <input placeholder="Seleziona una data" type="date" class="form-control datepicker"
-                           name="date_filter"
-                           value="<?php echo (isset($_SESSION['date_filter'])) ? $_SESSION['date_filter'] : null ?>">
-                </div>
-            </div>
-
-            <div class="container-fluid">
-                <input type="submit" value="cerca" class="btn" style="background-color: #20d6a9">
-            </div>
-        </form>
+    <div class="text-center mb-3">
+        <button class="btn" style="background-color: #20d6a9" data-toggle="collapse"
+           class="text-primary" data-target="#filterMask"
+           aria-expanded="false" aria-controls="filterMask" id="filterButton">
+            Mostra filtri
+        </button>
     </div>
-    <hr>
+
+    <!-- Filter mask -->
+    <div class="collapse" id="filterMask">
+        <div class="container">
+            <form action="<?php echo URL ?>researchCases/showCases" method="post">
+
+                <h3 class="text-center">Filtri Base:</h3>
+
+                <!-- base filters  -->
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Scegli ordinamento</label>
+                    <div class="col-sm-9">
+                        <select class="browser-default custom-select" name="order_results">
+                            <option value="0" <?php echo (isset($_SESSION['order_results']) && intval($_SESSION['order_results']) == 0) ? "selected" : null ?>>
+                                Casi più recenti
+                            </option>
+                            <option value="2" <?php echo (isset($_SESSION['order_results']) && intval($_SESSION['order_results']) == 2) ? "selected" : null ?>>
+                                Casi meno recenti
+                            </option>
+                            <option value="1" <?php echo (isset($_SESSION['order_results']) && intval($_SESSION['order_results']) == 1) ? "selected" : null ?>>
+                                Casi più ricorrenti
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <h3 class="text-center">Filtri avanzati:</h3>
+                <hr>
+                <!-- Search text -->
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Inserisci parola chiave</label>
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" placeholder="Ricerca" aria-label="Search"
+                               name="text_filter"
+                               value="<?php echo (isset($_SESSION['text_filter'])) ? $_SESSION['text_filter'] : null ?>">
+                    </div>
+                </div>
+
+                <!-- Search Category -->
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Seleziona categoria</label>
+                    <div class="col-sm-9">
+                        <select class="browser-default custom-select" name="category_filter">
+                            <option value="0">Tutte le categorie</option>
+                            <?php foreach ($categories as $category): ?>
+                                <option value="<?php echo $category['id'] ?>" <?php echo ((isset($_SESSION['category_filter']) && $_SESSION['category_filter'] == $category['id']) ? "selected>" : ">") . $category['name'] . "</option>" ?>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Date -->
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Scegli una data</label>
+                    <div class="col-sm-9">
+                        <input placeholder="Seleziona una data" type="date" class="form-control datepicker"
+                               name="date_filter"
+                               value="<?php echo (isset($_SESSION['date_filter'])) ? $_SESSION['date_filter'] : null ?>">
+                    </div>
+                </div>
+
+                <div class="container-fluid">
+                    <input type="submit" value="cerca" class="btn" style="background-color: #20d6a9">
+                </div>
+            </form>
+        </div>
+        <hr>
+    </div>
     <p class="m-0">Aggiungi <a href data-toggle="modal" data-target="#addCase"> caso </a></p>
 
     <!-- Add category -->
@@ -79,9 +90,12 @@
     <!-- End filter mask-->
 
     <h2 class="text-center">Risultati:</h2>
+    <hr>
 
     <!-- Show cases -->
+    <?php echo (sizeof($cases) == 0)? "<h3 class='text-center'>Non ci sono risultati</h3>": null?>
     <?php foreach ($cases as $case): ?>
+
 
         <!-- Uses to print times variable -->
         <?php $key = $case['id']; ?>
@@ -120,7 +134,7 @@
 
         </div>
     <?php endforeach; ?>
-    <hr>
+
 
     <!-- Modal add category -->
     <div class="modal fade modal-open" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="addCategory"
@@ -336,7 +350,7 @@
                                 <option value="0" selected>Nessun caso</option>
 
                                 <!-- check if there is already a selected option -->
-                                <?php foreach ($cases as $variant): ?>
+                                <?php foreach ($all_cases as $variant): ?>
 
                                     <!-- Check if the option is selected -->
                                     <?php echo '<option value="' . $variant['id'] . '" id="variant' . $variant['id'] . '"' . (intval($variant['id']) == intval($case['variant']) ? " selected >" : ">") ?><?php echo '(id: ' . $variant['id'] . ') ' . $variant['title'] . '</option>' ?>

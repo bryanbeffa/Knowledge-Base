@@ -6,3 +6,7 @@ body.modal-open-noscroll {
 modal-open-block-body{
     overflow: hidden;
 }
+
+btn-outline-bg-color{
+    border: 2px solid #20d6a9;
+}

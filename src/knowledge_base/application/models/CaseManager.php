@@ -15,6 +15,18 @@ class CaseManager
         }
     }
 
+    public function getAllCases(){
+        try{
+            $prepared_query = $this->conn->prepare("SELECT * FROM CASES");
+            $prepared_query->execute();
+            $res = $prepared_query->fetchAll(PDO::FETCH_ASSOC);
+
+            return $res;
+
+        }catch(PDOException $ex){
+        }
+    }
+
     /**
      * Method that returns the cases
      * @return array cases stored in the db
@@ -65,6 +77,16 @@ class CaseManager
                 } else if (intval($_SESSION['order_results']) == 1) {
 
                     //order by times
+                    $times_query = $this->conn->prepare("select variant from cases where deleted = 0 AND variant IS NOT NULL group by variant order by count(variant) desc;");
+                    $times_query->execute();
+
+                    $cases_list = $times_query->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach ($cases_list as $case){
+
+                    }
+
+
                     $sql = "SELECT * FROM cases WHERE DELETED = 0";
                 }
             }

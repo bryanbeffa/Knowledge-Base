@@ -6,19 +6,19 @@
     <!-- Add user -->
     <p>Aggiungi un <a href data-toggle="modal" data-target="#registrationModal"> utente </a>
 
-    <table id="dtBasicExample" class="table table-striped table-bordered" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th class="th-sm">Id</th>
-                <th class="th-sm">Nome</th>
-                <th class="th-sm">Cognome</th>
-                <th class="th-sm">E-mail</th>
-                <!--<th class="th-sm">Richiesta cambio <br>password</th>-->
-                <th class="th-sm">Admin</th>
-                <th class="th-sm">Elimina utente</th>
-            </tr>
+    <table class="table text-center table-bordered" cellspacing="0" width="100%">
+        <thead class="special-color text-light table-borderless">
+        <tr>
+            <th class="th-sm">Id</th>
+            <th class="th-sm">Nome</th>
+            <th class="th-sm">Cognome</th>
+            <th class="th-sm">E-mail</th>
+            <!--<th class="th-sm">Richiesta cambio <br>password</th>-->
+            <th class="th-sm">Admin</th>
+            <th class="th-sm">Elimina utente</th>
+        </tr>
         </thead>
-        <tbody>
+        <tbody class="white table-borderless">
         <?php foreach ($users as $user): ?>
             <tr>
                 <?php echo '<td>' . $user['id'] . '</td>' ?>
@@ -40,8 +40,9 @@
                 <?php endif; ?>
 
                 <td>
-                    <a class="text-info" href="<?php echo URL . "users/deleteUser/" . $user['id'] ?>"
-                       onclick="return confirm('Sei sicuro di voler eliminare questo utente?');">
+                    <a class="text-info"
+                       data-toggle="modal" data-target="#confirmDelete"
+                       onclick="deleteUser(<?php echo $user['id'] ?>, '<?php echo $user['name'] ?>')">
                         Elimina
                     </a>
                 </td>
@@ -139,7 +140,51 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Confirm -->
+    <div class="modal fade modal-open" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="confirmDelete"
+         aria-hidden="true">
+
+        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+            <!-- Content -->
+            <div class="modal-content">
+
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Elimina utente </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form action="<?php echo URL ?>users/deleteUser" method="post">
+                    <!-- Body -->
+                    <div class="modal-body">
+
+                        <div>
+                            <input type="hidden" id="userToDeleteId" name="userToDeleteId">
+                        </div>
+
+                        <!-- msg -->
+                        <p id="deleteMessage"></p>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi
+                        </button>
+                        <input type="submit" class="btn" style="background-color: #20d6a9" value="Elimina">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script type="text/javascript" src="/knowledge_base/application/libs/js/deleteUser.js"></script>
 
 </body
 

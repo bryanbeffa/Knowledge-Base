@@ -17,8 +17,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
-        <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -35,19 +35,19 @@
     <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\login\application\libs\img" />
-      <recent name="C:\xampp\htdocs\login\application\models" />
-      <recent name="C:\xampp\htdocs\login\application\libs\css" />
-      <recent name="C:\xampp\htdocs\login\application\views\tasks" />
-      <recent name="C:\xampp\htdocs\login\application\views\login" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\knowledge_base\application\libs\img" />
       <recent name="C:\xampp\htdocs\knowledge_base\application\libs" />
       <recent name="C:\xampp\htdocs\login\application\views\templates" />
       <recent name="C:\xampp\htdocs\login\application\views\subjects" />
       <recent name="C:\xampp\htdocs\login\application\libs" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\login\application\libs\img" />
+      <recent name="C:\xampp\htdocs\login\application\models" />
+      <recent name="C:\xampp\htdocs\login\application\libs\css" />
+      <recent name="C:\xampp\htdocs\login\application\views\tasks" />
+      <recent name="C:\xampp\htdocs\login\application\views\login" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -145,6 +145,8 @@
       <workItem from="1570788903514" duration="5641000" />
       <workItem from="1571134314313" duration="9326000" />
       <workItem from="1571307536370" duration="10869000" />
+      <workItem from="1571346360854" duration="22000" />
+      <workItem from="1571393849986" duration="9500000" />
     </task>
     <servers />
   </component>

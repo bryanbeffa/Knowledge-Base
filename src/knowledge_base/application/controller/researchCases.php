@@ -17,7 +17,7 @@ class ResearchCases
         require_once 'application/models/CaseManager.php';
         require_once 'application/models/DocCase.php';
         require_once 'application/models/Validator.php';
-        require_once 'application/controller/dbErrorPage.php';
+        require_once 'application/controller/dbError.php';
 
         try {
             $this->user_manager = new UserManager();
@@ -72,6 +72,9 @@ class ResearchCases
                 //get cases
                 $cases = $this->case_manager->getCases();
 
+                //used to print variant during the modification of a case if filters are actived
+                $all_cases = $this->case_manager->getAllCases();
+
                 $cases_times = array();
                 foreach ($cases as $case) {
                     //create associative array, id case as key
@@ -95,7 +98,7 @@ class ResearchCases
             }
 
         } else {
-            DbErrorPage::noDatabaseConnection();
+            DbError::noDatabaseConnection();
         }
     }
 
@@ -139,7 +142,7 @@ class ResearchCases
                 header("Location: " . URL . "home/index");
             }
         } else {
-            DbErrorPage::noDatabaseConnection();
+            DbError::noDatabaseConnection();
         }
     }
 
@@ -223,7 +226,7 @@ class ResearchCases
                 header("Location: " . URL . "home/index");
             }
         } else {
-            DbErrorPage::noDatabaseConnection();
+            DbError::noDatabaseConnection();
         }
     }
 
@@ -287,7 +290,7 @@ class ResearchCases
                 header("Location: " . URL . "home/index");
             }
         } else {
-            DbErrorPage::noDatabaseConnection();
+            DbError::noDatabaseConnection();
         }
     }
 
@@ -334,7 +337,7 @@ class ResearchCases
                 header("Location: " . URL . "home/index");
             }
         } else {
-            DbErrorPage::noDatabaseConnection();
+            DbError::noDatabaseConnection();
         }
     }
 
@@ -414,7 +417,7 @@ class ResearchCases
                 header("Location: " . URL . "home/index");
             }
         } else {
-            DbErrorPage::noDatabaseConnection();
+            DbError::noDatabaseConnection();
         }
     }
 }

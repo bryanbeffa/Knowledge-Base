@@ -22,7 +22,7 @@ class Home
         require_once 'application/models/DbManager.php';
         require_once 'application/models/UserManager.php';
         require_once 'application/models/PasswordManager.php';
-        require_once 'application/controller/dbErrorPage.php';
+        require_once 'application/controller/dbError.php';
 
         try {
             $this->user_manager = new UserManager();
@@ -40,7 +40,7 @@ class Home
             require_once 'application/views/login/index.php';
         } else {
             //redirect to no connection page
-            DbErrorPage::noDatabaseConnection();
+            DbError::noDatabaseConnection();
         }
     }
 
@@ -96,7 +96,7 @@ class Home
                 $this->index();
             }
         } else {
-            DbErrorPage::noDatabaseConnection();
+            DbError::noDatabaseConnection();
         }
     }
 

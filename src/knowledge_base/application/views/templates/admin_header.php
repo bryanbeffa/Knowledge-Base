@@ -3,7 +3,6 @@
 <body class="modal-open-noscroll">
     <!--Navbar -->
     <nav class="mb-1 navbar navbar-expand-lg navbar-light" style="background-color: #20d6a9">
-        <a class="navbar-brand font-weight-bold" href="#">Knowledge Base</a>
 
         <!-- small screens toggle button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"

@@ -11,7 +11,7 @@ class Users
         require_once 'application/models/UserManager.php';
         require_once 'application/models/PasswordManager.php';
         require_once 'application/models/User.php';
-        require_once 'application/controller/dbErrorPage.php';
+        require_once 'application/controller/dbError.php';
 
         try {
             $this->user_manager = new UserManager();
@@ -41,7 +41,7 @@ class Users
                     $users = $this->user_manager->getUsersList();
 
                     //if the success variable is set print the message
-                    if(isset($_SESSION['success'])) {
+                    if (isset($_SESSION['success'])) {
                         Home::setSuccessMsg($_SESSION['success']);
                         Home::successMsg();
                         unset($_SESSION['success']);
@@ -61,15 +61,14 @@ class Users
                 header("Location: " . URL . "home/index");
             }
         } else {
-            DbErrorPage::noDatabaseConnection();
+            DbError::noDatabaseConnection();
         }
     }
 
     /**
      * Method that tries to delete the user.
-     * @param $id id of the user who will be deleted
      */
-    public function deleteUser($id)
+    public function deleteUser()
     {
         //check if the db is connected
         if (isset($this->user_manager)) {
@@ -79,19 +78,27 @@ class Users
                 //check if the user is an admin
                 if (UserManager::isAdminUser($_SESSION['email'])) {
 
-                    //try to delete user
-                    if($this->user_manager->deleteUSer($id)){
+                    if (isset($_POST['userToDeleteId'])) {
+                        $id = $this->testInput($_POST['userToDeleteId']);
+                        $id = intval($id);
 
-                        //set success msg
-                        $_SESSION['success'] = "Utente eliminato";
+                        //try to delete user
+                        if ($this->user_manager->deleteUSer($id)) {
 
-                        //redirect to manage function
+                            //set success msg
+                            $_SESSION['success'] = "Utente eliminato";
+
+                            //redirect to manage function
+                            header("Location: " . URL . "users/manageUsers");
+
+                        } else {
+                            Home::setErrorMsg("Impossibile eliminare l'utente");
+                            Home::printError();
+                            $this->manageUsers();
+                        }
+
+                    }else{
                         header("Location: " . URL . "users/manageUsers");
-
-                    } else {
-                        Home::setErrorMsg("Impossibile eliminare l'utente");
-                        Home::printError();
-                        $this->manageUsers();
                     }
 
                 } else {
@@ -103,7 +110,7 @@ class Users
                 header("Location: " . URL . "home/index");
             }
         } else {
-            DbErrorPage::noDatabaseConnection();
+            DbError::noDatabaseConnection();
         }
     }
 
@@ -167,14 +174,17 @@ class Users
 
                                     } else {
                                         Home::printError();
+                                        $this->manageUsers();
                                     }
                                 } else {
                                     Home::setErrorMsg("La password non rispetta le condizioni di sicurezza");
                                     Home::printError();
+                                    $this->manageUsers();
                                 }
                             } else {
                                 Home::setErrorMsg("I campi di testo non possono essere vuoti");
                                 Home::printError();
+                                $this->manageUsers();
                             }
 
                         } else {
@@ -194,7 +204,7 @@ class Users
                 header("Location: " . URL . "home/index");
             }
         } else {
-            DbErrorPage::noDatabaseConnection();
+            DbError::noDatabaseConnection();
         }
     }
 
@@ -236,7 +246,7 @@ class Users
                 header("Location: " . URL . "home/index");
             }
         } else {
-            DbErrorPage::noDatabaseConnection();
+            DbError::noDatabaseConnection();
         }
     }
 }

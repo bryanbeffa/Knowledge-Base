@@ -1,7 +1,7 @@
 <?php
 
 
-class DbErrorPage
+class DbError
 {
     public function __construct()
     {

@@ -48,7 +48,12 @@ function showModifyModal(caseName, caseId, caseDescription, categoryId, variantI
 
 }
 
-$(document).ready(function () {
-    $('#dtBasicExample').DataTable();
-    $('.dataTables_length').addClass('bs-select');
+$(document).ready(function(){
+    $("#filterButton").click(function() {
+        if ($(this).text() == "Nascondi filtri") {
+            $(this).text("Mostra filtri");
+        } else {
+            $(this).text("Nascondi filtri");
+        };
+    });
 });
