@@ -39,6 +39,7 @@ class ResearchCases
 
                 if (isset($_POST['order_results']) && intval($_POST['order_results']) == 1) {
 
+                    //order by most represent
                     $_SESSION['order_results'] = 1;
                 } else if (isset($_POST['order_results']) && intval($_POST['order_results']) == 2) {
 
@@ -107,11 +108,10 @@ class ResearchCases
      * @param $id
      */
     public
-    function deleteCase($id)
+    function deleteCase()
     {
         //check if the db is connected
         if (isset($this->user_manager)) {
-
 
             //check if the uses is logged
             if ($this->user_manager->isUserLogged()) {
@@ -119,18 +119,27 @@ class ResearchCases
                 //check if the user is an admin
                 if (UserManager::isAdminUser($_SESSION['email'])) {
 
-                    //try to delete the case
-                    if ($this->case_manager->setDeletedCase($id)) {
+                    if (isset($_POST['caseToDeleteId'])) {
 
-                        //show success alert
-                        $_SESSION['success'] = "Il caso è stato eliminato con successo";
+                        $id = $this->testInput($_POST['caseToDeleteId']);
+                        $id = intval($id);
 
+                        //try to delete the case
+                        if ($this->case_manager->setDeletedCase($id)) {
+
+                            //show success alert
+                            $_SESSION['success'] = "Il caso è stato eliminato con successo";
+
+                            //redirect to showCases function
+                            header("Location: " . URL . "researchCases/showCases");
+                        } else {
+                            Home::setErrorMsg("Impossibile eliminare il caso");
+                            Home::printError();
+                            $this->showCases();
+                        }
+                    } else {
                         //redirect to showCases function
                         header("Location: " . URL . "researchCases/showCases");
-                    } else {
-                        Home::setErrorMsg("Impossibile eliminare il caso");
-                        Home::printError();
-                        $this->showCases();
                     }
                 } else {
                     //redirect to login page

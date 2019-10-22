@@ -39,4 +39,5 @@
 
         </div>
     </nav>
+    <script type="text/javascript" src="/knowledge_base/application/libs/js/researchPage.js"></script>
     <!--/.Navbar -->

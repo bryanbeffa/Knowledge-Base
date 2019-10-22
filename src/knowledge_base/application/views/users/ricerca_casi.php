@@ -126,9 +126,9 @@
                 <div class="card-footer bg-transparent text-right">
                     <a class="btn text-dark" style="background-color: #20d6a9"
                        onclick="showModifyModal('<?php echo $case['title'] ?>' , '<?php echo $case['id'] ?>', '<?php echo $case['description'] ?>', '<?php echo $case['category_id'] ?>', '<?php echo $case['variant'] ?>')">Modifica</a>
-                    <a class="btn" style="background-color: #20d6a9"
-                       href="<?php echo URL . "researchCases/deleteCase/" . $case['id'] ?>"
-                       onclick="return confirm('Sei sicuro di voler eliminare questo caso?');"> Elimina</a>
+                    <a class="btn text-dark" style="background-color: #20d6a9"
+                       data-toggle="modal" data-target="#confirmDeleteCase"
+                       onclick="deleteCase(<?php echo $case['id'] ?>, '<?php echo $case['title'] ?>')"> Elimina</a>
                 </div>
             <?php endif; ?>
 
@@ -222,8 +222,8 @@
                             <label>Variante del caso:</label>
                             <select class="browser-default custom-select" required name="new_case_variant">
                                 <option value="0" selected>Nessun caso</option>
-                                <?php foreach ($cases as $case): ?>
-                                    <?php echo "<option value=" . $case['id'] . "selected>" . " (id: " . $case['id'] . ") " . $case['title'] . "</option>" ?>
+                                <?php foreach ($all_cases as $case_variant): ?>
+                                    <?php echo "<option value=" . $case_variant['id'] . "selected>" . " (id: " . $case_variant['id'] . ") " . $case_variant['title'] . "</option>" ?>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -350,10 +350,10 @@
                                 <option value="0" selected>Nessun caso</option>
 
                                 <!-- check if there is already a selected option -->
-                                <?php foreach ($all_cases as $variant): ?>
+                                <?php foreach ($all_cases as $case_variant): ?>
 
                                     <!-- Check if the option is selected -->
-                                    <?php echo '<option value="' . $variant['id'] . '" id="variant' . $variant['id'] . '"' . (intval($variant['id']) == intval($case['variant']) ? " selected >" : ">") ?><?php echo '(id: ' . $variant['id'] . ') ' . $variant['title'] . '</option>' ?>
+                                    <?php echo '<option value="' . $case_variant['id'] . '" id="variant' . $case_variant['id'] . '"' . (intval($case_variant['id']) == intval($case['variant']) ? " selected >" : ">") ?><?php echo '(id: ' . $case_variant['id'] . ') ' . $case_variant['title'] . '</option>' ?>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -377,6 +377,48 @@
                         </button>
                         <input type="submit" class="btn" style="background-color: #20d6a9" value="Salva"
                                onclick="return confirm('Sei sicuro di voler modificare questo caso?');">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirm delete case-->
+    <div class="modal fade modal-open" id="confirmDeleteCase" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteCase"
+         aria-hidden="true">
+
+        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+            <!-- Content -->
+            <div class="modal-content">
+
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Elimina caso </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form action="<?php echo URL ?>researchCases/deleteCase" method="post">
+                    <!-- Body -->
+                    <div class="modal-body">
+
+                        <div>
+                            <input type="hidden" id="caseToDeleteId" name="caseToDeleteId">
+                        </div>
+
+                        <!-- msg -->
+                        <p id="deleteMessage"></p>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi
+                        </button>
+                        <input type="submit" class="btn" style="background-color: #20d6a9" value="Elimina">
                     </div>
                 </form>
             </div>

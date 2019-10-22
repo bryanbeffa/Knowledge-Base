@@ -56,10 +56,11 @@ class CaseManager
                 $date_filter = "%" . $date_filter . "%";
                 $category_filter = "%" . $category_filter . "%";
 
-                //variable that sets if include or not null category id
-                $include_null_category_id = (($_SESSION['category_filter']) == 0) ? " OR category_id IS NULL) " : ") ";
 
                 if (intval($_SESSION['order_results']) == 0 || intval($_SESSION['order_results']) == 2) {
+
+                    //variable that sets if include or not null category id
+                    $include_null_category_id = (($_SESSION['category_filter']) == 0) ? " OR category_id IS NULL) " : ") ";
 
                     //if true order by most recent
                     $order = "";
@@ -71,23 +72,25 @@ class CaseManager
                                 OR title LIKE :text_filter 
                                 OR variant LIKE :id) 
                                 AND (created_at LIKE :date_filter) 
-                                AND (category_id LIKE :category_id" . $include_null_category_id . "
-                                order by created_at " . $order;
+                                AND (category_id LIKE :category_id" . $include_null_category_id .
+                                "order by created_at " . $order;
 
                 } else if (intval($_SESSION['order_results']) == 1) {
+                    //variable that sets if include or not null category id
+                    $include_null_category_id = (($_SESSION['category_filter']) == 0) ? " OR c.category_id IS NULL) " : ") ";
 
-                    //order by times
-                    $times_query = $this->conn->prepare("select variant from cases where deleted = 0 AND variant IS NOT NULL group by variant order by count(variant) desc;");
-                    $times_query->execute();
-
-                    $cases_list = $times_query->fetchAll(PDO::FETCH_ASSOC);
-
-                    foreach ($cases_list as $case){
-
-                    }
-
-
-                    $sql = "SELECT * FROM cases WHERE DELETED = 0";
+                    $sql = "SELECT c.* FROM cases c
+                            INNER JOIN cases a ON 
+                            c.id = a.variant 
+                            where a.deleted = 0 AND a.variant IS NOT NULL 
+                            AND (c.description LIKE :text_filter 
+                                OR c.id LIKE :id 
+                                OR c.title LIKE :text_filter 
+                                OR c.variant LIKE :id) 
+                            AND (c.created_at LIKE :date_filter)
+                            AND (c.category_id LIKE :category_id" . $include_null_category_id .
+                            " group by a.variant 
+                            order by count(a.variant) desc;";
                 }
             }
 
@@ -100,6 +103,7 @@ class CaseManager
             $prepared_query->bindParam(':category_id', $category_filter, PDO::PARAM_STR);
 
             $prepared_query->execute();
+
             return $prepared_query->fetchAll(PDO::FETCH_ASSOC);
 
         } catch (PDOException $ex) {

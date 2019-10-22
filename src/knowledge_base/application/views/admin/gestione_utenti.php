@@ -3,9 +3,11 @@
 <div class="p-5">
     <h1>Gestione utenti </h1>
     <p>In questa pagina puoi gestire gli gestire gli utenti</p>
-    <!-- Add user -->
-    <p>Aggiungi un <a href data-toggle="modal" data-target="#registrationModal"> utente </a>
 
+    <!-- Add user -->
+    <p>Aggiungi un <a href data-toggle="modal" data-target="#registrationModal"> utente </a><hr>
+
+    <p><b class="text-danger">Attenzione: </b>gli utenti eliminati non possono essere recuperati!</p>
     <table class="table text-center table-bordered" cellspacing="0" width="100%">
         <thead class="special-color text-light table-borderless">
         <tr>
@@ -41,7 +43,7 @@
 
                 <td>
                     <a class="text-info"
-                       data-toggle="modal" data-target="#confirmDelete"
+                       data-toggle="confirmDeleteCase" data-target="#confirmDeleteCase"
                        onclick="deleteUser(<?php echo $user['id'] ?>, '<?php echo $user['name'] ?>')">
                         Elimina
                     </a>
@@ -50,7 +52,6 @@
         <?php endforeach; ?>
         </tbody>
     </table>
-
 
     <!-- Modal -->
     <div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="registrationModal"
