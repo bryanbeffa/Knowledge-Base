@@ -15,15 +15,35 @@ class CaseManager
         }
     }
 
-    public function getAllCases(){
-        try{
-            $prepared_query = $this->conn->prepare("SELECT * FROM CASES");
+    /**
+     * Return if there is a valid case with the defined id
+     * @param $id case id
+     * @return bool if there is a valid (not deleted) case
+     */
+    public function getCaseById($id)
+    {
+        try {
+            $prepared_query = $this->conn->prepare("SELECT * FROM CASES WHERE deleted = 0 AND ID = :id");
+            $prepared_query->bindParam(":id", $id, PDO::PARAM_INT);
+            $prepared_query->execute();
+            $res = $prepared_query->fetchAll(PDO::FETCH_ASSOC);
+
+            return sizeof($res) > 0;
+
+        } catch (PDOException $ex) {
+        }
+    }
+
+    public function getAllCases()
+    {
+        try {
+            $prepared_query = $this->conn->prepare("SELECT * FROM CASES WHERE deleted = 0");
             $prepared_query->execute();
             $res = $prepared_query->fetchAll(PDO::FETCH_ASSOC);
 
             return $res;
 
-        }catch(PDOException $ex){
+        } catch (PDOException $ex) {
         }
     }
 
@@ -64,7 +84,7 @@ class CaseManager
 
                     //if true order by most recent
                     $order = "";
-                    (intval($_SESSION['order_results']) == 0)? $order = "desc": null;
+                    (intval($_SESSION['order_results']) == 0) ? $order = "desc" : null;
                     //order by date
                     $sql = "SELECT * FROM cases WHERE DELETED = 0 AND 
                             (description LIKE :text_filter 
@@ -73,7 +93,7 @@ class CaseManager
                                 OR variant LIKE :id) 
                                 AND (created_at LIKE :date_filter) 
                                 AND (category_id LIKE :category_id" . $include_null_category_id .
-                                "order by created_at " . $order;
+                        "order by created_at " . $order;
 
                 } else if (intval($_SESSION['order_results']) == 1) {
                     //variable that sets if include or not null category id
@@ -89,7 +109,7 @@ class CaseManager
                                 OR c.variant LIKE :id) 
                             AND (c.created_at LIKE :date_filter)
                             AND (c.category_id LIKE :category_id" . $include_null_category_id .
-                            " group by a.variant 
+                        " group by a.variant 
                             order by count(a.variant) desc;";
                 }
             }

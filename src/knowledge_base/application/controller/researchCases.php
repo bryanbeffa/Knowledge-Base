@@ -87,7 +87,7 @@ class ResearchCases
                 //if success variable is set print the message
                 if (isset($_SESSION['success'])) {
                     Home::setSuccessMsg($_SESSION['success']);
-                    Home::successMsg();
+                    Home::printSuccessMsg();
                     unset($_SESSION['success']);
                 }
 
@@ -134,7 +134,7 @@ class ResearchCases
                             header("Location: " . URL . "researchCases/showCases");
                         } else {
                             Home::setErrorMsg("Impossibile eliminare il caso");
-                            Home::printError();
+                            Home::printErrorMsg();
                             $this->showCases();
                         }
                     } else {
@@ -188,7 +188,13 @@ class ResearchCases
 
                                 //null -> 0
                                 if (intval($_POST['new_case_variant']) != 0) {
+
                                     $variant = $this->testInput($_POST['new_case_variant']);
+
+                                    //check if the variant is valid
+                                    if(!$this->case_manager->getCaseById($variant)) {
+                                        $variant = null;
+                                    }
                                 }
                             }
 
@@ -210,7 +216,7 @@ class ResearchCases
 
                             } else {
                                 Home::setErrorMsg("Impossibile creare il caso. Riprova più tardi");
-                                Home::printError();
+                                Home::printErrorMsg();
                                 $this->showCases();
                             }
 
@@ -223,7 +229,7 @@ class ResearchCases
                         Home::setErrorMsg("Il titolo non deve contenere da 1 a 50 caratteri");
                     }
 
-                    Home::printError();
+                    Home::printErrorMsg();
                     $this->showCases();
 
                 } else {
@@ -280,14 +286,18 @@ class ResearchCases
 
                             } else {
                                 $this->showCases();
-                                Home::printError();
+                                Home::printErrorMsg();
                             }
                         } else {
                             Home::setErrorMsg("Inserire da 1 a 50 caratteri");
-                            Home::printError();
+                            Home::printErrorMsg();
                             $this->showCases();
                         }
+                    } else {
+                        //redirect to login page
+                        header("Location: " . URL . "researchCases/showCases");
                     }
+
 
                 } else {
                     //redirect to login page
@@ -331,8 +341,8 @@ class ResearchCases
                         header("Location: " . URL . "researchCases/showCases");
 
                     } else {
-                        Home::setErrorMsg("Inserire da 1 a 50 caratteri");
-                        Home::printError();
+                        Home::setErrorMsg("Impossibile eliminare la categoria");
+                        Home::printErrorMsg();
                         $this->showCases();
                     }
 
@@ -379,7 +389,13 @@ class ResearchCases
 
                                     //null -> 0
                                     if (intval($_POST['modify_case_variant']) != 0) {
+
                                         $variant = $this->testInput($_POST['modify_case_variant']);
+
+                                        //check if the variant is valid
+                                        if(!$this->case_manager->getCaseById($variant)) {
+                                            $variant = null;
+                                        }
                                     }
                                 }
 
@@ -396,7 +412,7 @@ class ResearchCases
 
                                 } else {
                                     Home::setErrorMsg("Impossibile modificare il caso. Riprova più tardi");
-                                    Home::printError();
+                                    Home::printErrorMsg();
                                     $this->showCases();
                                 }
 
@@ -409,7 +425,7 @@ class ResearchCases
                             Home::setErrorMsg("Il titolo non deve contenere da 1 a 50 caratteri");
                         }
 
-                        Home::printError();
+                        Home::printErrorMsg();
                         $this->showCases();
 
                     } else {

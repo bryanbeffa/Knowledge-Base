@@ -96,7 +96,6 @@
     <?php echo (sizeof($cases) == 0)? "<h3 class='text-center'>Non ci sono risultati</h3>": null?>
     <?php foreach ($cases as $case): ?>
 
-
         <!-- Uses to print times variable -->
         <?php $key = $case['id']; ?>
         <div class="card mt-4 mb-5">
@@ -212,7 +211,7 @@
                             <label>Seleziona una categoria <b class="text-danger">*</b></label>
                             <select class="browser-default custom-select" required name="new_case_category">
                                 <?php foreach ($categories as $category): ?>
-                                    <?php echo "<option value=" . $category['id'] . "selected>" . $category['name'] . "</option>" ?>
+                                    <?php echo "<option value='" . $category['id'] . "' selected>" . $category['name'] . "</option>" ?>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -298,12 +297,12 @@
     </div>
 
     <!-- Modal modify case-->
-    <div class="modal modal-open" id="modifyCase" tabindex="-1" role="dialog"
+    <div class="modal modal-open" style="overflow-x: hidden; overflow-scrolling: auto" id="modifyCase" tabindex="-1" role="dialog"
          aria-labelledby="modifyCase"
          aria-hidden="true">
 
         <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
 
             <!-- Content -->
             <div class="modal-content">
@@ -316,7 +315,7 @@
                     </button>
                 </div>
 
-                <form action="<?php echo URL ?>researchCases/modifyCase" method="post">
+                <form action="<?php echo URL ?>researchCases/modifyCase" method="post" id="modifyForm">
                     <!-- Body -->
                     <div class="modal-body">
 
@@ -353,6 +352,7 @@
                                 <?php foreach ($all_cases as $case_variant): ?>
 
                                     <!-- Check if the option is selected -->
+
                                     <?php echo '<option value="' . $case_variant['id'] . '" id="variant' . $case_variant['id'] . '"' . (intval($case_variant['id']) == intval($case['variant']) ? " selected >" : ">") ?><?php echo '(id: ' . $case_variant['id'] . ') ' . $case_variant['title'] . '</option>' ?>
                                 <?php endforeach; ?>
                             </select>
@@ -375,8 +375,8 @@
                         <button type="button" class="btn" data-dismiss="modal"
                                 style="background-color: #20d6a9">Chiudi
                         </button>
-                        <input type="submit" class="btn" style="background-color: #20d6a9" value="Salva"
-                               onclick="return confirm('Sei sicuro di voler modificare questo caso?');">
+                        <input type="button" class="btn" style="background-color: #20d6a9" value="Salva"
+                               data-toggle="modal" data-target="#confirmModifyCase">
                     </div>
                 </form>
             </div>
@@ -419,6 +419,48 @@
                         <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi
                         </button>
                         <input type="submit" class="btn" style="background-color: #20d6a9" value="Elimina">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal modify case -->
+    <div class="modal modal-open bg-dark" id="confirmModifyCase" tabindex="-1" role="dialog" aria-labelledby="confirmModifyCase"
+         aria-hidden="true">
+
+        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+        <div class="modal-dialog modal-dialog-centered " role="document">
+
+            <!-- Content -->
+            <div class="modal-content" style="overflow: hidden">
+
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Conferma modifiche </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form action="<?php echo URL ?>researchCases/modifyCase" method="post">
+                    <!-- Body -->
+                    <div class="modal-body">
+
+                        <div>
+                            <input type="hidden" id="caseToDeleteId" name="caseToDeleteId">
+                        </div>
+
+                        <!-- msg -->
+                        <p>Sei sicuro di voler salvare le modifiche?</p>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi
+                        </button>
+                        <a class="btn text-dark" id="submit" style="background-color: #20d6a9">Conferma</a>
                     </div>
                 </form>
             </div>

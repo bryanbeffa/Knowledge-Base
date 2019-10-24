@@ -13,7 +13,7 @@ class Home
     private static $error_msg = "";
 
     /**
-     * @var string attribute that defines the error message.
+     * @var string attribute that defines the success message.
      */
     private static $success_msg = "";
 
@@ -45,7 +45,7 @@ class Home
     }
 
     /**
-     * @param $msg danger message to set.
+     * @param $msg error message to set.
      */
     public static function setErrorMsg($msg)
     {
@@ -80,7 +80,7 @@ class Home
                     //save user's inputs in session variables
                     $_SESSION['email'] = $email;
                     $_SESSION['password'] = $password;
-                    $_SESSION['id'] = $this->user_manager->getIdByEmail($email);
+                    $_SESSION['id'] = intval($this->user_manager->getIdByEmail($email));
 
                     //redirect to research cases - prevent re-login if the database crashed
                     header("Location: " . URL . "researchCases/showCases");
@@ -105,7 +105,7 @@ class Home
      * @param $data data to validate
      * @return string validated data
      */
-    function testInput($data)
+    private function testInput($data)
     {
         $data = trim($data);
         $data = stripslashes($data);
@@ -116,7 +116,7 @@ class Home
     /**
      * Method that show a success alert.
      */
-    public static function successMsg()
+    public static function printSuccessMsg()
     {
         echo "<div class='text-center alert alert-success alert-dismissible fade show fixed-bottom' role='alert'>
                                   <strong>Ottimo! </strong>" . self::$success_msg .
@@ -127,7 +127,7 @@ class Home
     /**
      * Method that print the error message.
      */
-    public static function printError()
+    public static function printErrorMsg()
     {
         echo "<div class='text-center alert alert-danger alert-dismissible fade show fixed-bottom' role='alert'>
                                   <strong>Errore! </strong>" . self::$error_msg . "

@@ -11,8 +11,8 @@ class PasswordManager
     public static function checkStrength($password)
     {
 
-        //length 8, 1 uppercase, at least 1 digit
-        $pattern = '/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/';
+        //length 8, 1 uppercase, at least 1 digit, max length 50 characters
+        $pattern = '/^(?=.*[0-9])(?=.*[A-Z]).{8,50}$/';
 
         return preg_match($pattern, $password);
     }

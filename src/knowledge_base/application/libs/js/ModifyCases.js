@@ -48,6 +48,7 @@ function showModifyModal(caseName, caseId, caseDescription, categoryId, variantI
 
 }
 
+//change filter button text
 $(document).ready(function(){
     $("#filterButton").click(function() {
         if ($(this).text() == "Nascondi filtri") {
@@ -56,4 +57,10 @@ $(document).ready(function(){
             $(this).text("Nascondi filtri");
         };
     });
+});
+
+//submit form after confirm popup
+$('#submit').click(function(){
+    /* when the submit button in the modal is clicked, submit the form */
+    $('#modifyForm').submit();
 });

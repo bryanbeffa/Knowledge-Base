@@ -8,7 +8,7 @@
     <p>Aggiungi un <a href data-toggle="modal" data-target="#registrationModal"> utente </a><hr>
 
     <p><b class="text-danger">Attenzione: </b>gli utenti eliminati non possono essere recuperati!</p>
-    <table class="table text-center table-bordered" cellspacing="0" width="100%">
+    <table class="table text-center table-bordered table-responsive-lg" cellspacing="0" width="100%">
         <thead class="special-color text-light table-borderless">
         <tr>
             <th class="th-sm">Id</th>
@@ -43,7 +43,7 @@
 
                 <td>
                     <a class="text-info"
-                       data-toggle="confirmDeleteCase" data-target="#confirmDeleteCase"
+                       data-toggle="modal" data-target="#deleteUserConfirm"
                        onclick="deleteUser(<?php echo $user['id'] ?>, '<?php echo $user['name'] ?>')">
                         Elimina
                     </a>
@@ -53,12 +53,12 @@
         </tbody>
     </table>
 
-    <!-- Modal -->
+    <!-- Modal add user -->
     <div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="registrationModal"
          aria-hidden="true">
 
         <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-        <div class="modal-md modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-md modal-dialog modal-dialog-centered modal-md" role="document">
 
             <!-- modal content -->
             <div class="modal-content">
@@ -77,7 +77,7 @@
 
                         <!-- Name -->
                         <div class="mt-3">
-                            <label>Nome:</label>
+                            <label>Nome (massimo 50 caratteri)</label>
                             <input type="text" id="name"
                                    value="<?php echo (isset($_SESSION['new_user_name'])) ? $_SESSION['new_user_name'] : null ?>"
                                    class="form-control" name="name" required placeholder="Inserire nome">
@@ -85,7 +85,7 @@
 
                         <!-- Surname -->
                         <div class="mt-3">
-                            <label class="">Cognome:</label>
+                            <label class="">Cognome (massimo 50 caratteri)</label>
                             <input type="text" id="surname" class="form-control" name="surname"
                                    placeholder="Inserire cognome"
                                    value="<?php echo (isset($_SESSION['new_user_surname'])) ? $_SESSION['new_user_surname'] : null ?>"
@@ -94,7 +94,7 @@
 
                         <!-- Email -->
                         <div class="mt-3">
-                            <label class="">Email:</label>
+                            <label class="">Email</label>
                             <input type="email" id="email" class="form-control" name="email"
                                    value="<?php echo (isset($_SESSION['new_user_email'])) ? $_SESSION['new_user_email'] : null ?>"
                                    required placeholder="mario@esempio.com">
@@ -115,14 +115,14 @@
 
                         <!-- Password -->
                         <div class="mt-3">
-                            <label class="">Password (min 8 caratteri, 1 maiuscola ed un numero):</label>
+                            <label class="">Password (min 8 caratteri, max 50 caratteri, 1 maiuscola ed un numero)</label>
                             <input type="password" id="password" class="form-control" name="password"
                                    required placeholder="Inserire password">
                         </div>
 
                         <!-- Confirm Password -->
                         <div class="mt-3">
-                            <label class="">Conferma password:</label>
+                            <label class="">Conferma password</label>
                             <input type="password" id="confirmPassword" class="form-control"
                                    placeholder="Confermare password"
                                    name="confirm_pass" required onkeyup="confirmPassCorrect()">
@@ -143,7 +143,7 @@
     </div>
 
     <!-- Modal Confirm -->
-    <div class="modal fade modal-open" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="confirmDelete"
+    <div class="modal fade modal-open" id="deleteUserConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteUserConfirm"
          aria-hidden="true">
 
         <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
