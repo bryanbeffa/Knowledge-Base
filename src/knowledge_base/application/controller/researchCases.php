@@ -192,30 +192,36 @@ class ResearchCases
                                     $variant = $this->testInput($_POST['new_case_variant']);
 
                                     //check if the variant is valid
-                                    if(!$this->case_manager->getCaseById($variant)) {
+                                    if(!$this->case_manager->checkCaseId($variant)) {
                                         $variant = null;
                                     }
                                 }
                             }
 
-                            //create DocCase object
-                            $case = new DocCase($title, $category, $variant, $description);
+                            if($this->category_manager->checkCategoryId($category)) {
+                                //create DocCase object
+                                $case = new DocCase($title, $category, $variant, $description);
 
-                            if ($this->case_manager->addCase($case)) {
+                                if ($this->case_manager->addCase($case)) {
 
-                                //unset session variables
-                                unset($_SESSION['new_case_title']);
-                                unset($_SESSION['new_case_description']);
-                                unset($_SESSION['new_case_category']);
+                                    //unset session variables
+                                    unset($_SESSION['new_case_title']);
+                                    unset($_SESSION['new_case_description']);
+                                    unset($_SESSION['new_case_category']);
 
-                                //show success alert
-                                $_SESSION['success'] = "Il caso è stato creato con successo";
+                                    //show success alert
+                                    $_SESSION['success'] = "Il caso è stato creato con successo";
 
-                                //redirect to showCases function
-                                header("Location: " . URL . "researchCases/showCases");
+                                    //redirect to showCases function
+                                    header("Location: " . URL . "researchCases/showCases");
 
+                                } else {
+                                    Home::setErrorMsg("Impossibile creare il caso. Riprova più tardi");
+                                    Home::printErrorMsg();
+                                    $this->showCases();
+                                }
                             } else {
-                                Home::setErrorMsg("Impossibile creare il caso. Riprova più tardi");
+                                Home::setErrorMsg("La categoria inserita non è valida");
                                 Home::printErrorMsg();
                                 $this->showCases();
                             }
@@ -393,25 +399,32 @@ class ResearchCases
                                         $variant = $this->testInput($_POST['modify_case_variant']);
 
                                         //check if the variant is valid
-                                        if(!$this->case_manager->getCaseById($variant)) {
+                                        if(!$this->case_manager->checkCaseId($variant)) {
                                             $variant = null;
                                         }
                                     }
                                 }
 
-                                //create DocCase object
-                                $case = new DocCase($title, $category, $variant, $description);
+                                if($this->category_manager->checkCategoryId($category)){
 
-                                if ($this->case_manager->modifyCase($case, $id)) {
+                                    //create DocCase object
+                                    $case = new DocCase($title, $category, $variant, $description);
 
-                                    //show success alert
-                                    $_SESSION['success'] = "Il caso è stato modificato con successo";
+                                    if ($this->case_manager->modifyCase($case, $id)) {
 
-                                    //redirect to showCases function
-                                    header("Location: " . URL . "researchCases/showCases");
+                                        //show success alert
+                                        $_SESSION['success'] = "Il caso è stato modificato con successo";
 
+                                        //redirect to showCases function
+                                        header("Location: " . URL . "researchCases/showCases");
+
+                                    } else {
+                                        Home::setErrorMsg("Impossibile modificare il caso. Riprova più tardi");
+                                        Home::printErrorMsg();
+                                        $this->showCases();
+                                    }
                                 } else {
-                                    Home::setErrorMsg("Impossibile modificare il caso. Riprova più tardi");
+                                    Home::setErrorMsg("La categoria inserita non è valida");
                                     Home::printErrorMsg();
                                     $this->showCases();
                                 }

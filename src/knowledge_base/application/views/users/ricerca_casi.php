@@ -1,11 +1,11 @@
 <?php ?>
 
-<div class="p-5">
+<div class="p-5" >
     <h1>Ricerca casi</h1>
     <hr>
 
     <div class="text-center mb-3">
-        <button class="btn" style="background-color: #20d6a9" data-toggle="collapse"
+        <button class="btn text-white" style="background-color: #028090" data-toggle="collapse"
            class="text-primary" data-target="#filterMask"
            aria-expanded="false" aria-controls="filterMask" id="filterButton">
             Mostra filtri
@@ -101,8 +101,8 @@
         <div class="card mt-4 mb-5">
 
             <!-- Title -->
-            <div class="card-header" style="background-color: #20d6a9">
-                <h2 class="text-center"><b>Nome: </b><?php echo $case['title'] ?></h2>
+            <div class="card-header" style="background-color: #028090">
+                <h2 class="text-center text-white"><b>Nome: </b><?php echo $case['title'] ?></h2>
             </div>
 
             <!-- Body -->
@@ -123,9 +123,9 @@
             <!-- Footer-->
             <?php if ($is_admin): ?>
                 <div class="card-footer bg-transparent text-right">
-                    <a class="btn text-dark" style="background-color: #20d6a9"
-                       onclick="showModifyModal('<?php echo $case['title'] ?>' , '<?php echo $case['id'] ?>', '<?php echo $case['description'] ?>', '<?php echo $case['category_id'] ?>', '<?php echo $case['variant'] ?>')">Modifica</a>
-                    <a class="btn text-dark" style="background-color: #20d6a9"
+                    <a class="btn text-white" style="background-color: #028090"
+                       onclick="showModifyModal('<?php echo str_replace("'", "\'", $case['title']) ?>' , '<?php echo $case['id'] ?>', '<?php echo str_replace("'", "\'", $case['description']) ?>', '<?php echo $case['category_id'] ?>', '<?php echo $case['variant'] ?>')">Modifica</a>
+                    <a class="btn text-white" style="background-color: #028090"
                        data-toggle="modal" data-target="#confirmDeleteCase"
                        onclick="deleteCase(<?php echo $case['id'] ?>, '<?php echo $case['title'] ?>')"> Elimina</a>
                 </div>

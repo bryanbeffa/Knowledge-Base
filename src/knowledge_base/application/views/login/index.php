@@ -39,7 +39,7 @@ require_once 'application/config/config.php';
                 </div>
 
                 <!-- Sign in button -->
-                <button class="btn btn-block" type="submit" style="background-color: #20d6a9; color: #000">Sign in</button>
+                <button class="btn btn-block text-white" type="submit" style="background-color: #05668D; color: #000">Sign in</button>
 
             </form>
             <!-- Form -->

@@ -1,4 +1,4 @@
-<div >
+<div>
     <hr>
     <table class="w-100 text-center">
         <tr>

@@ -20,7 +20,7 @@ class CaseManager
      * @param $id case id
      * @return bool if there is a valid (not deleted) case
      */
-    public function getCaseById($id)
+    public function checkCaseId($id)
     {
         try {
             $prepared_query = $this->conn->prepare("SELECT * FROM CASES WHERE deleted = 0 AND ID = :id");

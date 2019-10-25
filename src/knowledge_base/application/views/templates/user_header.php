@@ -2,7 +2,7 @@
 
 <body class="modal-open-noscroll">
 <!--Navbar -->
-<nav class="mb-1 navbar navbar-expand-lg navbar-light" style="background-color: #20d6a9">
+<nav class="mb-1 navbar navbar-expand-lg navbar-light" style="background-color: #05668D">
 
     <!-- small screens toggle button -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
@@ -11,7 +11,7 @@
     </button>
 
     <!-- menu items -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent-333">
+    <div class="collapse navbar-collapse " id="navbarSupportedContent-333">
         <ul class="navbar-nav mr-auto">
             <!-- Cases -->
             <li class="nav-item">

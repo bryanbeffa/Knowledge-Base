@@ -36,6 +36,7 @@ class Home
     public function index()
     {
         if (isset($this->user_manager)) {
+
             require_once 'application/views/templates/head.php';
             require_once 'application/views/login/index.php';
         } else {
@@ -119,8 +120,8 @@ class Home
     public static function printSuccessMsg()
     {
         echo "<div class='text-center alert alert-success alert-dismissible fade show fixed-bottom' role='alert'>
-                                  <strong>Ottimo! </strong>" . self::$success_msg .
-            "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                                  <strong>Ottimo! </strong>" . self::$success_msg . "
+                                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                                   <span aria-hidden='true'>&times;</span></button></div>";
     }
 

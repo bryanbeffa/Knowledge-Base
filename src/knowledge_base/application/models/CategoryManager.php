@@ -38,7 +38,7 @@ class CategoryManager
     public function checkCategoryId($id)
     {
         try {
-            $prepared_query = $this->conn->prepare("SELECT * FROM CATEGORY WHERE id = :id");
+            $prepared_query = $this->conn->prepare("SELECT * FROM CATEGORIES WHERE id = :id");
             $prepared_query->bindParam(":id", $id, PDO::PARAM_INT);
             $prepared_query->execute();
             $res = $prepared_query->fetchAll(PDO::FETCH_ASSOC);

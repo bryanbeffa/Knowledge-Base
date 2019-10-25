@@ -2,7 +2,7 @@
 
 <body class="modal-open-noscroll">
     <!--Navbar -->
-    <nav class="mb-1 navbar navbar-expand-lg navbar-light" style="background-color: #20d6a9">
+    <nav class="mb-1 navbar navbar-expand-lg navbar-light" style="background-color: #05668D">
 
         <!-- small screens toggle button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"
@@ -16,14 +16,14 @@
 
                 <!-- Manage users -->
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo URL.'users/manageUsers'?>"> Gestione utenti
+                    <a class="nav-link text-white" href="<?php echo URL.'users/manageUsers'?>"> Gestione utenti
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
 
                 <!-- Cases -->
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo URL.'researchCases/showCases'?>">Ricerca Casi
+                    <a class="nav-link text-white" href="<?php echo URL.'researchCases/showCases'?>">Ricerca Casi
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
@@ -32,7 +32,7 @@
             <!-- logout button -->
             <ul class="navbar-nav ml-auto nav-flex-icons">
                 <li class="nav-item">
-                    <a class="nav-link" href="<?php echo URL.'users/logout'?>">Logout
+                    <a class="nav-link text-white"" href="<?php echo URL.'users/logout'?>">Logout
                     </a>
                 </li>
             </ul>
