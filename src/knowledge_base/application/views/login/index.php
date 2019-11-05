@@ -8,7 +8,7 @@
 require_once 'application/config/config.php';
 ?>
 
-<body style="background: url('/knowledge_base/application/libs/img/login_bg.jpg')">
+<body class="login-image" style="background: url('/knowledge_base/application/libs/img/login_bg.jpg')">
     <div class="container border col-md-6 p-4 align-middle white" style="opacity: 0.95; position:absolute; left:0;right:0; top:50%; -webkit-transform:translateY(-50%) !important; -ms-transform:translateY(-50%) !important; transform:translateY(-50%) !important;">
 
         <!---->
@@ -39,7 +39,7 @@ require_once 'application/config/config.php';
                 </div>
 
                 <!-- Sign in button -->
-                <button class="btn btn-block text-white" type="submit" style="background-color: #05668D; color: #000">Sign in</button>
+                <button class="btn btn-block blue-gradient" type="submit">Sign in</button>
 
             </form>
             <!-- Form -->

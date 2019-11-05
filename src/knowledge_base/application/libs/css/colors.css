@@ -1,0 +1,12 @@
+.blue-gradient{
+    background-color: #05668D;
+    color: #fff;
+}
+
+.blue-gradient:hover{
+    color: #fff;
+}
+
+.login-image{
+    background: url("/knowledge_base/application/libs/img/login_bg.jpg");
+}

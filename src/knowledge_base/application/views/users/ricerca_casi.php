@@ -1,13 +1,13 @@
 <?php ?>
 
-<div class="p-5" >
+<div class="p-5">
     <h1>Ricerca casi</h1>
     <hr>
 
     <div class="text-center mb-3">
-        <button class="btn text-white" style="background-color: #028090" data-toggle="collapse"
-           class="text-primary" data-target="#filterMask"
-           aria-expanded="false" aria-controls="filterMask" id="filterButton">
+        <button class="btn text-white blue-gradient" data-toggle="collapse"
+                class="text-primary" data-target="#filterMask"
+                aria-expanded="false" aria-controls="filterMask" id="filterButton">
             Mostra filtri
         </button>
     </div>
@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="container-fluid">
-                    <input type="submit" value="cerca" class="btn" style="background-color: #20d6a9">
+                    <input type="submit" value="cerca" class="btn blue-gradient text-white">
                 </div>
             </form>
         </div>
@@ -93,7 +93,7 @@
     <hr>
 
     <!-- Show cases -->
-    <?php echo (sizeof($cases) == 0)? "<h3 class='text-center'>Non ci sono risultati</h3>": null?>
+    <?php echo (sizeof($cases) == 0) ? "<h3 class='text-center'>Non ci sono risultati</h3>" : null ?>
     <?php foreach ($cases as $case): ?>
 
         <!-- Uses to print times variable -->
@@ -101,7 +101,7 @@
         <div class="card mt-4 mb-5">
 
             <!-- Title -->
-            <div class="card-header" style="background-color: #028090">
+            <div class="card-header blue-gradient">
                 <h2 class="text-center text-white"><b>Nome: </b><?php echo $case['title'] ?></h2>
             </div>
 
@@ -123,11 +123,12 @@
             <!-- Footer-->
             <?php if ($is_admin): ?>
                 <div class="card-footer bg-transparent text-right">
-                    <a class="btn text-white" style="background-color: #028090"
-                       onclick="showModifyModal('<?php echo str_replace("'", "\'", $case['title']) ?>' , '<?php echo $case['id'] ?>', '<?php echo str_replace("'", "\'", $case['description']) ?>', '<?php echo $case['category_id'] ?>', '<?php echo $case['variant'] ?>')">Modifica</a>
-                    <a class="btn text-white" style="background-color: #028090"
+                    <a class="btn text-white blue-gradient"
+                       onclick="showModifyModal('<?php echo str_replace("'", "\'", $case['title']) ?>' , <?php echo $case['id'] ?>, '<?php echo str_replace("'", "\'", $case['description']) ?>', <?php echo $case['category_id'] ?>, <?php echo $case['variant'] ?>)">Modifica</a>
+                    <a class="btn text-white blue-gradient"
                        data-toggle="modal" data-target="#confirmDeleteCase"
-                       onclick="deleteCase(<?php echo $case['id'] ?>, '<?php echo $case['title'] ?>')"> Elimina</a>
+                       onclick="deleteCase(<?php echo $case['id'] ?>, '<?php str_replace("'", "\'", $case['title']) ?>')">
+                        Elimina</a>
                 </div>
             <?php endif; ?>
 
@@ -167,9 +168,9 @@
 
                     <!-- Footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi
+                        <button type="button" class="btn blue-gradient" data-dismiss="modal">Chiudi
                         </button>
-                        <input type="submit" class="btn" style="background-color: #20d6a9" value="Aggiungi">
+                        <input type="submit" class="btn blue-gradient" value="Aggiungi">
                     </div>
                 </form>
             </div>
@@ -242,9 +243,9 @@
 
                     <!-- Footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi
+                        <button type="button" class="btn blue-gradient" data-dismiss="modal">Chiudi
                         </button>
-                        <input type="submit" class="btn" style="background-color: #20d6a9" value="Aggiungi">
+                        <input type="submit" class="btn blue-gradient" value="Aggiungi">
                     </div>
                 </form>
             </div>
@@ -286,9 +287,9 @@
 
                     <!-- Footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi
+                        <button type="button" class="btn blue-gradient" data-dismiss="modal">Chiudi
                         </button>
-                        <input type="submit" class="btn" style="background-color: #20d6a9" value="Elimina"
+                        <input type="submit" class="btn blue-gradient" value="Elimina"
                                onclick="return confirm('Sei sicuro di voler eliminare questa categoria?');">
                     </div>
                 </form>
@@ -297,12 +298,13 @@
     </div>
 
     <!-- Modal modify case-->
-    <div class="modal modal-open" style="overflow-x: hidden; overflow-scrolling: auto" id="modifyCase" tabindex="-1" role="dialog"
+    <div class="modal fade modal-open" style="overflow-x: hidden; overflow-scrolling: auto" id="modifyCase"
+         tabindex="-1" role="dialog"
          aria-labelledby="modifyCase"
          aria-hidden="true">
 
         <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 
             <!-- Content -->
             <div class="modal-content">
@@ -372,10 +374,10 @@
 
                     <!-- Footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal"
-                                style="background-color: #20d6a9">Chiudi
+                        <button type="button" class="btn blue-gradient" data-dismiss="modal"
+                        >Chiudi
                         </button>
-                        <input type="button" class="btn" style="background-color: #20d6a9" value="Salva"
+                        <input type="button" class="btn blue-gradient" value="Salva"
                                data-toggle="modal" data-target="#confirmModifyCase">
                     </div>
                 </form>
@@ -384,7 +386,8 @@
     </div>
 
     <!-- Modal Confirm delete case-->
-    <div class="modal fade modal-open" id="confirmDeleteCase" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteCase"
+    <div class="modal fade modal-open" id="confirmDeleteCase" tabindex="-1" role="dialog"
+         aria-labelledby="confirmDeleteCase"
          aria-hidden="true">
 
         <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
@@ -416,17 +419,18 @@
 
                     <!-- Footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi
+                        <button type="button" class="btn blue-gradient" data-dismiss="modal">Chiudi
                         </button>
-                        <input type="submit" class="btn" style="background-color: #20d6a9" value="Elimina">
+                        <input type="submit" class="btn blue-gradient" value="Elimina">
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Modal modify case -->
-    <div class="modal modal-open bg-dark" id="confirmModifyCase" tabindex="-1" role="dialog" aria-labelledby="confirmModifyCase"
+    <!-- Modal modify case confirm -->
+    <div class="modal fade modal-open black" id="confirmModifyCase" tabindex="-1" role="dialog"
+         aria-labelledby="confirmModifyCase"
          aria-hidden="true">
 
         <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
@@ -443,26 +447,20 @@
                     </button>
                 </div>
 
-                <form action="<?php echo URL ?>researchCases/modifyCase" method="post">
-                    <!-- Body -->
-                    <div class="modal-body">
+                <!-- Body -->
+                <div class="modal-body">
 
-                        <div>
-                            <input type="hidden" id="caseToDeleteId" name="caseToDeleteId">
-                        </div>
+                    <!-- msg -->
+                    <p>Sei sicuro di voler salvare le modifiche?</p>
 
-                        <!-- msg -->
-                        <p>Sei sicuro di voler salvare le modifiche?</p>
+                </div>
 
-                    </div>
-
-                    <!-- Footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi
-                        </button>
-                        <a class="btn text-dark" id="submit" style="background-color: #20d6a9">Conferma</a>
-                    </div>
-                </form>
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn blue-gradient" data-dismiss="modal">Chiudi
+                    </button>
+                    <button class="btn blue-gradient" id="submit">Conferma</button>
+                </div>
             </div>
         </div>
     </div>

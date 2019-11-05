@@ -5,11 +5,13 @@
     <p>In questa pagina puoi gestire gli gestire gli utenti</p>
 
     <!-- Add user -->
-    <p>Aggiungi un <a href data-toggle="modal" data-target="#registrationModal"> utente </a><hr>
+    <p>Aggiungi un <a href data-toggle="modal" data-target="#registrationModal"> utente </a>
+    <hr>
 
     <p><b class="text-danger">Attenzione: </b>gli utenti eliminati non possono essere recuperati!</p>
-    <table class="table text-center table-bordered table-responsive-lg" cellspacing="0" width="100%">
-        <thead class="special-color text-light table-borderless">
+    <table id="dtBasicExample" class="table text-center table-bordered table-responsive-lg" cellspacing="0"
+           width="100%">
+        <thead class="blue-gradient text-white table-borderless">
         <tr>
             <th class="th-sm">Id</th>
             <th class="th-sm">Nome</th>
@@ -28,12 +30,6 @@
                 <?php echo '<td>' . $user['surname'] . '</td>' ?>
                 <?php echo '<td>' . $user['email'] . '</td>' ?>
 
-                <!--<td>
-                    <a class="text-info" href="<?php echo URL . "users/requestChangePass/" . $user['id'] ?>">
-                        Effettua richiesta
-                    </a>
-                </td>-->
-
                 <!-- Check if the user is admin or not-->
                 <?php if (intval($user['is_admin'] == 0)): ?>
                     <td>No</td>
@@ -44,7 +40,7 @@
                 <td>
                     <a class="text-info"
                        data-toggle="modal" data-target="#deleteUserConfirm"
-                       onclick="deleteUser(<?php echo $user['id'] ?>, '<?php echo $user['name'] ?>')">
+                       onclick="deleteUser(<?php echo $user['id'] ?>, '<?php echo str_replace("'", "\'", $user['name']) ?>')">
                         Elimina
                     </a>
                 </td>
@@ -115,7 +111,8 @@
 
                         <!-- Password -->
                         <div class="mt-3">
-                            <label class="">Password (min 8 caratteri, max 50 caratteri, 1 maiuscola ed un numero)</label>
+                            <label class="">Password (min 8 caratteri, max 50 caratteri, 1 maiuscola ed un
+                                numero)</label>
                             <input type="password" id="password" class="form-control" name="password"
                                    required placeholder="Inserire password">
                         </div>
@@ -133,9 +130,9 @@
 
                     <!-- buttons of the modal -->
                     <div class="modal-footer">
-                        <button type="button" class="btn" style="background-color: #20d6a9" data-dismiss="modal">Chiudi
+                        <button type="button" class="btn blue-gradient" data-dismiss="modal">Chiudi
                         </button>
-                        <input type="submit" class="btn" style="background-color: #20d6a9">
+                        <input type="submit" class="btn blue-gradient">
                     </div>
                 </form>
             </div>
@@ -143,7 +140,8 @@
     </div>
 
     <!-- Modal Confirm -->
-    <div class="modal fade modal-open" id="deleteUserConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteUserConfirm"
+    <div class="modal fade modal-open" id="deleteUserConfirm" tabindex="-1" role="dialog"
+         aria-labelledby="deleteUserConfirm"
          aria-hidden="true">
 
         <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
@@ -175,9 +173,9 @@
 
                     <!-- Footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" style="background-color: #20d6a9">Chiudi
+                        <button type="button" class="btn blue-gradient" data-dismiss="modal">Chiudi
                         </button>
-                        <input type="submit" class="btn" style="background-color: #20d6a9" value="Elimina">
+                        <input type="submit" class="btn blue-gradient" value="Elimina">
                     </div>
                 </form>
             </div>
@@ -186,6 +184,26 @@
 </div>
 
 <script type="text/javascript" src="/knowledge_base/application/libs/js/deleteUser.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#dtBasicExample').DataTable( {
+            "lengthMenu": [[10, 25, 50], [10, 25, 50]],
+            "ordering": false,
+            "language": {
+                "lengthMenu": "Mostra _MENU_ record per pagina",
+                "zeroRecords": "Nessun record trovato",
+                "info": "Pagina _PAGE_ di _PAGES_",
+                "infoEmpty": "Nessun record disponibile",
+                "infoFiltered": "(filtrato da _MAX_ record totali)",
+                "search": "Cerca:","paginate": {
+                    "previous": "Precedente",
+                    "next": "Successiva"
+                }
+            }
+        } );
+        $('.dataTables_length').addClass('bs-select');
+    });
+</script>
 
 </body
 
