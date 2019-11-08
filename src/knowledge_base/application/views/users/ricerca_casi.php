@@ -1,6 +1,23 @@
 <?php ?>
 
-<div class="p-5">
+<div id="preloadImage" class="text-center vertical-align white opacity-100">
+    <img class="vertical-align m-auto" src="/knowledge_base/application/libs/img/book.gif">
+</div>
+
+<script>
+
+    //set preload div height
+    var height = $(window).height();
+    $("#preloadImage").height(height);
+
+    //wait for the fully loading of the page
+    $(document).ready(function () {
+        $("#mainContainer").show();
+        $("#preloadImage").hide();
+    });
+</script>
+
+<div class="p-5" id="mainContainer" style="display: none">
     <h1>Ricerca casi</h1>
     <hr>
 
@@ -93,47 +110,68 @@
     <hr>
 
     <!-- Show cases -->
-    <?php echo (sizeof($cases) == 0) ? "<h3 class='text-center'>Non ci sono risultati</h3>" : null ?>
-    <?php foreach ($cases as $case): ?>
 
-        <!-- Uses to print times variable -->
-        <?php $key = $case['id']; ?>
-        <div class="card mt-4 mb-5">
+    <!-- Adapted table for using pagination -->
+    <table id="casesTable" class="table table-responsive-lg" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php echo (sizeof($cases) == 0) ? "<h3 class='text-center'>Non ci sono risultati</h3>" : null ?>
+        <?php foreach ($cases
 
-            <!-- Title -->
-            <div class="card-header blue-gradient">
-                <h2 class="text-center text-white"><b>Nome: </b><?php echo $case['title'] ?></h2>
-            </div>
+                       as $case): ?>
 
-            <!-- Body -->
-            <div class="card-body">
-                <h5><b>ID:</b> <?php echo $case['id'] ?></h5>
-                <h5><b>Categoria:</b> <?php echo ($case['category_id'] != null) ? $cases_categories["$key"] : "-" ?>
-                </h5>
-                <h5><b>Variante di:</b> <?php echo ($case['variant'] == null) ? "-" : $case['variant'] ?> </h5>
-                <h5><b>Data creazione:</b> <?php echo date_format(date_create($case['created_at']), "d.m.Y H:i:s") ?>
-                </h5>
-                <h5 class="font-weight-bold">Descrizione:</h5>
-                <p><?php echo $case['description'] ?></p>
+            <tr>
+                <td class="w-100">
 
-                <!-- Times -->
-                <h5><b>Numero di ripresentazioni: </b><?php echo $cases_times["$key"] ?> </h5>
-            </div>
+                    <!-- Uses to print times variable -->
+                    <?php $key = $case['id']; ?>
+                    <div class="card mt-4 mb-5">
 
-            <!-- Footer-->
-            <?php if ($is_admin): ?>
-                <div class="card-footer bg-transparent text-right">
-                    <a class="btn text-white blue-gradient"
-                       onclick="showModifyModal('<?php echo str_replace("'", "\'", $case['title']) ?>' , <?php echo $case['id'] ?>, '<?php echo str_replace("'", "\'", $case['description']) ?>', <?php echo $case['category_id'] ?>, <?php echo $case['variant'] ?>)">Modifica</a>
-                    <a class="btn text-white blue-gradient"
-                       data-toggle="modal" data-target="#confirmDeleteCase"
-                       onclick="deleteCase(<?php echo $case['id'] ?>, '<?php str_replace("'", "\'", $case['title']) ?>')">
-                        Elimina</a>
-                </div>
-            <?php endif; ?>
+                        <!-- Title -->
+                        <div class="card-header blue-gradient">
+                            <h2 class="text-center text-white"><b>Nome: </b><?php echo $case['title'] ?></h2>
+                        </div>
 
-        </div>
-    <?php endforeach; ?>
+                        <!-- Body -->
+                        <div class="card-body">
+                            <h5><b>ID:</b> <?php echo $case['id'] ?></h5>
+                            <h5>
+                                <b>Categoria:</b> <?php echo ($case['category_id'] != null) ? $cases_categories["$key"] : "-" ?>
+                            </h5>
+                            <h5><b>Variante di:</b> <?php echo ($case['variant'] == null) ? "-" : $case['variant'] ?>
+                            </h5>
+                            <h5><b>Data
+                                    creazione:</b> <?php echo date_format(date_create($case['created_at']), "d.m.Y H:i:s") ?>
+                            </h5>
+                            <h5 class="font-weight-bold">Descrizione:</h5>
+                            <p><?php echo $case['description'] ?></p>
+
+                            <!-- Times -->
+                            <h5><b>Numero di ripresentazioni: </b><?php echo $cases_times["$key"] ?> </h5>
+                        </div>
+
+                        <!-- Footer-->
+                        <?php if ($is_admin): ?>
+                            <div class="card-footer bg-transparent text-right">
+                                <a class="btn text-white blue-gradient"
+                                   onclick="showModifyModal('<?php echo str_replace("'", "\'", $case['title']) ?>' , <?php echo $case['id'] ?>, '<?php echo str_replace("'", "\'", $case['description']) ?>', <?php echo $case['category_id'] ?>, <?php echo $case['variant'] ?>)">Modifica</a>
+                                <a class="btn text-white blue-gradient"
+                                   data-toggle="modal" data-target="#confirmDeleteCase"
+                                   onclick="deleteCase(<?php echo $case['id'] ?>, '<?php str_replace("'", "\'", $case['title']) ?>')">
+                                    Elimina</a>
+                            </div>
+                        <?php endif; ?>
+
+                    </div>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 
 
     <!-- Modal add category -->
@@ -467,5 +505,27 @@
 </div>
 
 <script type="text/javascript" src="/knowledge_base/application/libs/js/ModifyCases.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#casesTable').DataTable({
+            "lengthMenu": [[10, 15, 20], [10, 15, 20]],
+            "ordering": false,
+            "language": {
+                "search": "Cerca in live:",
+                "lengthMenu": "Mostra _MENU_ record per pagina",
+                "zeroRecords": "Nessun record trovato",
+                "info": "Pagina _PAGE_ di _PAGES_",
+                "infoEmpty": "Nessun record disponibile",
+                "infoFiltered": "(filtrato da _MAX_ record totali)",
+                "paginate": {
+                    "previous": "Precedente",
+                    "next": "Successiva"
+                }
+            }
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+</script>
+
 
 </body>

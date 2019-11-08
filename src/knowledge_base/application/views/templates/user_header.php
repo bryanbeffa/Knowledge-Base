@@ -2,7 +2,7 @@
 
 <body class="modal-open-noscroll">
 <!--Navbar -->
-<nav class="mb-1 navbar navbar-expand-lg navbar-light nav-text-dimension blue-gradient font-weight-bold">
+<nav class="mb-1 navbar navbar-expand-lg navbar-light nav-text-dimension blue-gradient">
 
     <!-- small screens toggle button -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-333"

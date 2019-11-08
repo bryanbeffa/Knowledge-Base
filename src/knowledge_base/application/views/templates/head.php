@@ -18,6 +18,7 @@
     <link href="/knowledge_base/application/libs/css/colors.css" rel="stylesheet">
     <link href="/knowledge_base/application/libs/css/modal.css" rel="stylesheet">
     <link href="/knowledge_base/application/libs/css/dimensions.css" rel="stylesheet">
+    <link href="/knowledge_base/application/libs/css/index.css" rel="stylesheet">
 
     <!-- Scripts -->
 
@@ -33,4 +34,5 @@
     <script type="text/javascript" src="/knowledge_base/application/libs/js/addons/datatables.min.js"></script>
     <link href="/knowledge_base/application/libs/css/addons/datatables-select.min.css" rel="stylesheet">
     <script type="text/javascript" src="/knowledge_base/application/libs/js/addons/datatables-select.min.js"></script>
+
 </head>

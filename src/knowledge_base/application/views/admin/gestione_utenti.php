@@ -9,7 +9,7 @@
     <hr>
 
     <p><b class="text-danger">Attenzione: </b>gli utenti eliminati non possono essere recuperati!</p>
-    <table id="dtBasicExample" class="table text-center table-bordered table-responsive-lg" cellspacing="0"
+    <table id="userTable" class="table text-center table-bordered table-responsive-lg table-hover" cellspacing="0"
            width="100%">
         <thead class="blue-gradient text-white table-borderless">
         <tr>
@@ -186,7 +186,7 @@
 <script type="text/javascript" src="/knowledge_base/application/libs/js/deleteUser.js"></script>
 <script>
     $(document).ready(function () {
-        $('#dtBasicExample').DataTable( {
+        $('#userTable').DataTable( {
             "lengthMenu": [[10, 25, 50], [10, 25, 50]],
             "ordering": false,
             "language": {
@@ -195,7 +195,8 @@
                 "info": "Pagina _PAGE_ di _PAGES_",
                 "infoEmpty": "Nessun record disponibile",
                 "infoFiltered": "(filtrato da _MAX_ record totali)",
-                "search": "Cerca:","paginate": {
+                "search": "Cerca:",
+                "paginate": {
                     "previous": "Precedente",
                     "next": "Successiva"
                 }
