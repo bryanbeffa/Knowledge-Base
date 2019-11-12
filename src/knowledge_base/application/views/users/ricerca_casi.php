@@ -119,10 +119,8 @@
         </tr>
         </thead>
         <tbody>
-        <?php echo (sizeof($cases) == 0) ? "<h3 class='text-center'>Non ci sono risultati</h3>" : null ?>
-        <?php foreach ($cases
 
-                       as $case): ?>
+        <?php foreach ($cases as $case): ?>
 
             <tr>
                 <td class="w-100">
@@ -172,7 +170,6 @@
         <?php endforeach; ?>
         </tbody>
     </table>
-
 
     <!-- Modal add category -->
     <div class="modal fade modal-open" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="addCategory"
@@ -308,7 +305,7 @@
                     </button>
                 </div>
 
-                <form action="<?php echo URL ?>researchCases/deleteCategory" method="post">
+                <form action="<?php echo URL ?>researchCases/deleteCategory" method="post" id="deleteCategoryForm">
                     <!-- Body -->
                     <div class="modal-body">
 
@@ -327,8 +324,8 @@
                     <div class="modal-footer">
                         <button type="button" class="btn blue-gradient" data-dismiss="modal">Chiudi
                         </button>
-                        <input type="submit" class="btn blue-gradient" value="Elimina"
-                               onclick="return confirm('Sei sicuro di voler eliminare questa categoria?');">
+                        <input type="button" class="btn blue-gradient" value="Elimina"
+                               data-toggle="modal" data-target="#confirmDeleteCategory">
                     </div>
                 </form>
             </div>
@@ -451,7 +448,7 @@
                         </div>
 
                         <!-- msg -->
-                        <p id="deleteMessage"></p>
+                        <p id="deleteCaseMessage"></p>
 
                     </div>
 
@@ -462,6 +459,43 @@
                         <input type="submit" class="btn blue-gradient" value="Elimina">
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirm delete category-->
+    <div class="modal fade modal-open black" id="confirmDeleteCategory" tabindex="-1" role="dialog"
+         aria-labelledby="confirmDeleteCategory"
+         aria-hidden="true">
+
+        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+            <!-- Content -->
+            <div class="modal-content">
+
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Elimina categoria </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body">
+
+                    <!-- msg -->
+                    <p id="deleteCategoryMessage">Sei sicuro di voler eliminare questa categoria?</p>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn blue-gradient" data-dismiss="modal">Chiudi
+                    </button>
+                    <button type="submit" class="btn blue-gradient" id="deleteCategorySubmit">Elimina</button>
+                </div>
             </div>
         </div>
     </div>
@@ -497,14 +531,14 @@
                 <div class="modal-footer">
                     <button type="button" class="btn blue-gradient" data-dismiss="modal">Chiudi
                     </button>
-                    <button class="btn blue-gradient" id="submit">Conferma</button>
+                    <button class="btn blue-gradient" id="confirmModifySubmit">Conferma</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script type="text/javascript" src="/knowledge_base/application/libs/js/ModifyCases.js"></script>
+<script type="text/javascript" src="/knowledge_base/application/libs/js/modifyCases.js"></script>
 <script>
     $(document).ready(function () {
         $('#casesTable').DataTable({
@@ -526,6 +560,3 @@
         $('.dataTables_length').addClass('bs-select');
     });
 </script>
-
-
-</body>

@@ -60,7 +60,13 @@ $(document).ready(function(){
 });
 
 //submit form after confirm popup
-$('#submit').click(function(){
+$('#confirmModifySubmit').click(function(){
     /* when the submit button in the modal is clicked, submit the form */
     $('#modifyForm').submit();
+});
+
+//submit form after confirm popup
+$('#deleteCategorySubmit').click(function(){
+    /* when the submit button in the modal is clicked, submit the form */
+    $('#deleteCategoryForm').submit();
 });

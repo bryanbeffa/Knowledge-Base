@@ -191,13 +191,13 @@ class ResearchCases
                                     $variant = $this->testInput($_POST['new_case_variant']);
 
                                     //check if the variant is valid
-                                    if(!$this->case_manager->checkCaseId($variant)) {
+                                    if (!$this->case_manager->checkCaseId($variant)) {
                                         $variant = null;
                                     }
                                 }
                             }
 
-                            if($this->category_manager->checkCategoryId($category)) {
+                            if ($this->category_manager->checkCategoryId($category)) {
                                 //create DocCase object
                                 $case = new DocCase($title, $category, $variant, $description);
 
@@ -332,30 +332,32 @@ class ResearchCases
                 //check if the user is an admin
                 if (UserManager::isAdminUser($_SESSION['email'])) {
 
-                    //check post variable
-                    if (isset($_POST['delete_category_id']) && !empty($this->testInput($_POST['delete_category_id']))) {
+                    if (isset($_POST['delete_category_id'])) {
 
                         $category_id = $this->testInput($_POST['delete_category_id']);
 
-                        //delete category
-                        $this->category_manager->deleteCategory($category_id);
+                        //try to delete category
+                        if ($this->category_manager->deleteCategory($category_id)) {
 
-                        //show success alert
-                        $_SESSION['success'] = "La categoria è stata eliminata con successo";
+                            //show success alert
+                            $_SESSION['success'] = "La categoria è stata eliminata con successo";
+                            header("Location: " . URL . "researchCases/showCases");
 
-                        header("Location: " . URL . "researchCases/showCases");
+                        } else {
+                            Home::setErrorMsg("Impossibile eliminare la categoria");
+                            Home::printErrorMsg();
+                            $this->showCases();
+                        }
 
                     } else {
-                        Home::setErrorMsg("Impossibile eliminare la categoria");
-                        Home::printErrorMsg();
-                        $this->showCases();
+                        //redirect to login page
+                        header("Location: " . URL . "researchCases/showCases");
                     }
 
                 } else {
                     //redirect to login page
                     header("Location: " . URL . "researchCases/showCases");
                 }
-
             } else {
                 //redirect to login page
                 header("Location: " . URL . "home/index");
@@ -365,7 +367,8 @@ class ResearchCases
         }
     }
 
-    public function modifyCase()
+    public
+    function modifyCase()
     {
         //check if the db is connected
         if (isset($this->user_manager)) {
@@ -398,13 +401,13 @@ class ResearchCases
                                         $variant = $this->testInput($_POST['modify_case_variant']);
 
                                         //check if the variant is valid
-                                        if(!$this->case_manager->checkCaseId($variant)) {
+                                        if (!$this->case_manager->checkCaseId($variant)) {
                                             $variant = null;
                                         }
                                     }
                                 }
 
-                                if($this->category_manager->checkCategoryId($category)){
+                                if ($this->category_manager->checkCategoryId($category)) {
 
                                     //create DocCase object
                                     $case = new DocCase($title, $category, $variant, $description);

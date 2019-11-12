@@ -8,15 +8,15 @@
 require_once 'application/config/config.php';
 ?>
 
-<body class="login-image blue-gradient">
-    <div class="container border col-md-6 p-4 align-middle white vertical-align border-radius">
+<body class="login-bg-image blue-gradient">
+    <div class="container border col-md-6 p-4 align-middle white vertical-align border-radius" id="loginMask">
 
         <!---->
         <div class="px-lg-5">
 
             <!-- logo -->
             <div class="text-center mb-3">
-                <img alt="Logo knowledge base" src="/knowledge_base/application/libs/img/kb_logo.svg" class="col-6"/>
+                <img alt="Logo knowledge base" src="/knowledge_base/application/libs/img/login_logo.png" class="col-5 mb-3"/>
             </div>
 
             <!-- Form -->
@@ -28,13 +28,13 @@ require_once 'application/config/config.php';
 
                 <!-- Email -->
                 <div class="md-form mt-3">
-                    <input type="email" id="email" class="form-control" name="email">
+                    <input type="email" id="email" class="form-control" name="email" required>
                     <label for="email">Email</label>
                 </div>
 
                 <!-- Password -->
                 <div class="md-form">
-                    <input type="password" id="password" class="form-control" name="password">
+                    <input type="password" id="password" class="form-control" name="password" required>
                     <label for="password">Password</label>
                 </div>
 
