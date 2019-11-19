@@ -1,7 +1,7 @@
 <?php ?>
 
 
-<body class="login-bg-image blue-gradient">
+<body style="background: url('/knowledge_base/application/libs/img/login_bg.jpg')">
 
     <div class="container border col-md-6 p-4 align-middle white" style="opacity: 0.95; position:absolute; left:0;right:0; top:50%; -webkit-transform:translateY(-50%) !important; -ms-transform:translateY(-50%) !important; transform:translateY(-50%) !important;">
 
@@ -14,7 +14,7 @@
             </div>
 
             <!-- div -->
-            <div class="container text-center text-dark">
+            <div class="container text-center">
                 <h2>ERRORE</h2>
                 <h3>Connessione alla banca dati fallita</h3>
                 <p>Ricarica la pagina o riprova più tardi</p>
