@@ -1,5 +1,4 @@
-User: knowledge_project_admin
-Password: KnowledgeBase2019
+
 ---------------------------------------------------------------
 
 // Creating tables
