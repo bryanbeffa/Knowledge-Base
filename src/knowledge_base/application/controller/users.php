@@ -9,6 +9,7 @@ class Users
     public function __construct()
     {
         require_once 'application/models/DbManager.php';
+        require_once 'application/models/MessageManager.php';
         require_once 'application/models/UserManager.php';
         require_once 'application/models/PasswordManager.php';
         require_once 'application/models/User.php';
@@ -46,8 +47,8 @@ class Users
 
                     //if the success variable is set print the message
                     if (isset($_SESSION['success'])) {
-                        Home::setSuccessMsg($_SESSION['success']);
-                        Home::printSuccessMsg();
+                        MessageManager::setSuccessMsg($_SESSION['success']);
+                        MessageManager::printSuccessMsg();
                         unset($_SESSION['success']);
                     }
 
@@ -69,6 +70,10 @@ class Users
         }
     }
 
+    public function index(){
+        $this->manageUsers();
+    }
+
     /**
      * Method that tries to delete the user.
      */
@@ -86,7 +91,7 @@ class Users
                         $id = intval($this->testInput($_POST['userToDeleteId']));
 
                         //check if the user to delete it's not the current user
-                        if($_SESSION['id'] != $id){
+                        if ($_SESSION['id'] != $id) {
 
                             //try to delete user
                             if ($this->user_manager->deleteUser($id)) {
@@ -98,14 +103,14 @@ class Users
                                 header("Location: " . URL . "users/manageUsers");
 
                             } else {
-                                Home::setErrorMsg("Impossibile eliminare l'utente");
-                                Home::printErrorMsg();
+                                MessageManager::setErrorMsg("Impossibile eliminare l'utente");
+                                MessageManager::printErrorMsg();
                                 $this->manageUsers();
                             }
 
                         } else {
-                            Home::setErrorMsg("Non puoi eliminare il tuo account");
-                            Home::printErrorMsg();
+                            MessageManager::setErrorMsg("Non puoi eliminare il tuo account");
+                            MessageManager::printErrorMsg();
                             $this->manageUsers();
                         }
 
@@ -180,7 +185,7 @@ class Users
                                             //check name length
                                             if ($this->validator->validateTextInput($email, 3, 320)) {
 
-                                                    if ($this->user_manager->createUser($user)) {
+                                                if ($this->user_manager->createUser($user)) {
 
                                                     //unset sessions variables
                                                     unset($_SESSION['new_user_name']);
@@ -194,34 +199,34 @@ class Users
                                                     header("Location: " . URL . "users/manageUsers");
 
                                                 } else {
-                                                    Home::printErrorMsg();
+                                                    MessageManager::printErrorMsg();
                                                     $this->manageUsers();
                                                 }
 
                                             } else {
-                                                Home::setErrorMsg("L'email inserita non è valida");
-                                                Home::printErrorMsg();
+                                                MessageManager::setErrorMsg("L'email inserita non è valida");
+                                                MessageManager::printErrorMsg();
                                                 $this->manageUsers();
                                             }
 
                                         } else {
-                                            Home::setErrorMsg("Il cognome può contenere al massimo 50 caratteri");
-                                            Home::printErrorMsg();
+                                            MessageManager::setErrorMsg("Il cognome può contenere al massimo 50 caratteri");
+                                            MessageManager::printErrorMsg();
                                             $this->manageUsers();
                                         }
                                     } else {
-                                        Home::setErrorMsg("Il nome può contenere al massimo 50 caratteri");
-                                        Home::printErrorMsg();
+                                        MessageManager::setErrorMsg("Il nome può contenere al massimo 50 caratteri");
+                                        MessageManager::printErrorMsg();
                                         $this->manageUsers();
                                     }
                                 } else {
-                                    Home::setErrorMsg("La password non rispetta le condizioni di sicurezza");
-                                    Home::printErrorMsg();
+                                    MessageManager::setErrorMsg("La password non rispetta le condizioni di sicurezza");
+                                    MessageManager::printErrorMsg();
                                     $this->manageUsers();
                                 }
                             } else {
-                                Home::setErrorMsg("I campi di testo non possono essere vuoti");
-                                Home::printErrorMsg();
+                                MessageManager::setErrorMsg("I campi di testo non possono essere vuoti");
+                                MessageManager::printErrorMsg();
                                 $this->manageUsers();
                             }
 
@@ -230,8 +235,8 @@ class Users
                         }
                     } else {
                         //redirect to manager page
-                        Home::setErrorMsg("Le password non corrispondono");
-                        Home::printErrorMsg();
+                        MessageManager::setErrorMsg("Le password non corrispondono");
+                        MessageManager::printErrorMsg();
                         $this->manageUsers();
                     }
                 } else {

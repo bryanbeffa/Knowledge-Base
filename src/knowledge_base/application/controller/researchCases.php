@@ -13,6 +13,7 @@ class ResearchCases
         require_once 'application/models/DbManager.php';
         require_once 'application/models/UserManager.php';
         require_once 'application/models/CategoryManager.php';
+        require_once 'application/models/MessageManager.php';
         require_once 'application/models/CaseManager.php';
         require_once 'application/models/DocCase.php';
         require_once 'application/models/Validator.php';
@@ -25,6 +26,10 @@ class ResearchCases
             $this->case_manager = new CaseManager();
         } catch (PDOException $exception) {
         }
+    }
+
+    public function index(){
+        $this->showCases();
     }
 
     public function showCases()
@@ -85,8 +90,8 @@ class ResearchCases
 
                 //if success variable is set print the message
                 if (isset($_SESSION['success'])) {
-                    Home::setSuccessMsg($_SESSION['success']);
-                    Home::printSuccessMsg();
+                    MessageManager::setSuccessMsg($_SESSION['success']);
+                    MessageManager::printSuccessMsg();
                     unset($_SESSION['success']);
                 }
 
@@ -131,8 +136,8 @@ class ResearchCases
                             //redirect to showCases function
                             header("Location: " . URL . "researchCases/showCases");
                         } else {
-                            Home::setErrorMsg("Impossibile eliminare il caso");
-                            Home::printErrorMsg();
+                            MessageManager::setErrorMsg("Impossibile eliminare il caso");
+                            MessageManager::printErrorMsg();
                             $this->showCases();
                         }
                     } else {
@@ -214,26 +219,26 @@ class ResearchCases
                                     header("Location: " . URL . "researchCases/showCases");
 
                                 } else {
-                                    Home::setErrorMsg("Impossibile creare il caso. Riprova più tardi");
-                                    Home::printErrorMsg();
+                                    MessageManager::setErrorMsg("Impossibile creare il caso. Riprova più tardi");
+                                    MessageManager::printErrorMsg();
                                     $this->showCases();
                                 }
                             } else {
-                                Home::setErrorMsg("La categoria inserita non è valida");
-                                Home::printErrorMsg();
+                                MessageManager::setErrorMsg("La categoria inserita non è valida");
+                                MessageManager::printErrorMsg();
                                 $this->showCases();
                             }
 
                             exit();
                         } else {
-                            Home::setErrorMsg("La descrizione deve contenere del testo");
+                            MessageManager::setErrorMsg("La descrizione deve contenere del testo");
                         }
 
                     } else {
-                        Home::setErrorMsg("Il titolo non deve contenere da 1 a 50 caratteri");
+                        MessageManager::setErrorMsg("Il titolo non deve contenere da 1 a 50 caratteri");
                     }
 
-                    Home::printErrorMsg();
+                    MessageManager::printErrorMsg();
                     $this->showCases();
 
                 } else {
@@ -290,11 +295,11 @@ class ResearchCases
 
                             } else {
                                 $this->showCases();
-                                Home::printErrorMsg();
+                                MessageManager::printErrorMsg();
                             }
                         } else {
-                            Home::setErrorMsg("Inserire da 1 a 50 caratteri");
-                            Home::printErrorMsg();
+                            MessageManager::setErrorMsg("Inserire da 1 a 50 caratteri");
+                            MessageManager::printErrorMsg();
                             $this->showCases();
                         }
                     } else {
@@ -343,8 +348,8 @@ class ResearchCases
                             header("Location: " . URL . "researchCases/showCases");
 
                         } else {
-                            Home::setErrorMsg("Impossibile eliminare la categoria");
-                            Home::printErrorMsg();
+                            MessageManager::setErrorMsg("Impossibile eliminare la categoria");
+                            MessageManager::printErrorMsg();
                             $this->showCases();
                         }
 
@@ -420,26 +425,26 @@ class ResearchCases
                                         header("Location: " . URL . "researchCases/showCases");
 
                                     } else {
-                                        Home::setErrorMsg("Impossibile modificare il caso. Riprova più tardi");
-                                        Home::printErrorMsg();
+                                        MessageManager::setErrorMsg("Impossibile modificare il caso. Riprova più tardi");
+                                        MessageManager::printErrorMsg();
                                         $this->showCases();
                                     }
                                 } else {
-                                    Home::setErrorMsg("La categoria inserita non è valida");
-                                    Home::printErrorMsg();
+                                    MessageManager::setErrorMsg("La categoria inserita non è valida");
+                                    MessageManager::printErrorMsg();
                                     $this->showCases();
                                 }
 
                                 exit();
                             } else {
-                                Home::setErrorMsg("La descrizione deve contenere del testo");
+                                MessageManager::setErrorMsg("La descrizione deve contenere del testo");
                             }
 
                         } else {
-                            Home::setErrorMsg("Il titolo non deve contenere da 1 a 50 caratteri");
+                            MessageManager::setErrorMsg("Il titolo non deve contenere da 1 a 50 caratteri");
                         }
 
-                        Home::printErrorMsg();
+                        MessageManager::printErrorMsg();
                         $this->showCases();
 
                     } else {

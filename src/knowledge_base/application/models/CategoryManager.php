@@ -7,7 +7,7 @@ class CategoryManager
 
     public function __construct()
     {
-        require_once 'application/controller/home.php';
+        require_once 'application/models/MessageManager.php';
         try {
             $this->conn = DbManager::connect();
         } catch (PDOException $ex) {
@@ -63,7 +63,7 @@ class CategoryManager
 
             return true;
         } catch (PDOException $ex) {
-            Home::setErrorMsg("La categoria esiste già");
+            MessageManager::setErrorMsg("La categoria esiste già");
             return false;
         }
     }
@@ -102,7 +102,7 @@ class CategoryManager
             return true;
         } catch (PDOException $ex) {
             echo $ex;
-            Home::setErrorMsg("Impossibile eliminare questa categoria");
+            MessageManager::setErrorMsg("Impossibile eliminare questa categoria");
             return false;
         }
     }

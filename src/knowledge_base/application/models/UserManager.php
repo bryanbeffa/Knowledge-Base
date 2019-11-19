@@ -12,7 +12,7 @@ class UserManager
 
     public function __construct()
     {
-        require_once 'application/controller/home.php';
+        require_once 'application/models/MessageManager.php';
         try {
             self::$conn = DbManager::connect();
         } catch (PDOException $ex) {
@@ -152,11 +152,11 @@ class UserManager
                 return true;
 
             } catch (PDOException $ex) {
-                Home::setErrorMsg("Impossibile creare l'utente");
+                MessageManager::setErrorMsg("Impossibile creare l'utente");
                 return false;
             }
         } else {
-            Home::setErrorMsg("Email già utilizzata");
+            MessageManager::setErrorMsg("Email già utilizzata");
             return false;
         }
     }

@@ -17,7 +17,7 @@ ini_set("display_errors", 1);
 /**
  * Configurazione di : URL del progetto
  */
-define('URL', 'http://localhost:8080/knowledge_base/');
+define('URL', 'http://10.20.143.201:8080/knowledge_base/');
 
 /**
  * Host del database
