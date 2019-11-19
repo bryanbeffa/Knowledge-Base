@@ -45,14 +45,18 @@ class DbManager
      */
     public static function connect()
     {
-        if (!self::$conn) {
+        try {
+            if (!self::$conn) {
 
-            self::$conn = new PDO("mysql:host=" . self::$host . ";dbname=" . self::$db_name . ";charset=" . self::$charset, self::$username, self::$password);
+                self::$conn = new PDO("mysql:host=" . self::$host . ";dbname=" . self::$db_name . ";charset=" . self::$charset, self::$username, self::$password);
 
-            // set the PDO error mode to exception
-            self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                // set the PDO error mode to exception
+                self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                return self::$conn;
+            }
             return self::$conn;
+        }catch (PDOException $ex){
+            echo $ex;
         }
-        return self::$conn;
-    }
+     }
 }
