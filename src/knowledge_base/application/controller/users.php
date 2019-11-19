@@ -88,13 +88,14 @@ class Users
                 if (UserManager::isAdminUser($_SESSION['email'])) {
 
                     if (isset($_POST['userToDeleteId'])) {
-                        $id = intval($this->testInput($_POST['userToDeleteId']));
+                        $id = $this->testInput($_POST['userToDeleteId']);
+                        $id = intval($id);
 
                         //check if the user to delete it's not the current user
                         if ($_SESSION['id'] != $id) {
 
                             //try to delete user
-                            if ($this->user_manager->deleteUser($id)) {
+                            if ($this->user_manager->deleteUSer($id)) {
 
                                 //set success msg
                                 $_SESSION['success'] = "Utente eliminato";
@@ -149,7 +150,7 @@ class Users
                     $password = $this->testInput($_POST['password']);
                     $confirm_pass = $this->testInput($_POST['confirm_pass']);
 
-                    //check if the passwords matches
+                    //check if the password are the same
                     if (PasswordManager::matchPassword($password, $confirm_pass)) {
 
                         //check if the user is an admin

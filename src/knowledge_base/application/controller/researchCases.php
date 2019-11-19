@@ -77,7 +77,7 @@ class ResearchCases
                 //get cases
                 $cases = $this->case_manager->getCases();
 
-                //used to print variants in the select field during the modification of a case
+                //used to print variant during the modification of a case if filters are actived
                 $all_cases = $this->case_manager->getAllCases();
 
                 $cases_times = array();
@@ -125,7 +125,8 @@ class ResearchCases
 
                     if (isset($_POST['caseToDeleteId'])) {
 
-                        $id = intval($this->testInput($_POST['caseToDeleteId']));
+                        $id = $this->testInput($_POST['caseToDeleteId']);
+                        $id = intval($id);
 
                         //try to delete the case
                         if ($this->case_manager->setDeletedCase($id)) {

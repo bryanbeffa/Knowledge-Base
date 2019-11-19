@@ -49,11 +49,6 @@ class CategoryManager
         }
     }
 
-    /**
-     * Try to add new category
-     * @param $category_name the name of the new category
-     * @return bool return if the add category operation was successful
-     */
     public function addCategory($category_name){
         try {
             //prepare query
@@ -68,11 +63,6 @@ class CategoryManager
         }
     }
 
-    /**
-     * Method that returns the data of the desired category
-     * @param $id category id of the desired category
-     * @return mixed all data of the category
-     */
     public function getCategoryById($id){
         try {
             //prepare query
@@ -87,11 +77,6 @@ class CategoryManager
         }
     }
 
-    /**
-     * Method that tries to delete the desired category
-     * @param $id category to delete id
-     * @return bool if the category have been deleted
-     */
     public function deleteCategory($id){
         try {
             //prepare query
