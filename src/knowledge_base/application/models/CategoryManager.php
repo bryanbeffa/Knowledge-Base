@@ -3,6 +3,9 @@
 
 class CategoryManager
 {
+    /**
+     * @var attribute that defines the database connection
+     */
     private $conn;
 
     public function __construct()
@@ -49,6 +52,11 @@ class CategoryManager
         }
     }
 
+    /**
+     * Method that tries to add a new category.
+     * @param $category_name name of the new category
+     * @return bool if the operation is successful
+     */
     public function addCategory($category_name){
         try {
             //prepare query
@@ -63,6 +71,11 @@ class CategoryManager
         }
     }
 
+    /**
+     * Method that returns the category using its id
+     * @param $id id of the category
+     * @return mixed category desired
+     */
     public function getCategoryById($id){
         try {
             //prepare query
@@ -77,6 +90,11 @@ class CategoryManager
         }
     }
 
+    /**
+     * Method that tries to delete the desired category
+     * @param $id id of the category to delete
+     * @return bool if the operation was successful
+     */
     public function deleteCategory($id){
         try {
             //prepare query

@@ -40,20 +40,12 @@ class User
 
     public function __construct(string $name, string $surname, string $email, string $password, $admin, $change_pass )
     {
-        $this->name = $this->testInput($name);
-        $this->surname = $this->testInput($surname);
-        $this->email = $this->testInput($email);
-        $this->password = $this->testInput($password);
-        $this->admin = $this->testInput($admin);
-        $this->change_pass = $this->testInput($change_pass);
-    }
-
-    public function testInput($data)
-    {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
+        $this->name = $name;
+        $this->surname = $surname;
+        $this->email = $email;
+        $this->password = $password;
+        $this->admin = $admin;
+        $this->change_pass = $change_pass;
     }
 
     /**

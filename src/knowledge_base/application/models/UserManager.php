@@ -8,6 +8,9 @@
 
 class UserManager
 {
+    /**
+     * @var attribute that defines the database connection
+     */
     private static $conn;
 
     public function __construct()
@@ -29,11 +32,8 @@ class UserManager
         if ($this->isExistingEmail($email)) {
 
             //check if the password is correct
-            if ($this->isPasswordCorrect($email, $password)) {
-                return true;
-            }
+            return $this->isPasswordCorrect($email, $password);
 
-            return false;
         }
 
         return false;
@@ -52,13 +52,7 @@ class UserManager
         $res = $prepared_query->fetch();
 
         //check if the row count is 1
-        if (intval($res[0]) == 1) {
-            //email already exists
-            return true;
-        }
-
-        //email do not exist
-        return false;
+        return intval($res[0]) == 1;
     }
 
     /**
@@ -75,11 +69,7 @@ class UserManager
         $hashed_password = $res[0];
 
         //check if the inserted password is correct
-        if (password_verify($password, $hashed_password)) {
-            return true;
-        } else {
-            return false;
-        }
+        return password_verify($password, $hashed_password);
     }
 
     /**
@@ -110,11 +100,7 @@ class UserManager
         $res = $prepared_query->fetch();
         $is_admin = $res[0];
 
-        if (intval($is_admin)) {
-            return true;
-        }
-
-        return false;
+        return intval($is_admin);
     }
 
     /**
@@ -222,11 +208,8 @@ class UserManager
 
         //check if the variables are initialized
         if (isset($_SESSION['email']) && isset($_SESSION['password'])) {
-            if ($this->checkCredentials($_SESSION['email'], $_SESSION['password'])) {
-                return true;
-            }
+            return $this->checkCredentials($_SESSION['email'], $_SESSION['password']);
         }
-
         return false;
 
     }

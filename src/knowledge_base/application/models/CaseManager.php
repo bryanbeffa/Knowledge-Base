@@ -3,6 +3,9 @@
 
 class CaseManager
 {
+    /**
+     * @var attribute that defines the database connection
+     */
     private $conn;
 
     public function __construct()
@@ -34,6 +37,10 @@ class CaseManager
         }
     }
 
+    /**
+     * Method that return all cases.
+     * @return array all cases stored in the database
+     */
     public function getAllCases()
     {
         try {
@@ -235,7 +242,12 @@ class CaseManager
         }
     }
 
-
+    /**
+     * Method that tries to update an existing case.
+     * @param DocCase $case new case data
+     * @param $id id of the case to modify
+     * @return bool if the operation is successful
+     */
     public function modifyCase(DocCase $case, $id)
     {
         try {

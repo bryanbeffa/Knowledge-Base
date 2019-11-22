@@ -3,9 +3,24 @@
 class ResearchCases
 {
 
+    /**
+     * @var UserManager Attribute that defines the user manager.
+     */
     private $user_manager;
+
+    /**
+     * @var Validator Attribute that defines the validator.
+     */
     private $validator;
+
+    /**
+     * @var CategoryManager Attribute that defines the category manager.
+     */
     private $category_manager;
+
+    /**
+     * @var CaseManager Attribute that defines the case manager.
+     */
     private $case_manager;
 
     public function __construct()
@@ -32,6 +47,9 @@ class ResearchCases
         $this->showCases();
     }
 
+    /**
+     * Method used to show the cases to the user.
+     */
     public function showCases()
     {
         //check if the db is connected
@@ -255,6 +273,11 @@ class ResearchCases
         }
     }
 
+    /**
+     * Method that validate the values.
+     * @param $data value to test.
+     * @return string the valid value.
+     */
     function testInput($data)
     {
         $data = trim($data);
@@ -372,6 +395,9 @@ class ResearchCases
         }
     }
 
+    /**
+     * Method used to modify the case.
+     */
     public
     function modifyCase()
     {
