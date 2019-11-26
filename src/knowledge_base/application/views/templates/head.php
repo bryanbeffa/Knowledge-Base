@@ -21,8 +21,6 @@
     <link href="/knowledge_base/application/libs/css/index.css" rel="stylesheet">
 
     <!-- Scripts -->
-
-
     <!-- MDB scripts-->
     <script type="text/javascript" src="/knowledge_base/application/libs/js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="/knowledge_base/application/libs/js/bootstrap.js"></script>
@@ -34,5 +32,10 @@
     <script type="text/javascript" src="/knowledge_base/application/libs/js/addons/datatables.min.js"></script>
     <link href="/knowledge_base/application/libs/css/addons/datatables-select.min.css" rel="stylesheet">
     <script type="text/javascript" src="/knowledge_base/application/libs/js/addons/datatables-select.min.js"></script>
+
+    <!-- datepicker -->
+    <link href="/knowledge_base/application/libs/css/datepicker/bootstrap-datepicker.standalone.css" rel="stylesheet">
+    <script type="text/javascript" src="/knowledge_base/application/libs/js/datepicker/bootstrap-datepicker.it.min.js"></script>
+    <script type="text/javascript" src="/knowledge_base/application/libs/js/datepicker/bootstrap-datepicker.js"></script>
 
 </head>

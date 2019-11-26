@@ -70,7 +70,7 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Seleziona categoria</label>
                     <div class="col-sm-9">
-                        <select class="browser-default custom-select" name="category_filter">
+                        <select class="browser-default custom-select mdb-select" name="category_filter">
                             <option value="0">Tutte le categorie</option>
                             <?php foreach ($categories as $category): ?>
                                 <option value="<?php echo $category['id'] ?>" <?php echo ((isset($_SESSION['category_filter']) && $_SESSION['category_filter'] == $category['id']) ? "selected>" : ">") . $category['name'] . "</option>" ?>
@@ -83,9 +83,9 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Scegli una data</label>
                     <div class="col-sm-9">
-                        <input placeholder="Seleziona una data" type="date" class="form-control datepicker"
-                               name="date_filter"
-                               value="<?php echo (isset($_SESSION['date_filter'])) ? $_SESSION['date_filter'] : null ?>">
+                        <input placeholder="20.10.2019" type="text" class="form-control datepicker"
+                               name="date_filter" id="datepicker"
+                               value="<?php echo (isset($_SESSION['date_filter'])) ? date_format(date_create($_SESSION['date_filter']), "d.m.Y") : null ?>">
                     </div>
                 </div>
 
@@ -558,5 +558,15 @@
             }
         });
         $('.dataTables_length').addClass('bs-select');
+    });
+
+    $('.datepicker').datepicker({
+        format: "dd.mm.yyyy",
+        weekStart: 1,
+        todayBtn: "linked",
+        clearBtn: true,
+        language: "it",
+        todayHighlight: true,
+        autoclose: true,
     });
 </script>

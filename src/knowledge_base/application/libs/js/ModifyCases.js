@@ -9,7 +9,7 @@ function showModifyModal(caseName, caseId, caseDescription, categoryId, variantI
 
     //show all options
     var options = select.options;
-    for (var i = 0; i < options.length; i++){
+    for (var i = 0; i < options.length; i++) {
         options[i].hidden = false;
     }
 
@@ -49,24 +49,26 @@ function showModifyModal(caseName, caseId, caseDescription, categoryId, variantI
 }
 
 //change filter button text
-$(document).ready(function(){
-    $("#filterButton").click(function() {
+$(document).ready(function () {
+    $("#filterButton").click(function () {
         if ($(this).text() == "Nascondi filtri") {
             $(this).text("Mostra filtri");
         } else {
             $(this).text("Nascondi filtri");
-        };
+        }
+        ;
     });
+
 });
 
 //submit form after confirm popup
-$('#confirmModifySubmit').click(function(){
+$('#confirmModifySubmit').click(function () {
     /* when the submit button in the modal is clicked, submit the form */
     $('#modifyForm').submit();
 });
 
 //submit form after confirm popup
-$('#deleteCategorySubmit').click(function(){
+$('#deleteCategorySubmit').click(function () {
     /* when the submit button in the modal is clicked, submit the form */
     $('#deleteCategoryForm').submit();
 });

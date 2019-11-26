@@ -1,0 +1,5 @@
+- Modifica utenti
+- Eliminazione utente -> casi che ha creato (comportamento)
+- View riassuntiva dei casi
+- Bottone che rimanda alla caso padre
+- Layout casi da rendere più leggibile
