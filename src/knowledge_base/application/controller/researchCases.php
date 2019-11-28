@@ -73,9 +73,9 @@ class ResearchCases
                 }
 
                 //set session variables
-                (isset($_POST['text_filter'])) ? $_SESSION['text_filter'] = $this->testInput($_POST['text_filter']) : $_SESSION['text_filter'] = '';
-                (isset($_POST['date_filter'])) ? $_SESSION['date_filter'] = date_format(date_create($this->testInput($_POST['date_filter'])), "Y-m-d") : $_SESSION['date_filter'] = '';
-                (isset($_POST['category_filter'])) ? $_SESSION['category_filter'] = intval($this->testInput($_POST['category_filter'])) : $_SESSION['category_filter'] = '';
+                (isset($_POST['text_filter']) && !empty($_POST['text_filter'])) ? $_SESSION['text_filter'] = $this->testInput($_POST['text_filter']) : $_SESSION['text_filter'] = '';
+                (isset($_POST['date_filter']) && !empty($_POST['date_filter'])) ? $_SESSION['date_filter'] = date_format(date_create($this->testInput($_POST['date_filter'])), "Y-m-d") : $_SESSION['date_filter'] = '';
+                (isset($_POST['category_filter']) && !empty($_POST['category_filter'])) ? $_SESSION['category_filter'] = intval($this->testInput($_POST['category_filter'])) : $_SESSION['category_filter'] = '';
                 $is_admin = "";
 
                 //check if the user is an admin

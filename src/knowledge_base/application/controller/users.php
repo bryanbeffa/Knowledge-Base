@@ -70,7 +70,8 @@ class Users
         }
     }
 
-    public function index(){
+    public function index()
+    {
         $this->manageUsers();
     }
 
@@ -168,7 +169,7 @@ class Users
                             $_SESSION['new_user_email'] = $email;
 
                             //check if the text fields are not empty
-                            if (!empty($name) && !empty($password) && !empty($surname)) {
+                            if (!empty($name) && !empty($password) && !empty($surname) && !empty($email)) {
 
                                 //check the password strength
                                 if (PasswordManager::checkStrength($password)) {
@@ -183,7 +184,7 @@ class Users
                                         //check surname
                                         if ($this->validator->validateTextInput($surname, 1, 50)) {
 
-                                            //check name length
+                                            //check email length
                                             if ($this->validator->validateTextInput($email, 3, 320)) {
 
                                                 if ($this->user_manager->createUser($user)) {
@@ -252,6 +253,114 @@ class Users
         }
     }
 
+    public function modifyUser()
+    {
+        //check if the db is connected
+        if (isset($this->user_manager)) {
+
+            //check if the uses is logged
+            if ($this->user_manager->isUserLogged()) {
+                require_once 'application/views/templates/head.php';
+
+                //check if the post variable are not null
+                if (isset($_POST['modify_user_id']) && isset($_POST['modified_name']) && isset($_POST['modified_surname']) && isset($_POST['modified_email']) && isset($_POST['modified_is_admin'])) {
+
+                    //check if the user is an admin
+                    if (UserManager::isAdminUser($_SESSION['email'])) {
+
+                        //create user
+                        $name = $this->testInput($_POST['modified_name']);
+                        $surname = $this->testInput($_POST['modified_surname']);
+                        $email = $this->testInput($_POST['modified_email']);
+                        $is_admin = $this->testInput($_POST['modified_is_admin']);
+
+                        //check if the text fields are not empty
+                        if (!empty($name) && !empty($surname) && !empty($email)) {
+
+                            //set password null
+                            $password = null;
+
+                            //check if there is a password
+                            if (isset($_POST['modified_password']) && !empty($_POST['modified_password'])) {
+
+                                $password = $this->testInput($_POST['modified_password']);
+
+                                //check if the password is complex enough
+                                if (!PasswordManager::checkStrength($password)) {
+                                    MessageManager::setErrorMsg("La password non rispetta le condizioni di sicurezza");
+                                    MessageManager::printErrorMsg();
+                                    $this->manageUsers();
+                                    exit();
+                                }
+                            }
+
+                            //hash password
+                            $password = password_hash($password, PASSWORD_DEFAULT);
+
+                            $id = $_POST['modify_user_id'];
+
+                            //check name
+                            if ($this->validator->validateTextInput($name, 1, 50)) {
+
+                                //check surname
+                                if ($this->validator->validateTextInput($surname, 1, 50)) {
+
+                                    //check email length
+                                    if ($this->validator->validateTextInput($email, 3, 320)) {
+
+                                        $user = new User($name, $surname, $email, $password, $is_admin, 0);
+
+                                        if ($this->user_manager->modifyUser($user, $id)) {
+
+                                            //user created message
+                                            $_SESSION['success'] = "L'utente è stato modificato con successo";
+
+                                            //redirect to manage function
+                                            header("Location: " . URL . "users/manageUsers");
+
+                                        } else {
+                                            MessageManager::printErrorMsg();
+                                            $this->manageUsers();
+                                        }
+
+                                    } else {
+                                        MessageManager::setErrorMsg("L'email inserita non è valida");
+                                        MessageManager::printErrorMsg();
+                                        $this->manageUsers();
+                                    }
+
+                                } else {
+                                    MessageManager::setErrorMsg("Il cognome può contenere al massimo 50 caratteri");
+                                    MessageManager::printErrorMsg();
+                                    $this->manageUsers();
+                                }
+                            } else {
+                                MessageManager::setErrorMsg("Il nome può contenere al massimo 50 caratteri");
+                                MessageManager::printErrorMsg();
+                                $this->manageUsers();
+                            }
+
+                        } else {
+                            MessageManager::setErrorMsg("I campi di testo non possono essere vuoti");
+                            MessageManager::printErrorMsg();
+                            $this->manageUsers();
+                        }
+
+                    } else {
+                        $this->researchCases();
+                    }
+                } else {
+                    $this->manageUsers();
+                }
+            } else {
+                //redirect to login page
+                header("Location: " . URL . "home/index");
+            }
+        } else {
+            DbError::noDatabaseConnection();
+        }
+    }
+
     function testInput($data)
     {
         $data = trim($data);
@@ -264,7 +373,8 @@ class Users
      * Method that set the user field 'change_pass' to 1. User has requested a password change.
      * @param $id user id
      */
-    public function requestChangePass($id)
+    public
+    function requestChangePass($id)
     {
         //check if the db is connected
         if (isset($this->user_manager)) {

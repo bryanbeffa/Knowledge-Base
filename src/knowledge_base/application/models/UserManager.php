@@ -40,6 +40,58 @@ class UserManager
 
     }
 
+    public function modifyUser($user, $id)
+    {
+        try {
+
+                $password = $user->getPassword();
+
+                //check if modify password
+                if ($password != null) {
+                    $sql = "UPDATE USERS set name = :name, surname = :surname, is_admin = :is_admin, password = :password, change_pass = :change_pass";
+                } else {
+                    $sql = "UPDATE USERS set name = :name, surname = :surname, is_admin = :is_admin, change_pass = :change_pass";
+                }
+
+                //aggiungere logica email esistente
+                if (intval($this->getIdByEmail($user->getEmail())) != $id) {
+
+                    $sql .= ", email = :email";
+
+
+                }
+
+                $sql .= " WHERE ID = :id";
+
+                //prepare query
+                $prepared_query = self::$conn->prepare($sql);
+
+                //get params
+                $name = $user->getName();
+                $surname = $user->getSurname();
+                $email = $user->getEmail();
+                $is_admin = $user->getAdmin();
+                $change_pass = $user->getChangePass();
+
+                //bind params
+                $prepared_query->bindParam(':name', $name, PDO::PARAM_STR);
+                $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
+                $prepared_query->bindParam(':surname', $surname, PDO::PARAM_STR);
+                $prepared_query->bindParam(':email', $email, PDO::PARAM_STR);
+                $prepared_query->bindParam(':password', $password, PDO::PARAM_STR);
+                $prepared_query->bindParam(':is_admin', $is_admin, PDO::PARAM_INT);
+                $prepared_query->bindParam(':change_pass', $change_pass, PDO::PARAM_INT);
+
+                $prepared_query->execute();
+
+                return true;
+
+            } catch (PDOException $ex) {
+                MessageManager::setErrorMsg("Email già utilizzata");
+                return false;
+            }
+    }
+
     /**
      * Method that return if the email is in the system.
      */
@@ -77,13 +129,18 @@ class UserManager
      */
     public function getUsersList()
     {
-        //get the password from database
-        $prepared_query = self::$conn->prepare("SELECT * FROM users");
-        $prepared_query->execute();
+        try {
+            //get the password from database
+            $prepared_query = self::$conn->prepare("SELECT * FROM users");
+            $prepared_query->execute();
 
-        $users = $prepared_query->fetchAll();
+            $users = $prepared_query->fetchAll();
 
-        return $users;
+            return $users;
+
+        } catch (PDOException $ex) {
+            return false;
+        }
     }
 
     /**
@@ -91,16 +148,21 @@ class UserManager
      */
     public static function isAdminUser($email)
     {
-        //get is_admin value
-        $prepared_query = self::$conn->prepare("SELECT is_admin FROM users WHERE email = :email");
-        $prepared_query->bindParam(':email', $email, PDO::PARAM_STR);
-        $prepared_query->execute();
+        try {
+            //get is_admin value
+            $prepared_query = self::$conn->prepare("SELECT is_admin FROM users WHERE email = :email");
+            $prepared_query->bindParam(':email', $email, PDO::PARAM_STR);
+            $prepared_query->execute();
 
-        //get result
-        $res = $prepared_query->fetch();
-        $is_admin = $res[0];
+            //get result
+            $res = $prepared_query->fetch();
+            $is_admin = $res[0];
 
-        return intval($is_admin);
+            return intval($is_admin);
+
+        } catch (PDOException $ex) {
+            return false;
+        }
     }
 
     /**
@@ -108,7 +170,8 @@ class UserManager
      * @param User $user user will be created
      * @return bool if the user has been created.
      */
-    public function createUser(User $user)
+    public
+    function createUser(User $user)
     {
         //check if the email already exists
         if (!$this->isExistingEmail($user->getEmail())) {
@@ -151,7 +214,8 @@ class UserManager
      * Method that sets the db field 'change_pass' of the table users to the specified user to 1.
      * @param $id id of the user who requested the change password.
      */
-    public function requestChangePass($id)
+    public
+    function requestChangePass($id)
     {
         try {
             //prepare query
@@ -167,7 +231,8 @@ class UserManager
      * Method that tries to delete the user.
      * @param $id id of the user who will be deleted
      */
-    public function deleteUser($id)
+    public
+    function deleteUser($id)
     {
         try {
             //prepare query
@@ -185,7 +250,8 @@ class UserManager
      * Get user id by email.
      * @param $email user email
      */
-    public function getIdByEmail($email)
+    public
+    function getIdByEmail($email)
     {
         try {
             //prepare query
@@ -203,7 +269,8 @@ class UserManager
     /**
      * Method that returns if the user is logged
      */
-    public function isUserLogged()
+    public
+    function isUserLogged()
     {
 
         //check if the variables are initialized
@@ -217,7 +284,8 @@ class UserManager
     /**
      * Method that unsets session variables
      */
-    public static function logout()
+    public
+    static function logout()
     {
         session_destroy();
     }

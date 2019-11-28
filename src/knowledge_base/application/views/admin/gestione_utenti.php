@@ -17,8 +17,8 @@
             <th class="th-sm">Nome</th>
             <th class="th-sm">Cognome</th>
             <th class="th-sm">E-mail</th>
-            <!--<th class="th-sm">Richiesta cambio <br>password</th>-->
             <th class="th-sm">Admin</th>
+            <td class="th-sm">Modifica utente</td>
             <th class="th-sm">Elimina utente</th>
         </tr>
         </thead>
@@ -36,6 +36,14 @@
                 <?php else: ?>
                     <td>Si</td>
                 <?php endif; ?>
+
+                <td>
+                    <a class="text-info"
+                       data-toggle="modal" data-target="#modifyUserModal"
+                       onclick="modifyUser(<?php echo $user['id'] ?>, '<?php echo str_replace("'", "\'", $user['name']) ?>', '<?php echo str_replace("'", "\'", $user['surname']) ?>' , '<?php echo str_replace("'", "\'", $user['email']) ?>')">
+                        Modifica
+                    </a>
+                </td>
 
                 <td>
                     <a class="text-info"
@@ -178,6 +186,126 @@
                         <input type="submit" class="btn blue-gradient" value="Elimina">
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal modify user -->
+    <div class="modal fade" id="modifyUserModal" tabindex="-1" role="dialog" aria-labelledby="modifyUserModal"
+         aria-hidden="true">
+
+        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+        <div class="modal-md modal-dialog modal-dialog-centered modal-md" role="document">
+
+            <!-- modal content -->
+            <div class="modal-content">
+                    <form action="<?php echo URL ?>users/modifyUser" method="post" id="modifyUserForm">
+
+                    <!-- modal header -->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modifica utente</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <!-- body of the modal -->
+                    <div class="modal-body">
+
+                        <!-- Hidden id-->
+                        <input type="hidden" id="modifyUserId" name="modify_user_id">
+
+                        <!-- Name -->
+                        <div class="mt-3">
+                            <label>Nome (massimo 50 caratteri)</label>
+                            <input type="text" id="modifyUserName"
+                                   class="form-control" name="modified_name" required placeholder="Inserire nome">
+                        </div>
+
+                        <!-- Surname -->
+                        <div class="mt-3">
+                            <label class="">Cognome (massimo 50 caratteri)</label>
+                            <input type="text" id="modifyUserSurname" class="form-control" name="modified_surname"
+                                   placeholder="Inserire cognome"
+                                   id="modifyUserSurname"
+                                   required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mt-3">
+                            <label class="">Email</label>
+                            <input type="email" id="modifyUserEmail" class="form-control" name="modified_email"
+                                   required placeholder="mario@esempio.com">
+                        </div>
+
+                        <!-- User Privileges -->
+                        <div class="mt-3 custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="modifyBaseUser"
+                                   name="modified_is_admin" value="0" checked="checked">
+                            <label class="custom-control-label" for="modifyBaseUser">Utente base</label>
+                        </div>
+
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="modifyAdminUser"
+                                   name="modified_is_admin" value="1">
+                            <label class="custom-control-label" for="modifyAdminUser">Utente admin</label>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mt-3">
+                            <label class="">Password (min 8 caratteri, max 50 caratteri, 1 maiuscola ed un
+                                numero)</label>
+                            <input type="password" id="modifyPassword" class="form-control" name="modified_password"
+                                   placeholder="Inserire password">
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn blue-gradient" data-dismiss="modal"
+                        >Chiudi
+                        </button>
+                        <input type="button" class="btn blue-gradient" value="Salva"
+                               data-toggle="modal" data-target="#confirmModifyUser">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal modify user confirm -->
+    <div class="modal fade modal-open black" id="confirmModifyUser" tabindex="-1" role="dialog"
+         aria-labelledby="confirmModifyCase"
+         aria-hidden="true">
+
+        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+        <div class="modal-dialog modal-dialog-centered " role="document">
+
+            <!-- Content -->
+            <div class="modal-content" style="overflow: hidden">
+
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Conferma modifiche </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <!-- Body -->
+                <div class="modal-body">
+
+                    <!-- msg -->
+                    <p>Sei sicuro di voler salvare le modifiche?</p>
+
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn blue-gradient" data-dismiss="modal">Chiudi
+                    </button>
+                    <button class="btn blue-gradient" id="confirmModifyUserSubmit">Conferma</button>
+                </div>
             </div>
         </div>
     </div>

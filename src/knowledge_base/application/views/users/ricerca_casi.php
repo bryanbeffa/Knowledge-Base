@@ -83,9 +83,9 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Scegli una data</label>
                     <div class="col-sm-9">
-                        <input placeholder="20.10.2019" type="text" class="form-control datepicker"
+                        <input placeholder="es. 20.10.2019" type="text" class="form-control datepicker"
                                name="date_filter" id="datepicker"
-                               value="<?php echo (isset($_SESSION['date_filter'])) ? date_format(date_create($_SESSION['date_filter']), "d.m.Y") : null ?>">
+                               value="<?php echo (isset($_SESSION['date_filter']) &&  !empty($_SESSION['date_filter'])) ? date_format(date_create($_SESSION['date_filter']), "d.m.Y") : "" ?>">
                     </div>
                 </div>
 
@@ -131,7 +131,7 @@
 
                         <!-- Title -->
                         <div class="card-header blue-gradient">
-                            <h2 class="text-center text-white"><b>Nome: </b><?php echo $case['title'] ?></h2>
+                            <h2 class="text-center text-white"><b>Titolo: </b><?php echo $case['title'] ?></h2>
                         </div>
 
                         <!-- Body -->
@@ -568,5 +568,6 @@
         language: "it",
         todayHighlight: true,
         autoclose: true,
+        defaultDate: null
     });
 </script>
