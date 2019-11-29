@@ -43,7 +43,8 @@ class ResearchCases
         }
     }
 
-    public function index(){
+    public function index()
+    {
         $this->showCases();
     }
 
@@ -60,11 +61,9 @@ class ResearchCases
                 require_once 'application/views/templates/head.php';
 
                 if (isset($_POST['order_results']) && intval($_POST['order_results']) == 1) {
-
                     //order by most represent
                     $_SESSION['order_results'] = 1;
                 } else if (isset($_POST['order_results']) && intval($_POST['order_results']) == 2) {
-
                     //order by less recent
                     $_SESSION['order_results'] = 2;
                 } else {

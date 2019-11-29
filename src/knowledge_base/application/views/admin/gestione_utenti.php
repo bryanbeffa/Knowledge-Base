@@ -217,14 +217,14 @@
 
                         <!-- Name -->
                         <div class="mt-3">
-                            <label>Nome (massimo 50 caratteri)</label>
+                            <label>Nome (massimo 50 caratteri) <b class="text-danger">*</b></label>
                             <input type="text" id="modifyUserName"
                                    class="form-control" name="modified_name" required placeholder="Inserire nome">
                         </div>
 
                         <!-- Surname -->
                         <div class="mt-3">
-                            <label class="">Cognome (massimo 50 caratteri)</label>
+                            <label>Cognome (massimo 50 caratteri) <b class="text-danger">*</b></label>
                             <input type="text" id="modifyUserSurname" class="form-control" name="modified_surname"
                                    placeholder="Inserire cognome"
                                    id="modifyUserSurname"
@@ -233,7 +233,7 @@
 
                         <!-- Email -->
                         <div class="mt-3">
-                            <label class="">Email</label>
+                            <label>Email <b class="text-danger">*</b></label>
                             <input type="email" id="modifyUserEmail" class="form-control" name="modified_email"
                                    required placeholder="mario@esempio.com">
                         </div>
@@ -258,6 +258,8 @@
                             <input type="password" id="modifyPassword" class="form-control" name="modified_password"
                                    placeholder="Inserire password">
                         </div>
+
+                        <p class="mt-3"><b class="text-danger">* </b>indica un campo obbligatorio</p>
                     </div>
 
                     <!-- Footer -->

@@ -40,56 +40,74 @@ class UserManager
 
     }
 
+    /**
+     * Method that tries to update the desired user.
+     * @param $user user
+     * @param $id user id
+     * @return bool if the operation was successful
+     */
     public function modifyUser($user, $id)
     {
         try {
+            $change_email = false;
 
-                $password = $user->getPassword();
+            $sql = "";
 
-                //check if modify password
-                if ($password != null) {
-                    $sql = "UPDATE USERS set name = :name, surname = :surname, is_admin = :is_admin, password = :password, change_pass = :change_pass";
-                } else {
-                    $sql = "UPDATE USERS set name = :name, surname = :surname, is_admin = :is_admin, change_pass = :change_pass";
+            //check if the email is the current user email
+            if ($this->getIdByEmail($user->getEmail()) === intval($id)){
+                $sql .= "UPDATE USERS set name = :name, surname = :surname, is_admin = :is_admin, change_pass = :change_pass";
+
+            } else {
+
+                //check if the email is already used
+                if(!$this->isExistingEmail($user->getEmail())){
+                    $change_email = true;
+                    $sql .= "UPDATE USERS set name = :name, surname = :surname, email = :email, is_admin = :is_admin, change_pass = :change_pass";
                 }
-
-                //aggiungere logica email esistente
-                if (intval($this->getIdByEmail($user->getEmail())) != $id) {
-
-                    $sql .= ", email = :email";
-
-
-                }
-
-                $sql .= " WHERE ID = :id";
-
-                //prepare query
-                $prepared_query = self::$conn->prepare($sql);
-
-                //get params
-                $name = $user->getName();
-                $surname = $user->getSurname();
-                $email = $user->getEmail();
-                $is_admin = $user->getAdmin();
-                $change_pass = $user->getChangePass();
-
-                //bind params
-                $prepared_query->bindParam(':name', $name, PDO::PARAM_STR);
-                $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
-                $prepared_query->bindParam(':surname', $surname, PDO::PARAM_STR);
-                $prepared_query->bindParam(':email', $email, PDO::PARAM_STR);
-                $prepared_query->bindParam(':password', $password, PDO::PARAM_STR);
-                $prepared_query->bindParam(':is_admin', $is_admin, PDO::PARAM_INT);
-                $prepared_query->bindParam(':change_pass', $change_pass, PDO::PARAM_INT);
-
-                $prepared_query->execute();
-
-                return true;
-
-            } catch (PDOException $ex) {
-                MessageManager::setErrorMsg("Email già utilizzata");
-                return false;
             }
+
+            $password = $user->getPassword();
+
+            //check if update password
+            if (!empty($password)) {
+                $sql .= ", password  = :password";
+            }
+
+            $sql .= " WHERE ID = :id";
+
+            //prepare query
+            $prepared_query = self::$conn->prepare($sql);
+
+            //get params
+            $name = $user->getName();
+            $surname = $user->getSurname();
+            $email = $user->getEmail();
+            $is_admin = $user->getAdmin();
+            $change_pass = $user->getChangePass();
+
+            if(!empty($password)){
+                $prepared_query->bindParam(':password', $password, PDO::PARAM_STR);
+            }
+
+            if($change_email){
+                $prepared_query->bindParam(':email', $email, PDO::PARAM_STR);
+            }
+
+            //bind params
+            $prepared_query->bindParam(':name', $name, PDO::PARAM_STR);
+            $prepared_query->bindParam(':id', $id, PDO::PARAM_INT);
+            $prepared_query->bindParam(':surname', $surname, PDO::PARAM_STR);
+            $prepared_query->bindParam(':is_admin', $is_admin, PDO::PARAM_INT);
+            $prepared_query->bindParam(':change_pass', $change_pass, PDO::PARAM_INT);
+
+            $prepared_query->execute();
+
+            return true;
+
+        } catch (PDOException $ex) {
+            MessageManager::setErrorMsg("Email già utilizzata");
+            return false;
+        }
     }
 
     /**
@@ -260,7 +278,7 @@ class UserManager
             $prepared_query->execute();
 
             $res = $prepared_query->fetch();
-            return $res[0];
+            return intval($res[0]);
 
         } catch (PDOException $ex) {
         }

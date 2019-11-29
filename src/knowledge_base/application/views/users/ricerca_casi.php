@@ -83,9 +83,9 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Scegli una data</label>
                     <div class="col-sm-9">
-                        <input placeholder="es. 20.10.2019" type="text" class="form-control datepicker"
-                               name="date_filter" id="datepicker"
-                               value="<?php echo (isset($_SESSION['date_filter']) &&  !empty($_SESSION['date_filter'])) ? date_format(date_create($_SESSION['date_filter']), "d.m.Y") : "" ?>">
+                        <input placeholder="es. 20.10.2019" type="text" class="form-control" onfocus="this.type = 'date';"
+                               name="date_filter"
+                               value="<?php echo (isset($_SESSION['date_filter']) && !empty($_SESSION['date_filter'])) ? date_format(date_create($_SESSION['date_filter']), "d.m.Y") : "" ?>">
                     </div>
                 </div>
 
@@ -111,7 +111,7 @@
 
     <!-- Show cases -->
 
-    <!-- Adapted table for using pagination -->
+    <!-- Adapted table using pagination -->
     <table id="casesTable" class="table table-responsive-lg" cellspacing="0" width="100%">
         <thead>
         <tr>
@@ -123,11 +123,11 @@
         <?php foreach ($cases as $case): ?>
 
             <tr>
-                <td class="w-100">
+                <td class="w-100 text-justify">
 
                     <!-- Uses to print times variable -->
                     <?php $key = $case['id']; ?>
-                    <div class="card mt-4 mb-5">
+                    <div class="card mt-4 mb-5" id="case<?php echo $case['id'] ?>">
 
                         <!-- Title -->
                         <div class="card-header blue-gradient">
@@ -135,21 +135,27 @@
                         </div>
 
                         <!-- Body -->
-                        <div class="card-body">
+                        <div class="border-bottom card-body">
                             <h5><b>ID:</b> <?php echo $case['id'] ?></h5>
                             <h5>
                                 <b>Categoria:</b> <?php echo ($case['category_id'] != null) ? $cases_categories["$key"] : "-" ?>
                             </h5>
-                            <h5><b>Variante di:</b> <?php echo ($case['variant'] == null) ? "-" : $case['variant'] ?>
+                            <h5>
+                                <b>Variante di:</b> <?php echo ($case['variant'] == null) ? "-" : $case['variant'] ?>
+                                <!-- <?php if ($case['variant'] != null): ?>
+                                    <a class="text-primary" href="#case<?php echo $case['variant'] ?>"> Vedi variante</a>
+                                <?php endif; ?> -->
                             </h5>
-                            <h5><b>Data
-                                    creazione:</b> <?php echo date_format(date_create($case['created_at']), "d.m.Y H:i:s") ?>
-                            </h5>
-                            <h5 class="font-weight-bold">Descrizione:</h5>
-                            <p><?php echo $case['description'] ?></p>
+                            <h5><b>Data creazione:</b> <?php echo date_format(date_create($case['created_at']), "d.m.Y H:i:s") ?></h5>
 
                             <!-- Times -->
                             <h5><b>Numero di ripresentazioni: </b><?php echo $cases_times["$key"] ?> </h5>
+
+                        </div>
+                        <div class="card-body">
+                            <h5 class="font-weight-bold">Descrizione:</h5>
+                            <h5><?php echo $case['description'] ?></h5>
+
                         </div>
 
                         <!-- Footer-->
@@ -545,7 +551,7 @@
             "lengthMenu": [[10, 15, 20], [10, 15, 20]],
             "ordering": false,
             "language": {
-                "search": "Cerca in live:",
+                "search": "Cerca tra i risultati:",
                 "lengthMenu": "Mostra _MENU_ record per pagina",
                 "zeroRecords": "Nessun record trovato",
                 "info": "Pagina _PAGE_ di _PAGES_",
@@ -560,14 +566,4 @@
         $('.dataTables_length').addClass('bs-select');
     });
 
-    $('.datepicker').datepicker({
-        format: "dd.mm.yyyy",
-        weekStart: 1,
-        todayBtn: "linked",
-        clearBtn: true,
-        language: "it",
-        todayHighlight: true,
-        autoclose: true,
-        defaultDate: null
-    });
 </script>

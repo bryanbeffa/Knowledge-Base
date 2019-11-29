@@ -134,6 +134,9 @@ class Users
         }
     }
 
+    /**
+     * Method that tries to add a new user.
+     */
     public function createUser()
     {
         //check if the db is connected
@@ -253,6 +256,9 @@ class Users
         }
     }
 
+    /**
+     * Method that tries to modify an existing user
+     */
     public function modifyUser()
     {
         //check if the db is connected
@@ -277,8 +283,8 @@ class Users
                         //check if the text fields are not empty
                         if (!empty($name) && !empty($surname) && !empty($email)) {
 
-                            //set password null
-                            $password = null;
+                            //set empty password
+                            $password = "";
 
                             //check if there is a password
                             if (isset($_POST['modified_password']) && !empty($_POST['modified_password'])) {
@@ -292,10 +298,10 @@ class Users
                                     $this->manageUsers();
                                     exit();
                                 }
-                            }
 
-                            //hash password
-                            $password = password_hash($password, PASSWORD_DEFAULT);
+                                //hash password
+                                $password = password_hash($password, PASSWORD_DEFAULT);
+                            }
 
                             $id = $_POST['modify_user_id'];
 
@@ -310,6 +316,7 @@ class Users
 
                                         $user = new User($name, $surname, $email, $password, $is_admin, 0);
 
+                                        //try to update user
                                         if ($this->user_manager->modifyUser($user, $id)) {
 
                                             //user created message
