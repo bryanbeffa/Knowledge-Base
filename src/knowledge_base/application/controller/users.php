@@ -150,9 +150,22 @@ class Users
                 if (isset($_POST['password']) && isset($_POST['confirm_pass'])
                     && isset($_POST['name']) && isset($_POST['surname']) && isset($_POST['email']) && isset($_POST['is_admin'])) {
 
-
                     $password = $this->testInput($_POST['password']);
                     $confirm_pass = $this->testInput($_POST['confirm_pass']);
+
+                    //create user
+                    $name = $this->testInput($_POST['name']);
+                    $surname = $this->testInput($_POST['surname']);
+                    $email = $this->testInput($_POST['email']);
+                    $is_admin = $this->testInput($_POST['is_admin']);
+
+                    //save data into session variables
+                    $_SESSION['new_user_name'] = $name;
+                    $_SESSION['new_user_surname'] = $surname;
+                    $_SESSION['new_user_email'] = $email;
+                    $_SESSION['new_user_is_admin'] = intval($is_admin);
+
+                    //$flag = (isset($_SESSION['new_user_is_admin']) && $_SESSION['new_user_is_admin'] == 0);
 
                     //check if the password are the same
                     if (PasswordManager::matchPassword($password, $confirm_pass)) {
@@ -160,16 +173,6 @@ class Users
                         //check if the user is an admin
                         if (UserManager::isAdminUser($_SESSION['email'])) {
 
-                            //create user
-                            $name = $this->testInput($_POST['name']);
-                            $surname = $this->testInput($_POST['surname']);
-                            $email = $this->testInput($_POST['email']);
-                            $is_admin = $this->testInput($_POST['is_admin']);
-
-                            //save data into session variables
-                            $_SESSION['new_user_name'] = $name;
-                            $_SESSION['new_user_surname'] = $surname;
-                            $_SESSION['new_user_email'] = $email;
 
                             //check if the text fields are not empty
                             if (!empty($name) && !empty($password) && !empty($surname) && !empty($email)) {
@@ -239,6 +242,7 @@ class Users
                             $this->researchCases();
                         }
                     } else {
+
                         //redirect to manager page
                         MessageManager::setErrorMsg("Le password non corrispondono");
                         MessageManager::printErrorMsg();

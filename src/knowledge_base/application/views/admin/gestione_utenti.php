@@ -107,13 +107,13 @@
                         <!-- User Privileges -->
                         <div class="mt-3 custom-control custom-radio custom-control-inline">
                             <input type="radio" class="custom-control-input" id="baseUser"
-                                   name="is_admin" value="0" checked="checked">
+                                   name="is_admin" value="0" <?php echo (isset($_SESSION['new_user_is_admin']) && $_SESSION['new_user_is_admin'] == 0)? 'checked="checked"': "" ?>>
                             <label class="custom-control-label" for="baseUser">Utente base</label>
                         </div>
 
                         <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" class="custom-control-input" id="adminUser"
-                                   name="is_admin" value="1">
+                                   name="is_admin" value="1" <?php echo (isset($_SESSION['new_user_is_admin']) && $_SESSION['new_user_is_admin'] == 1)? 'checked="checked"': null ?>>
                             <label class="custom-control-label" for="adminUser">Utente admin</label>
                         </div>
 
