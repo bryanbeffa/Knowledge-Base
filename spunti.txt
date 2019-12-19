@@ -1,4 +1,0 @@
-- View riassuntiva dei casi
-- Bottone che rimanda alla caso padre
-- Layout casi da rendere più leggibile
-- Campo cerca nella variante
